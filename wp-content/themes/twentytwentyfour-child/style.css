@@ -1,0 +1,140 @@
+/*
+ Theme Name: Twenty Twenty-Four Child
+ Theme URI: https://example.com/twentytwentyfour-child
+ Description: A child theme for the Twenty Twenty-Four theme
+ Author: Avi Levkovich
+ Template: twentytwentyfour
+ Version: 1.0.0
+ Text Domain: twentytwentyfour-child
+*/
+
+/* Add your custom styles below */
+
+html {
+    direction: rtl;
+}
+
+:where(.wp-site-blocks *:focus) {
+    outline-width: 2px;
+    outline-style: solid
+}
+
+/* עיצוב כללי לטופס */
+.subscribe, .edit-scholar {
+    direction: rtl;
+    font-family: 'Noto Sans Hebrew', 'Alef', sans-serif;
+    background-color: #f9f9f9;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    color: #333;
+}
+
+/* עיצוב השדות */
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+.input-field:focus {
+    border-color: #888;
+    outline: none;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* עיצוב כפתור השליחה */
+
+.submit-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+/* יישור אלגנטי */
+
+input, textarea, select {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"], input[type="email"], input[type="tel"], textarea, select {
+    background-color: #fff;
+    border: 1px solid #dcdcdc;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, textarea:focus, select:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+/* עיצוב ייחודי לטקסט */
+
+textarea {
+    min-height: 100px;
+}
+
+@media screen and (max-width: 768px) {
+    padding: 20px;
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .submit-button {
+        width: 100%;
+    }
+}
+
+.scholars-grid {
+    > div {
+        display: grid;
+        gap: 10px;
+
+        img {
+            width: 250px;
+            height: 250px;
+            object-fit: contain;
+        }
+    }
+}
+
+.scholar-component {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 10px;
+}
+
+.mail {
+    li {
+        color: #4CAF50;
+    }
+}
