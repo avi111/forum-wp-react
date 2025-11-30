@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Check, Eye, EyeOff, FileText, Upload, Users, X } from "lucide-react";
-import { Researcher } from "@/types.ts";
+import { Researcher } from "../types";
 
 interface JoinFormProps {
   onSubmit: (data: Omit<Researcher, "id" | "bio" | "status">) => void;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getResearcherName, Researcher, UserStatus } from "../types";
 import { MapPin, Search, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ResearcherIndexProps {
   researchers: Researcher[];
@@ -11,6 +12,7 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const navigate = useNavigate();
 
   // Filter logic: Check name, institution, or specialization
   const filteredResearchers = researchers.filter((r) => {
@@ -23,6 +25,10 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
 
     return isActive && matchesSearch;
   });
+
+  const handleResearcherClick = (r: Researcher) => {
+    navigate(`/researchers/${r.id}`);
+  };
 
   const handleSelectSuggestion = (name: string) => {
     setSearchTerm(name);
@@ -129,7 +135,10 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
                   <span className="text-xs font-semibold text-indigo-900 bg-indigo-50 px-2 py-1 rounded">
                     חבר פורום
                   </span>
-                  <button className="text-indigo-600 text-sm font-medium hover:underline">
+                  <button
+                    className="text-indigo-600 text-sm font-medium hover:underline"
+                    onClick={() => handleResearcherClick(researcher)}
+                  >
                     צפה בפרופיל מלא
                   </button>
                 </div>

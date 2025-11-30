@@ -43,17 +43,61 @@ const INSTITUTIONS = [
   "המרכז הבינתחומי הרצליה",
 ];
 
+const FACULTIES = [
+  "מדעי החיים",
+  "רפואה",
+  "מדעי החברה",
+  "פסיכולוגיה",
+  "מדעי המוח",
+];
+
+const SUB_SPECIALIZATIONS_POOL = [
+  "טיפול בטראומה",
+  "התמכרויות",
+  "פסיכדליה ומדיטציה",
+  "נוירופסיכופרמקולוגיה",
+  "מודלים חישוביים",
+  "טיפול קבוצתי",
+  "אתיקה ורגולציה",
+];
+
 // Generate 12+ researchers
-export const INITIAL_RESEARCHERS: Researcher[] = NAMES.map((name, index) => ({
-  id: `res${index + 1}`,
-  name: name,
-  email: `researcher${index}@example.ac.il`,
-  institution: INSTITUTIONS[index % INSTITUTIONS.length],
-  specialization: SPECIALIZATIONS[index % SPECIALIZATIONS.length],
-  bio: `חוקר מוביל בתחום ${SPECIALIZATIONS[index % SPECIALIZATIONS.length]}. עוסק במחקר קליני ותיאורטי אודות השפעות של חומרים משני תודעה על מערכת העצבים ובריאות הנפש.`,
-  status: UserStatus.ACTIVE,
-  imageUrl: `https://i.pravatar.cc/400?img=${index + 10}`, // Consistent mock images
-}));
+export const INITIAL_RESEARCHERS: Researcher[] = NAMES.map((name, index) => {
+  const nameParts = name.split(" ");
+  const title = nameParts[0];
+  const firstName = nameParts[1];
+  const lastName = nameParts.slice(2).join(" ") || firstName;
+
+  // A simple way to guess gender for mock data
+  const femaleNames = ["יעל", "שרה", "נעה", "רבקה", "ענת", "מיכל"];
+  const gender = femaleNames.includes(firstName) ? "נקבה" : "זכר";
+
+  return {
+    id: `res${index + 1}`,
+    username: `researcher${index + 1}`,
+    email: `researcher${index + 1}@example.ac.il`,
+    institution: INSTITUTIONS[index % INSTITUTIONS.length],
+    specialization: SPECIALIZATIONS[index % SPECIALIZATIONS.length],
+    subSpecializations: [
+      SUB_SPECIALIZATIONS_POOL[index % SUB_SPECIALIZATIONS_POOL.length],
+      SUB_SPECIALIZATIONS_POOL[(index + 2) % SUB_SPECIALIZATIONS_POOL.length],
+    ],
+    bio: `חוקר מוביל בתחום ${
+      SPECIALIZATIONS[index % SPECIALIZATIONS.length]
+    }. עוסק במחקר קליני ותיאורטי אודות השפעות של חומרים משני תודעה על מערכת העצבים ובריאות הנפש.`,
+    status: UserStatus.ACTIVE,
+    imageUrl: `https://i.pravatar.cc/400?img=${index + 10}`, // Consistent mock images
+    title,
+    firstName,
+    lastName,
+    phone: `052-12345${60 + index}`,
+    gender: gender,
+    idNumber: `${Math.floor(100000000 + Math.random() * 900000000)}`,
+    faculty: FACULTIES[index % FACULTIES.length],
+    newsletter: index % 2 === 0,
+    // studentYear is omitted as they are researchers
+  };
+});
 
 export const MOCK_NEWS: NewsItem[] = [
   {
