@@ -57,8 +57,7 @@ export const ResearcherCarousel: React.FC<ResearcherCarouselProps> = ({
 
   const handleDragMove = (x: number) => {
     if (!isDragging) return;
-    const currentX = x;
-    const diff = currentX - startX;
+    const diff = x - startX;
     setTranslateX(diff);
   };
 

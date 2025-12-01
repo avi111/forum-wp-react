@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
-import { NewsTicker } from "./components/NewsTicker";
-import { routeConfig } from "./routes";
+import { Layout } from "./components/Layout";
+import { OnJoin, routeConfig } from "./routes";
 import { Article, Researcher, UserStatus } from "./types";
-import { NAV_ITEMS } from "./mockData";
 import { Brain, Loader2 } from "lucide-react";
 import {
   useArticles,
   useEvents,
+  useMeetings,
   useNews,
   useResearchers,
+  useTrainings,
 } from "./hooks/useAppQueries";
 
 export default function App() {
@@ -21,16 +20,31 @@ export default function App() {
   // Fetch data using React Query hooks
   const { data: researchers = [], isLoading: loadingRes } = useResearchers();
   const { data: articles = [], isLoading: loadingArticles } = useArticles();
-  const { data: events = [], isLoading: loadingEvents } = useEvents();
+  const { data: eventsData, isLoading: loadingEvents } = useEvents(
+    1,
+    10,
+    "future",
+  );
+  const events = eventsData?.data || [];
+  const { data: meetings = [], isLoading: loadingMeetings } = useMeetings();
+  const { data: trainings = [], isLoading: loadingTrainings } = useTrainings();
   const { data: newsItems = [], isLoading: loadingNewsItems } = useNews();
 
   // App State
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
 
   const isLoading =
-    loadingRes || loadingArticles || loadingNewsItems || loadingEvents;
+    loadingRes ||
+    loadingArticles ||
+    loadingNewsItems ||
+    loadingEvents ||
+    loadingMeetings ||
+    loadingTrainings;
 
-  const onJoin = (data: Omit<Researcher, "id" | "bio" | "status">) => {
+  const onJoin: OnJoin = (
+    data: Omit<Researcher, "id" | "bio" | "status">,
+    callback,
+  ) => {
     const titleMap: Record<string, string> = {
       prof: "פרופ'",
       md: 'ד"ר',
@@ -53,7 +67,6 @@ export default function App() {
       bio: "",
       status: UserStatus.PENDING,
       imageUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(data.firstName + " " + data.lastName)}&background=random`,
-
       username: data.username,
       phone: data.phone,
       gender: data.gender,
@@ -64,7 +77,6 @@ export default function App() {
       newsletter: data.newsletter,
     };
 
-    // Optimistically update the cache without waiting for a re-fetch (since we don't have a backend)
     queryClient.setQueryData(
       ["researchers"],
       (old: Researcher[] | undefined) => {
@@ -73,12 +85,10 @@ export default function App() {
     );
 
     setCurrentUser(newResearcher);
-
-    window.location.hash = "#/dashboard";
+    callback();
   };
 
   const onUpdateUser = (updatedUser: Researcher) => {
-    // Update cache
     queryClient.setQueryData(
       ["researchers"],
       (old: Researcher[] | undefined) => {
@@ -91,7 +101,6 @@ export default function App() {
   };
 
   const onAddArticle = (newArticle: Article) => {
-    // Update cache
     queryClient.setQueryData(["articles"], (old: Article[] | undefined) => {
       return old ? [newArticle, ...old] : [newArticle];
     });
@@ -130,49 +139,39 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div
-        className="min-h-screen bg-slate-50 font-sans flex flex-col text-slate-900"
-        dir="rtl"
-      >
-        <NewsTicker news={newsItems} />
-
-        <Navbar
-          isLoggedIn={!!currentUser}
-          onLogout={() => {
-            setCurrentUser(null);
-            window.location.hash = "#/";
-          }}
-          navItems={NAV_ITEMS}
-          currentUser={currentUser}
-        />
-
-        <main className="flex-grow">
-          <Routes>
-            {routeConfig.map((route) => (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={route.element({
-                  articles,
-                  currentUser,
-                  events,
-                  onAddArticle,
-                  onJoin,
-                  onUpdateUser,
-                  researchers,
-                  userArticles: [],
-                })}
-              />
-            ))}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-
-        <Footer
-          currentUser={currentUser}
-          onSimulateApproval={simulateAdminApproval}
-        />
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Layout
+              currentUser={currentUser}
+              setCurrentUser={setCurrentUser}
+              newsItems={newsItems}
+              onSimulateApproval={simulateAdminApproval}
+            />
+          }
+        >
+          {routeConfig.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={route.element({
+                articles,
+                currentUser,
+                events,
+                meetings,
+                trainings,
+                onAddArticle,
+                onJoin,
+                onUpdateUser,
+                researchers,
+                userArticles: [],
+              })}
+            />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 }

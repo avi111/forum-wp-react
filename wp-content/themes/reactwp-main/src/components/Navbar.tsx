@@ -37,6 +37,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         return "/join";
       case PageView.DASHBOARD:
         return "/dashboard";
+      case PageView.MEETINGS:
+        return "/meetings";
       case PageView.LOGIN:
         return "/login";
       default:

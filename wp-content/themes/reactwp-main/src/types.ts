@@ -1,3 +1,5 @@
+
+
 export enum UserStatus {
   PENDING = "PENDING",
   ACTIVE = "ACTIVE",
@@ -25,6 +27,13 @@ export interface Researcher {
   newsletter?: boolean;
 }
 
+export interface ArticleAttachment {
+  name: string;
+  url: string;
+  type: 'pdf' | 'doc' | 'other';
+  size?: string;
+}
+
 export interface Article {
   id: string;
   title: string;
@@ -36,6 +45,7 @@ export interface Article {
   isEditorial: boolean; // True if it's a general site article (WP Post), False if researcher paper (Custom Post Type)
   tags: string[];
   imageUrl?: string;
+  attachments?: ArticleAttachment[];
 }
 
 export interface NewsItem {
@@ -55,6 +65,42 @@ export interface CalendarEvent {
   type: string;
 }
 
+export interface Meeting {
+  id: string;
+  date: string;
+  day: string;
+  month: string;
+  title: string;
+  description: string;
+  buttonText: string;
+}
+
+export interface TrainingModule {
+  title: string;
+  topics: string[];
+}
+
+export interface Training {
+  id: string;
+  category: string;
+  title: string;
+  description: string; // Short excerpt
+  fullDescription?: string;
+  date: string;
+  location?: string;
+  price?: string;
+  syllabus?: TrainingModule[];
+  instructors?: string[];
+  registrationLink?: string;
+  imageUrl?: string;
+  colorTheme: 'teal' | 'indigo' | 'purple';
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+}
+
 export enum PageView {
   HOME = "HOME",
   RESEARCHERS = "RESEARCHERS",
@@ -65,6 +111,7 @@ export enum PageView {
   JOIN = "JOIN",
   DASHBOARD = "DASHBOARD",
   LOGIN = "LOGIN",
+  MEETINGS = "MEETINGS",
 }
 
 export interface NavItem {

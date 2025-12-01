@@ -1,14 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { Article } from "../types";
 import { UserCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { PaginationControls } from "../components/PaginationControls";
+import { EDITORIAL_ITEMS_PER_PAGE, RESEARCHER_ITEMS_PER_PAGE } from "../consts";
 
 interface ArticleListProps {
   articles: Article[];
 }
 
 export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
-  const editorialArticles = articles.filter((a) => a.isEditorial);
-  const researcherArticles = articles.filter((a) => !a.isEditorial);
+  const navigate = useNavigate();
+
+  // State for separate pagination
+  const [editorialPage, setEditorialPage] = useState(1);
+  const [researcherPage, setResearcherPage] = useState(1);
+
+  // Filter articles
+  const allEditorialArticles = articles.filter((a) => a.isEditorial);
+  const allResearcherArticles = articles.filter((a) => !a.isEditorial);
+
+  // Calculate Pagination for Editorials
+  const totalEditorialPages = Math.ceil(
+    allEditorialArticles.length / EDITORIAL_ITEMS_PER_PAGE,
+  );
+  const currentEditorialArticles = allEditorialArticles.slice(
+    (editorialPage - 1) * EDITORIAL_ITEMS_PER_PAGE,
+    editorialPage * EDITORIAL_ITEMS_PER_PAGE,
+  );
+
+  // Calculate Pagination for Researchers
+  const totalResearcherPages = Math.ceil(
+    allResearcherArticles.length / RESEARCHER_ITEMS_PER_PAGE,
+  );
+  const currentResearcherArticles = allResearcherArticles.slice(
+    (researcherPage - 1) * RESEARCHER_ITEMS_PER_PAGE,
+    researcherPage * RESEARCHER_ITEMS_PER_PAGE,
+  );
+
+  const handleArticleClick = (id: string) => {
+    navigate(`/article/${id}`);
+  };
+
+  const handleEditorialPageChange = (page: number) => {
+    setEditorialPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleResearcherPageChange = (page: number) => {
+    setResearcherPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">
@@ -26,10 +68,11 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
           מערכת הפורום
         </h3>
         <div className="grid md:grid-cols-2 gap-8">
-          {editorialArticles.map((article) => (
+          {currentEditorialArticles.map((article) => (
             <div
               key={article.id}
-              className="group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg h-[400px] flex flex-col justify-end"
+              onClick={() => handleArticleClick(article.id)}
+              className="group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg h-[400px] flex flex-col justify-end cursor-pointer"
             >
               <img
                 src={article.imageUrl}
@@ -60,6 +103,12 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
             </div>
           ))}
         </div>
+
+        <PaginationControls
+          currentPage={editorialPage}
+          totalPages={totalEditorialPages}
+          onPageChange={handleEditorialPageChange}
+        />
       </div>
 
       {/* Researcher Articles Section */}
@@ -69,16 +118,17 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
           ממחקרים חדשים בקהילה
         </h3>
         <div className="grid md:grid-cols-3 gap-8">
-          {researcherArticles.map((article) => (
+          {currentResearcherArticles.map((article) => (
             <div
               key={article.id}
-              className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col"
+              onClick={() => handleArticleClick(article.id)}
+              className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer group"
             >
               <div className="h-48 overflow-hidden relative">
                 <img
                   src={article.imageUrl}
                   alt={article.title}
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
                 <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full shadow-sm">
                   {article.tags[0]}
@@ -89,7 +139,7 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
                   <UserCircle className="w-4 h-4" />
                   <span>{article.authorName}</span>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 mb-3 hover:text-indigo-600 cursor-pointer">
+                <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
                   {article.title}
                 </h3>
                 <p className="text-slate-600 text-sm line-clamp-3 mb-4 flex-1">
@@ -97,7 +147,13 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
                 </p>
                 <div className="pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
                   <span>{article.date}</span>
-                  <button className="text-indigo-600 font-medium hover:underline">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleArticleClick(article.id);
+                    }}
+                    className="text-indigo-600 font-medium hover:underline"
+                  >
                     קרא עוד
                   </button>
                 </div>
@@ -105,6 +161,12 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
             </div>
           ))}
         </div>
+
+        <PaginationControls
+          currentPage={researcherPage}
+          totalPages={totalResearcherPages}
+          onPageChange={handleResearcherPageChange}
+        />
       </div>
     </div>
   );

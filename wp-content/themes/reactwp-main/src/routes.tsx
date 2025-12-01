@@ -2,20 +2,36 @@ import { Link } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { ResearcherIndex } from "./pages/ResearcherIndex";
 import { ArticleList } from "./pages/ArticleList";
+import { ArticlePage } from "./pages/ArticlePage";
 import { JoinForm } from "./pages/JoinForm";
 import { Training } from "./pages/Training";
+import { TrainingPage } from "./pages/TrainingPage";
 import { Events } from "./pages/Events";
+import { Meetings } from "./pages/Meetings";
+import { PastEvents } from "./pages/PastEvents";
 import { Contact } from "./pages/Contact";
 import { ResearcherProfile } from "./pages/ResearcherProfile";
 import { Dashboard } from "./components/Dashboard";
-import { Article, CalendarEvent, Researcher } from "./types";
+import {
+  Article,
+  CalendarEvent,
+  Meeting,
+  Researcher,
+  Training as TrainingType,
+} from "./types";
+
+export type OnJoin = (
+  data: Omit<Researcher, "id" | "bio" | "status">,
+  callback: () => void,
+) => void;
 
 interface RouteProps {
   researchers: Researcher[];
   articles: Article[];
   events: CalendarEvent[];
-  onJoin: (data: Omit<Researcher, "id" | "bio" | "status">) => void;
-  // Removed onResearcherClick from props as navigation is internal now
+  meetings: Meeting[];
+  trainings: TrainingType[];
+  onJoin: OnJoin;
   currentUser: Researcher | null;
   onUpdateUser: (u: Researcher) => void;
   userArticles: Article[];
@@ -25,6 +41,7 @@ interface RouteProps {
 export const routeConfig = [
   {
     path: "/",
+    index: true,
     element: (props: RouteProps) => (
       <Home
         researchers={props.researchers}
@@ -42,7 +59,10 @@ export const routeConfig = [
   {
     path: "/researchers/:id",
     element: (props: RouteProps) => (
-      <ResearcherProfile researchers={props.researchers} />
+      <ResearcherProfile
+        researchers={props.researchers}
+        articles={props.articles}
+      />
     ),
   },
   {
@@ -50,12 +70,30 @@ export const routeConfig = [
     element: (props: RouteProps) => <ArticleList articles={props.articles} />,
   },
   {
+    path: "/article/:id",
+    element: (props: RouteProps) => <ArticlePage articles={props.articles} />,
+  },
+  {
     path: "/training",
-    element: () => <Training />,
+    element: (props: RouteProps) => <Training trainings={props.trainings} />,
+  },
+  {
+    path: "/training/:id",
+    element: (props: RouteProps) => (
+      <TrainingPage trainings={props.trainings} />
+    ),
   },
   {
     path: "/events",
-    element: (props: RouteProps) => <Events events={props.events} />,
+    element: () => <Events />,
+  },
+  {
+    path: "/events/past",
+    element: () => <PastEvents />,
+  },
+  {
+    path: "/meetings",
+    element: (props: RouteProps) => <Meetings meetings={props.meetings} />,
   },
   {
     path: "/contact",

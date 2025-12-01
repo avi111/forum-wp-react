@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { api } from "../services/api";
 
 export const useResearchers = () => {
@@ -22,9 +22,28 @@ export const useNews = () => {
   });
 };
 
-export const useEvents = () => {
+export const useEvents = (
+  page = 1,
+  limit = 100,
+  timeFilter: "future" | "past" | "all" = "all",
+) => {
   return useQuery({
-    queryKey: ["events"],
-    queryFn: api.fetchEvents,
+    queryKey: ["events", page, limit, timeFilter],
+    queryFn: () => api.fetchEvents(page, limit, timeFilter),
+    placeholderData: keepPreviousData,
+  });
+};
+
+export const useMeetings = () => {
+  return useQuery({
+    queryKey: ["meetings"],
+    queryFn: api.fetchMeetings,
+  });
+};
+
+export const useTrainings = () => {
+  return useQuery({
+    queryKey: ["trainings"],
+    queryFn: api.fetchTrainings,
   });
 };

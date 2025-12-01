@@ -1,9 +1,11 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getResearcherName, Researcher, UserStatus } from "../types";
+import { Article, getResearcherName, Researcher, UserStatus } from "../types";
 import {
   ArrowRight,
   Building2,
+  Calendar,
+  FileText,
   GraduationCap,
   Mail,
   MapPin,
@@ -13,10 +15,12 @@ import {
 
 interface ResearcherProfileProps {
   researchers: Researcher[];
+  articles: Article[];
 }
 
 export const ResearcherProfile: React.FC<ResearcherProfileProps> = ({
   researchers,
+  articles,
 }) => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -44,6 +48,11 @@ export const ResearcherProfile: React.FC<ResearcherProfileProps> = ({
   }
 
   const fullName = getResearcherName(researcher);
+
+  // Filter articles belonging to this researcher
+  const researcherArticles = articles.filter(
+    (a) => a.authorId === researcher.id,
+  );
 
   return (
     <div className="bg-slate-50 min-h-screen pb-12">
@@ -194,9 +203,9 @@ export const ResearcherProfile: React.FC<ResearcherProfileProps> = ({
               </div>
             </div>
 
-            {/* Placeholder for Researcher Articles */}
-            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8 opacity-70">
-              <div className="flex items-center gap-3 mb-4">
+            {/* Researcher Articles */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+              <div className="flex items-center gap-3 mb-6">
                 <div className="p-2 bg-teal-50 rounded-lg">
                   <GraduationCap className="w-6 h-6 text-teal-600" />
                 </div>
@@ -204,9 +213,60 @@ export const ResearcherProfile: React.FC<ResearcherProfileProps> = ({
                   פרסומים אחרונים
                 </h2>
               </div>
-              <p className="text-slate-500 text-sm">
-                רשימת הפרסומים של החוקר תוצג כאן בעתיד.
-              </p>
+
+              {researcherArticles.length > 0 ? (
+                <div className="space-y-4">
+                  {researcherArticles.map((article) => (
+                    <div
+                      key={article.id}
+                      className="border border-slate-100 rounded-lg p-4 hover:border-teal-100 hover:shadow-md transition-all bg-slate-50/30"
+                    >
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <div className="flex-1">
+                          <h4 className="font-bold text-lg text-slate-800 mb-2 hover:text-teal-600 transition-colors">
+                            {article.title}
+                          </h4>
+                          <p className="text-sm text-slate-600 line-clamp-2 mb-3">
+                            {article.excerpt}
+                          </p>
+                          <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
+                            <div className="flex gap-2">
+                              {article.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-xs font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex items-center text-xs text-slate-400">
+                              <Calendar className="w-3 h-3 ml-1" />
+                              {article.date}
+                            </div>
+                          </div>
+                        </div>
+                        {article.imageUrl && (
+                          <div className="hidden sm:block shrink-0">
+                            <img
+                              src={article.imageUrl}
+                              alt={article.title}
+                              className="w-24 h-24 object-cover rounded-lg shadow-sm"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 border border-dashed border-slate-200 rounded-lg bg-slate-50">
+                  <FileText className="w-10 h-10 mx-auto text-slate-300 mb-2" />
+                  <p className="text-slate-500 text-sm">
+                    טרם פורסמו מאמרים על ידי חוקר זה.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

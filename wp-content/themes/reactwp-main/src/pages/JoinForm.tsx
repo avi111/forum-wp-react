@@ -1,54 +1,22 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Check, Eye, EyeOff, FileText, Upload, Users, X } from "lucide-react";
 import { Researcher } from "../types";
+import {
+  INSTITUTIONS,
+  MAIN_SPECIALIZATIONS,
+  SUB_SPECIALIZATIONS,
+} from "../consts";
+import { OnJoin } from "@/routes.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface JoinFormProps {
-  onSubmit: (data: Omit<Researcher, "id" | "bio" | "status">) => void;
+  onSubmit: OnJoin;
 }
-
-const INSTITUTIONS = [
-  "מכון וייצמן למדע",
-  "אוניברסיטת תל-אביב",
-  "אוניברסיטת בר-אילן",
-  "אונ&#39; בן-גוריון בנגב",
-  "אונ&#39; חיפה",
-  "אונ&#39; אריאל",
-  "אונ&#39; העברית בירושלים",
-  "המרכז הרפואי עמק",
-  "המכללה האקדמית רייכמן",
-  "בית חולים רפואי איכילוב",
-  "משרד הבריאות",
-  "המרכז להתמכרויות - ICA",
-  "בית חולים תל השומר",
-  "עמותת אקספט (Accept)",
-];
-
-const MAIN_SPECIALIZATIONS = [
-  "פסיכיאטריה",
-  "נוירולוגיה",
-  "מדעי המוח",
-  "פסיכולוגיה קלינית",
-  "קרימינולוגיה",
-  "סוציולוגיה",
-  "ביוטכנולוגיה/ ביוכימיה",
-];
-
-const SUB_SPECIALIZATIONS = [
-  "מחקר קליני (Clinical Trials)",
-  "מדעי המוח (Neuroscience)",
-  "פסיכולוגיה קלינית (Clinical Psychology)",
-  "פסיכותרפיה בעזרת פסיכדלים (Psychedelic-assisted Psychotherapy)",
-  "פרמקולוגיה וכימיה (Pharmacology & Chemistry)",
-  "מחקר פרה-קליני / בחיות (Pre-clinical / Animal Studies)",
-  "סוציולוגיה ואנתרופולוגיה (Sociology & Anthropology)",
-  "היסטוריה ופילוסופיה (History & Philosophy)",
-  "מדיניות רפואית ורגולציה (Policy & Regulation)",
-];
 
 export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
   const [showBylaws, setShowBylaws] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -120,7 +88,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
       return;
     }
 
-    // Normalize data (handle &#39;Other&#39; fields)
+    // Normalize data (handle 'Other' fields)
     const finalInstitution =
       formData.institution === "other"
         ? formData.institutionOther
@@ -136,7 +104,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
       specialization: finalSpec,
     };
 
-    onSubmit(submissionData);
+    onSubmit(submissionData, () => navigate("/dashboard"));
   };
 
   return (
@@ -312,7 +280,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                 >
                   <option value="">בחר...</option>
                   <option value="prof">פרופ&#39;</option>
-                  <option value="md">ד&#34;ר לרפואה (MD)</option>
+                  <option value="md">דפרופ&#34;ר לרפואה (MD)</option>
                   <option value="phd">PhD מחקרי</option>
                   <option value="mr">מר</option>
                   <option value="ms">גב&#39;</option>
@@ -433,7 +401,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                         className="input-field text-sm py-1"
                         placeholder="פרט תחום נוסף..."
                         onChange={(e) => {
-                          // Logic handling for &#39;other&#39; in multi-select is complex, keeping simple text state for now
+                          // Logic handling for 'other' in multi-select is complex, keeping simple text state for now
                           // Ideally this would add to the array on blur
                           handleInputChange(e);
                         }}
@@ -453,9 +421,9 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">לא רלוונטי</option>
-                  <option value="1">שנה א&#39;</option>
-                  <option value="2">שנה ב&#39;</option>
-                  <option value="3">שנה ג&#39;</option>
+                  <option value="1">שנה א&#34;</option>
+                  <option value="2">שנה ב&#34;</option>
+                  <option value="3">שנה ג&#34;</option>
                   <option value="advanced">תארים מתקדמים</option>
                 </select>
               </div>

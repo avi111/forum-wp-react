@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { getResearcherName, Researcher, UserStatus } from "../types";
 import { MapPin, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { PaginationControls } from "../components/PaginationControls";
+import { RESEARCHER_INDEX_ITEMS_PER_PAGE } from "../consts";
 
 interface ResearcherIndexProps {
   researchers: Researcher[];
@@ -12,6 +14,7 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
   // Filter logic: Check name, institution, or specialization
@@ -26,12 +29,27 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
     return isActive && matchesSearch;
   });
 
+  // Pagination Logic
+  const totalPages = Math.ceil(
+    filteredResearchers.length / RESEARCHER_INDEX_ITEMS_PER_PAGE,
+  );
+  const currentResearchers = filteredResearchers.slice(
+    (currentPage - 1) * RESEARCHER_INDEX_ITEMS_PER_PAGE,
+    currentPage * RESEARCHER_INDEX_ITEMS_PER_PAGE,
+  );
+
   const handleResearcherClick = (r: Researcher) => {
     navigate(`/researchers/${r.id}`);
   };
 
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
   const handleSelectSuggestion = (name: string) => {
     setSearchTerm(name);
+    setCurrentPage(1); // Reset to first page when selecting
     // No need to set focus false immediately, filtering happens via state
   };
 
@@ -53,7 +71,7 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow click on suggestion
             placeholder="חיפוש חוקר לפי שם, מוסד או התמחות..."
@@ -63,7 +81,7 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
 
           {searchTerm && (
             <button
-              onClick={() => setSearchTerm("")}
+              onClick={() => handleSearchChange("")}
               className="absolute top-4 left-4 text-slate-300 hover:text-slate-500"
             >
               <X className="w-6 h-6" />
@@ -96,63 +114,71 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
 
       {/* Results Grid */}
       {filteredResearchers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredResearchers.map((researcher) => (
-            <div
-              key={researcher.id}
-              className="group bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-            >
-              <div className="h-28 bg-gradient-to-l from-indigo-900 to-slate-800 relative">
-                <div className="absolute inset-0 bg-pattern opacity-10"></div>
-              </div>
-              <div className="px-6 relative pb-6">
-                <div className="relative -top-12 mb-[-30px]">
-                  <img
-                    src={researcher.imageUrl}
-                    alt={getResearcherName(researcher)}
-                    className="w-24 h-24 rounded-2xl border-4 border-white shadow-md object-cover bg-white"
-                  />
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {currentResearchers.map((researcher) => (
+              <div
+                key={researcher.id}
+                className="group bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="h-28 bg-gradient-to-l from-indigo-900 to-slate-800 relative">
+                  <div className="absolute inset-0 bg-pattern opacity-10"></div>
                 </div>
-
-                <div className="pt-2">
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                    {getResearcherName(researcher)}
-                  </h3>
-                  <p className="text-teal-600 font-medium text-sm mb-3 uppercase tracking-wide">
-                    {researcher.specialization}
-                  </p>
-
-                  <div className="flex items-center text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-flex">
-                    <MapPin className="w-4 h-4 ml-1" />
-                    {researcher.institution}
+                <div className="px-6 relative pb-6">
+                  <div className="relative -top-12 mb-[-30px]">
+                    <img
+                      src={researcher.imageUrl}
+                      alt={getResearcherName(researcher)}
+                      className="w-24 h-24 rounded-2xl border-4 border-white shadow-md object-cover bg-white"
+                    />
                   </div>
 
-                  <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
-                    {researcher.bio}
-                  </p>
-                </div>
-                <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-                  <span className="text-xs font-semibold text-indigo-900 bg-indigo-50 px-2 py-1 rounded">
-                    חבר פורום
-                  </span>
-                  <button
-                    className="text-indigo-600 text-sm font-medium hover:underline"
-                    onClick={() => handleResearcherClick(researcher)}
-                  >
-                    צפה בפרופיל מלא
-                  </button>
+                  <div className="pt-2">
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                      {getResearcherName(researcher)}
+                    </h3>
+                    <p className="text-teal-600 font-medium text-sm mb-3 uppercase tracking-wide">
+                      {researcher.specialization}
+                    </p>
+
+                    <div className="flex items-center text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-flex">
+                      <MapPin className="w-4 h-4 ml-1" />
+                      {researcher.institution}
+                    </div>
+
+                    <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
+                      {researcher.bio}
+                    </p>
+                  </div>
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
+                    <span className="text-xs font-semibold text-indigo-900 bg-indigo-50 px-2 py-1 rounded">
+                      חבר פורום
+                    </span>
+                    <button
+                      className="text-indigo-600 text-sm font-medium hover:underline"
+                      onClick={() => handleResearcherClick(researcher)}
+                    >
+                      צפה בפרופיל מלא
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </>
       ) : (
         <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
           <Search className="w-16 h-16 mx-auto text-slate-300 mb-4" />
           <h3 className="text-xl font-bold text-slate-700">לא נמצאו חוקרים</h3>
           <p className="text-slate-500">נסה לחפש מונח אחר או בדוק את האיות</p>
           <button
-            onClick={() => setSearchTerm("")}
+            onClick={() => handleSearchChange("")}
             className="mt-4 text-teal-600 font-bold hover:underline"
           >
             נקה חיפוש

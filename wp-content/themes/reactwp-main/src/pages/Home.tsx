@@ -4,6 +4,7 @@ import { ResearcherCarousel } from "../components/ResearcherCarousel";
 import { HomeFeatures } from "../components/HomeFeatures";
 import { HomeLatestUpdates } from "../components/HomeLatestUpdates";
 import { Article, CalendarEvent, Researcher } from "../types";
+import { useLocation } from "react-router-dom";
 
 interface HomeProps {
   researchers: Researcher[];
@@ -16,6 +17,10 @@ export const Home: React.FC<HomeProps> = ({
   articles,
   events,
 }) => {
+  const location = useLocation();
+
+  console.log(location);
+
   // Filter articles
   const editorialArticles = articles.filter((a) => a.isEditorial);
   const researcherArticles = articles.filter((a) => !a.isEditorial);
