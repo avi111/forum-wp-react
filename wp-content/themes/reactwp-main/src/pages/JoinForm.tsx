@@ -6,8 +6,9 @@ import {
   MAIN_SPECIALIZATIONS,
   SUB_SPECIALIZATIONS,
 } from "../consts";
-import { OnJoin } from "@/routes.tsx";
+
 import { useNavigate } from "react-router-dom";
+import { OnJoin } from "../routes";
 
 interface JoinFormProps {
   onSubmit: OnJoin;
