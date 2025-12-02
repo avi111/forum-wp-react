@@ -1,6 +1,5 @@
-
-import React from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { NewsTicker } from "./NewsTicker";
@@ -9,7 +8,15 @@ import { useApp } from "../context/AppContext";
 
 export function Layout() {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser, newsItems, simulateAdminApproval } = useApp();
+  const { currentUser, setCurrentUser, newsItems, simulateAdminApproval } =
+    useApp();
+
+  const { pathname } = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const onLogout = () => {
     setCurrentUser(null);
