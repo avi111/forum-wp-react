@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { ResearcherIndex } from "./pages/ResearcherIndex";
@@ -15,10 +14,11 @@ import { About } from "./pages/About";
 import { ResearcherProfile } from "./pages/ResearcherProfile";
 import { Dashboard } from "./components/Dashboard";
 import { useApp } from "./context/AppContext";
+import { PageNotFound } from "./pages/PageNotFound";
 
 function DashboardWrapper() {
   const { currentUser } = useApp();
-  
+
   if (currentUser) {
     return <Dashboard />;
   }
@@ -100,5 +100,9 @@ export const routeConfig = [
   {
     path: "/dashboard",
     element: <DashboardWrapper />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
   },
 ];

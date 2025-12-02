@@ -1,96 +1,136 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>הפורום הישראלי למחקר פסיכדלי</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Assistant:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>הפורום הישראלי למחקר פסיכדלי</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Assistant:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
+  <style>
       body {
-        font-family: 'Assistant', sans-serif;
+          font-family: 'Assistant', sans-serif;
       }
+
       h1, h2, h3, h4, h5, h6 {
-        font-family: 'Heebo', sans-serif;
+          font-family: 'Heebo', sans-serif;
       }
-      
+
       /* Animation for Marquee */
       @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(50%); } 
+          0% {
+              transform: translateX(0);
+          }
+          100% {
+              transform: translateX(50%);
+          }
       }
-      
+
       @keyframes marquee-rtl {
-         0% { transform: translateX(0); }
-         100% { transform: translateX(50%); } 
+          0% {
+              transform: translateX(0);
+          }
+          100% {
+              transform: translateX(50%);
+          }
       }
-      
+
       .animate-marquee {
-        animation: marquee-rtl 40s linear infinite;
+          animation: marquee-rtl 40s linear infinite;
       }
-      
+
       .animate-marquee:hover {
-        animation-play-state: paused;
+          animation-play-state: paused;
       }
 
       /* Custom animations */
       @keyframes fade-in {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+              opacity: 0;
+          }
+          to {
+              opacity: 1;
+          }
       }
+
       .animate-fade-in {
           animation: fade-in 0.5s ease-out forwards;
       }
-      
+
       @keyframes slide-up {
-          from { transform: translateY(20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
+          from {
+              transform: translateY(20px);
+              opacity: 0;
+          }
+          to {
+              transform: translateY(0);
+              opacity: 1;
+          }
       }
+
       .animate-slide-up {
           animation: slide-up 0.5s ease-out forwards;
       }
-      
+
       @keyframes float {
-          0% { transform: translateY(0px); }
-          50% { transform: translateY(-15px); }
-          100% { transform: translateY(0px); }
+          0% {
+              transform: translateY(0px);
+          }
+          50% {
+              transform: translateY(-15px);
+          }
+          100% {
+              transform: translateY(0px);
+          }
       }
+
       .animate-float {
           animation: float 6s ease-in-out infinite;
       }
-      
+
       @keyframes blob {
-          0% { transform: translate(0px, 0px) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
-          100% { transform: translate(0px, 0px) scale(1); }
+          0% {
+              transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+              transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+              transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+              transform: translate(0px, 0px) scale(1);
+          }
       }
+
       .animate-blob {
           animation: blob 7s infinite;
       }
+
       .animation-delay-2000 {
           animation-delay: 2s;
       }
-    </style>
+  </style>
   <script type="importmap">
-{
-  "imports": {
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react/": "https://aistudiocdn.com/lucide-react@^0.555.0/",
-    "react-router-dom": "https://aistudiocdn.com/react-router-dom@^6.22.3",
-    "react-router": "https://aistudiocdn.com/react-router@^6.22.3",
-    "@tanstack/react-query": "https://aistudiocdn.com/@tanstack/react-query@^5.28.4"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
+    {
+      "imports": {
+        "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+        "react/": "https://aistudiocdn.com/react@^19.2.0/",
+        "react": "https://aistudiocdn.com/react@^19.2.0",
+        "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+        "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+        "lucide-react/": "https://aistudiocdn.com/lucide-react@^0.555.0/",
+        "react-router-dom": "https://aistudiocdn.com/react-router-dom@^6.22.3",
+        "react-router": "https://aistudiocdn.com/react-router@^6.22.3",
+        "@tanstack/react-query": "https://aistudiocdn.com/@tanstack/react-query@^5.28.4"
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="/index.css">
 </head>
-  <body class="bg-slate-50 text-slate-900">
-    <div id="root"></div>
+<body class="bg-slate-50 text-slate-900">
+  <div id="root"></div>
   <script type="module" src="/index.tsx"></script>
 </body>
 </html>

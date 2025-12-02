@@ -1,4 +1,3 @@
-
 import {
   Article,
   AppSettings,
@@ -13,6 +12,77 @@ import {
 } from "./types";
 
 export const MOCK_SETTINGS: AppSettings = {
+  strings: {
+    // Join Form
+    joinForm_passwords_not_match: "הסיסמאות אינן תואמות",
+    joinForm_bylaws_not_agreed: "יש לאשר את תקנון האגודה",
+    joinForm_request_successful: "תודה רבה! בקשתך התקבלה בהצלחה",
+    joinForm_title: "בקשת הצטרפות לחברות",
+    joinForm_subtitle: "הפורום הישראלי למחקר פסיכדלי",
+    joinForm_section1_title: "פרטי חשבון",
+    joinForm_username_label: "שם משתמש",
+    joinForm_email_label: 'כתובת דוא"ל (*)',
+    joinForm_password_label: "סיסמה (*)",
+    joinForm_confirm_password_label: "אישור סיסמה (*)",
+    joinForm_section2_title: "פרטים אישיים",
+    joinForm_firstName_label: "שם פרטי (*)",
+    joinForm_lastName_label: "שם משפחה (*)",
+    joinForm_idNumber_label: "מספר תעודת זהות (*)",
+    joinForm_phone_label: "מספר טלפון נייד (*)",
+    joinForm_gender_label: "מין",
+    joinForm_gender_select_placeholder: "בחר...",
+    joinForm_title_label: "תואר (*)",
+    joinForm_title_select_placeholder: "בחר...",
+    joinForm_section3_title: "פרטים אקדמיים ומקצועיים",
+    joinForm_institution_label: "מוסד אקדמי / מכון מחקר (*)",
+    joinForm_institution_select_placeholder: "בחר מוסד...",
+    joinForm_institution_other: "אחר",
+    joinForm_institution_other_placeholder: "נא פרט שם מוסד...",
+    joinForm_faculty_label: "פקולטה / חוג (*)",
+    joinForm_main_specialization_label: "תחום התמחות עיקרי",
+    joinForm_main_specialization_select_placeholder: "בחר תחום...",
+    joinForm_main_specialization_other: "אחר",
+    joinForm_main_specialization_other_placeholder: "נא פרט...",
+    joinForm_sub_specialization_label: "תת-התמחות (ניתן לבחור מספר אפשרויות)",
+    joinForm_sub_specialization_other_label: "אחר:",
+    joinForm_sub_specialization_other_placeholder: "פרט תחום נוסף...",
+    joinForm_student_year_label: "שנת לימודים (אם סטודנט)",
+    joinForm_student_year_select_placeholder: "לא רלוונטי",
+    joinForm_section4_title: "מסמכים נדרשים",
+    joinForm_verification_doc_title: "מסמך אימות זהות/אקדמי (*)",
+    joinForm_verification_doc_subtitle: "תעודת סטודנט / סגל / אישור מוסד",
+    joinForm_select_file: "בחר קובץ",
+    joinForm_intent_letter_title: "מכתב הצטרפות / הצהרת כוונות (*)",
+    joinForm_intent_letter_subtitle: "קובץ PDF או Word קצר",
+    joinForm_agreed_to_bylaws_prefix: "אני מאשר/ת את",
+    joinForm_bylaws_link: "תקנון האגודה",
+    joinForm_agreed_to_bylaws_suffix: "ומסכים/ה לכל תנאיו (*)",
+    joinForm_newsletter_agreement:
+      "אני מסכים/ה לקבלת דיוור, עדכונים והזמנות לאירועים במייל (ניתן להסרה בכל עת)",
+    joinForm_submit_button: "שליחת בקשת הצטרפות",
+    joinForm_submit_notice:
+      "לחיצה על שליחה מהווה הסכמה לתנאי השימוש ומדיניות הפרטיות של האתר.",
+    bylawsModal_title: "תקנון האגודה והפורום",
+    bylawsModal_section1_title: "סודיות ואתיקה:",
+    bylawsModal_section1_content:
+      "כל המידע המשותף בפורום זה נועד לדיון אקדמי/מחקרי בלבד. חל איסור מוחלט על הפצה או שימוש במידע רגיש מחוץ למסגרת הפורום ללא אישור מפורש מראש.",
+    bylawsModal_section2_title: "אימות זהות:",
+    bylawsModal_section2_content:
+      "חברות בפורום מותנית באימות רקע אקדמי/מקצועי בלבד. צוות הניהול שומר לעצמו את הזכות לסרב או לבטל חברות של משתמשים שאינם עומדים בקריטריונים אלו.",
+    bylawsModal_section3_title: "שימוש הוגן:",
+    bylawsModal_section3_content:
+      "אין לפרסם תוכן המפר זכויות יוצרים או קניין רוחני.",
+    bylawsModal_section4_title: "אכיפה:",
+    bylawsModal_section4_content:
+      "חברים שיפרו את התקנון עלולים להיחסם מהפורום באופן מיידי וללא אזהרה מוקדמת.",
+    bylawsModal_confirm_button: "קראתי ואני מאשר/ת",
+
+    // Article List
+    articleList_page_title: "מאמרים ופרסומים",
+    articleList_editorial_section_title: "מערכת הפורום",
+    articleList_researcher_section_title: "ממחקרים חדשים בקהילה",
+    articleList_read_more: "קרא עוד",
+  },
   institutions: [
     "מכון וייצמן למדע",
     "אוניברסיטת תל-אביב",

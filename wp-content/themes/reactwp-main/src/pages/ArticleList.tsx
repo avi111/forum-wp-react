@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import { UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PaginationControls } from "../components/PaginationControls";
 import { useApp } from "../context/AppContext";
+import { t } from "../services/stringService";
 
 export const ArticleList: React.FC = () => {
   const { articles, settings } = useApp();
@@ -53,7 +53,7 @@ export const ArticleList: React.FC = () => {
     <div className="max-w-7xl mx-auto py-16 px-4">
       <div className="text-center mb-16">
         <h2 className="text-4xl font-bold text-slate-900 mb-4">
-          מאמרים ופרסומים
+          {t("articleList_page_title")}
         </h2>
         <div className="w-24 h-1.5 bg-indigo-500 mx-auto rounded-full"></div>
       </div>
@@ -62,7 +62,7 @@ export const ArticleList: React.FC = () => {
       <div className="mb-16">
         <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center">
           <span className="w-2 h-8 bg-indigo-600 rounded ml-3"></span>
-          מערכת הפורום
+          {t("articleList_editorial_section_title")}
         </h3>
         <div className="grid md:grid-cols-2 gap-8">
           {currentEditorialArticles.map((article) => (
@@ -112,7 +112,7 @@ export const ArticleList: React.FC = () => {
       <div>
         <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center">
           <span className="w-2 h-8 bg-teal-500 rounded ml-3"></span>
-          ממחקרים חדשים בקהילה
+          {t("articleList_researcher_section_title")}
         </h3>
         <div className="grid md:grid-cols-3 gap-8">
           {currentResearcherArticles.map((article) => (
@@ -151,7 +151,7 @@ export const ArticleList: React.FC = () => {
                     }}
                     className="text-indigo-600 font-medium hover:underline"
                   >
-                    קרא עוד
+                    {t("articleList_read_more")}
                   </button>
                 </div>
               </div>

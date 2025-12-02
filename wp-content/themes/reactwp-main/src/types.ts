@@ -118,6 +118,7 @@ export interface AppSettings {
   latestEditorialLimit: number;
   latestResearchLimit: number;
   titleMap: Record<string, string>;
+  strings: Record<string, string>; // Added this line
 }
 
 export enum PageView {

@@ -4,6 +4,7 @@ import { Researcher } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useToast } from "../context/ToastContext";
+import { t } from "../services/stringService";
 
 export const JoinForm: FC = () => {
   const { onJoin, settings } = useApp();
@@ -74,15 +75,14 @@ export const JoinForm: FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert("הסיסמאות אינן תואמות");
+      alert(t("joinForm_passwords_not_match"));
       return;
     }
     if (!formData.agreedToBylaws) {
-      alert("יש לאשר את תקנון האגודה");
+      alert(t("joinForm_bylaws_not_agreed"));
       return;
     }
 
-    // Normalize data (handle 'Other' fields)
     const finalInstitution =
       formData.institution === "other"
         ? formData.institutionOther
@@ -99,7 +99,7 @@ export const JoinForm: FC = () => {
     };
 
     onJoin(submissionData, () => {
-      showToast("תודה רבה! בקשתך התקבלה בהצלחה");
+      showToast(t("joinForm_request_successful"));
       navigate("/dashboard");
     });
   };
@@ -107,35 +107,35 @@ export const JoinForm: FC = () => {
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
-        {/* Header */}
         <div className="bg-slate-900 text-white p-8 text-center relative overflow-hidden">
           <div className="relative z-10">
             <div className="bg-teal-500 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg transform rotate-6">
               <Users className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-3xl font-bold font-heebo">
-              בקשת הצטרפות לחברות
+              {t("joinForm_title")}
             </h2>
             <p className="text-teal-200 mt-2 text-lg">
-              הפורום הישראלי למחקר פסיכדלי
+              {t("joinForm_subtitle")}
             </p>
           </div>
           <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-8 md:p-12 space-y-12">
-          {/* Section 1: User Details */}
           <section className="space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-2">
               <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                 1
               </span>
-              <h3 className="text-xl font-bold text-slate-800">פרטי חשבון</h3>
+              <h3 className="text-xl font-bold text-slate-800">
+                {t("joinForm_section1_title")}
+              </h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  שם משתמש
+                  {t("joinForm_username_label")}
                 </label>
                 <input
                   type="text"
@@ -147,7 +147,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  כתובת דוא&#34;ל (*)
+                  {t("joinForm_email_label")}
                 </label>
                 <input
                   type="email"
@@ -159,7 +159,7 @@ export const JoinForm: FC = () => {
               </div>
               <div className="relative">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  סיסמה (*)
+                  {t("joinForm_password_label")}
                 </label>
                 <div className="relative">
                   <input
@@ -180,7 +180,7 @@ export const JoinForm: FC = () => {
               </div>
               <div className="relative">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  אישור סיסמה (*)
+                  {t("joinForm_confirm_password_label")}
                 </label>
                 <input
                   type="password"
@@ -193,18 +193,19 @@ export const JoinForm: FC = () => {
             </div>
           </section>
 
-          {/* Section 2: Personal Details */}
           <section className="space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-2">
               <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                 2
               </span>
-              <h3 className="text-xl font-bold text-slate-800">פרטים אישיים</h3>
+              <h3 className="text-xl font-bold text-slate-800">
+                {t("joinForm_section2_title")}
+              </h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  שם פרטי (*)
+                  {t("joinForm_firstName_label")}
                 </label>
                 <input
                   type="text"
@@ -216,7 +217,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  שם משפחה (*)
+                  {t("joinForm_lastName_label")}
                 </label>
                 <input
                   type="text"
@@ -228,7 +229,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  מספר תעודת זהות (*)
+                  {t("joinForm_idNumber_label")}
                 </label>
                 <input
                   type="text"
@@ -240,7 +241,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  מספר טלפון נייד (*)
+                  {t("joinForm_phone_label")}
                 </label>
                 <input
                   type="tel"
@@ -252,14 +253,16 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  מין
+                  {t("joinForm_gender_label")}
                 </label>
                 <select
                   name="gender"
                   className="input-field"
                   onChange={handleInputChange}
                 >
-                  <option value="">בחר...</option>
+                  <option value="">
+                    {t("joinForm_gender_select_placeholder")}
+                  </option>
                   {settings.genders.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -269,7 +272,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  תואר (*)
+                  {t("joinForm_title_label")}
                 </label>
                 <select
                   name="title"
@@ -277,7 +280,9 @@ export const JoinForm: FC = () => {
                   className="input-field"
                   onChange={handleInputChange}
                 >
-                  <option value="">בחר...</option>
+                  <option value="">
+                    {t("joinForm_title_select_placeholder")}
+                  </option>
                   {settings.titles.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -288,21 +293,20 @@ export const JoinForm: FC = () => {
             </div>
           </section>
 
-          {/* Section 3: Academic Details */}
           <section className="space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-2">
               <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                 3
               </span>
               <h3 className="text-xl font-bold text-slate-800">
-                פרטים אקדמיים ומקצועיים
+                {t("joinForm_section3_title")}
               </h3>
             </div>
 
             <div className="grid grid-cols-1 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  מוסד אקדמי / מכון מחקר (*)
+                  {t("joinForm_institution_label")}
                 </label>
                 <select
                   name="institution"
@@ -310,19 +314,23 @@ export const JoinForm: FC = () => {
                   className="input-field mb-2"
                   onChange={handleInputChange}
                 >
-                  <option value="">בחר מוסד...</option>
+                  <option value="">
+                    {t("joinForm_institution_select_placeholder")}
+                  </option>
                   {settings.institutions.map((inst) => (
                     <option key={inst} value={inst}>
                       {inst}
                     </option>
                   ))}
-                  <option value="other">אחר</option>
+                  <option value="other">
+                    {t("joinForm_institution_other")}
+                  </option>
                 </select>
                 {formData.institution === "other" && (
                   <input
                     type="text"
                     name="institutionOther"
-                    placeholder="נא פרט שם מוסד..."
+                    placeholder={t("joinForm_institution_other_placeholder")}
                     className="input-field bg-slate-50"
                     onChange={handleInputChange}
                   />
@@ -331,7 +339,7 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  פקולטה / חוג (*)
+                  {t("joinForm_faculty_label")}
                 </label>
                 <input
                   type="text"
@@ -344,26 +352,32 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  תחום התמחות עיקרי
+                  {t("joinForm_main_specialization_label")}
                 </label>
                 <select
                   name="mainSpecialization"
                   className="input-field mb-2"
                   onChange={handleInputChange}
                 >
-                  <option value="">בחר תחום...</option>
+                  <option value="">
+                    {t("joinForm_main_specialization_select_placeholder")}
+                  </option>
                   {settings.mainSpecializations.map((spec) => (
                     <option key={spec} value={spec}>
                       {spec}
                     </option>
                   ))}
-                  <option value="other">אחר</option>
+                  <option value="other">
+                    {t("joinForm_main_specialization_other")}
+                  </option>
                 </select>
                 {formData.mainSpecialization === "other" && (
                   <input
                     type="text"
                     name="mainSpecializationOther"
-                    placeholder="נא פרט..."
+                    placeholder={t(
+                      "joinForm_main_specialization_other_placeholder",
+                    )}
                     className="input-field bg-slate-50"
                     onChange={handleInputChange}
                   />
@@ -372,7 +386,7 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-3">
-                  תת-התמחות (ניתן לבחור מספר אפשרויות)
+                  {t("joinForm_sub_specialization_label")}
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
                   {settings.subSpecializations.map((sub) => (
@@ -392,18 +406,16 @@ export const JoinForm: FC = () => {
                   <div className="md:col-span-2 mt-2 pt-2 border-t border-slate-200">
                     <label className="flex items-center space-x-3 space-x-reverse">
                       <span className="text-sm font-bold text-slate-700 ml-2">
-                        אחר:
+                        {t("joinForm_sub_specialization_other_label")}
                       </span>
                       <input
                         type="text"
                         name="subSpecializationOther"
                         className="input-field text-sm py-1"
-                        placeholder="פרט תחום נוסף..."
-                        onChange={(e) => {
-                          // Logic handling for 'other' in multi-select is complex, keeping simple text state for now
-                          // Ideally this would add to the array on blur
-                          handleInputChange(e);
-                        }}
+                        placeholder={t(
+                          "joinForm_sub_specialization_other_placeholder",
+                        )}
+                        onChange={handleInputChange}
                       />
                     </label>
                   </div>
@@ -412,14 +424,16 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  שנת לימודים (אם סטודנט)
+                  {t("joinForm_student_year_label")}
                 </label>
                 <select
                   name="studentYear"
                   className="input-field w-full md:w-1/3"
                   onChange={handleInputChange}
                 >
-                  <option value="">לא רלוונטי</option>
+                  <option value="">
+                    {t("joinForm_student_year_select_placeholder")}
+                  </option>
                   {settings.studentYears.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
@@ -430,14 +444,13 @@ export const JoinForm: FC = () => {
             </div>
           </section>
 
-          {/* Section 4: Documents */}
           <section className="space-y-6">
             <div className="flex items-center gap-3 border-b border-slate-100 pb-2">
               <span className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-sm">
                 4
               </span>
               <h3 className="text-xl font-bold text-slate-800">
-                מסמכים נדרשים
+                {t("joinForm_section4_title")}
               </h3>
             </div>
 
@@ -445,14 +458,14 @@ export const JoinForm: FC = () => {
               <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:bg-slate-50 transition-colors">
                 <FileText className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <h4 className="font-bold text-slate-700 mb-1">
-                  מסמך אימות זהות/אקדמי (*)
+                  {t("joinForm_verification_doc_title")}
                 </h4>
                 <p className="text-xs text-slate-500 mb-4">
-                  תעודת סטודנט / סגל / אישור מוסד
+                  {t("joinForm_verification_doc_subtitle")}
                 </p>
                 <label className="cursor-pointer bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm inline-flex items-center">
                   <Upload className="w-4 h-4 ml-2" />
-                  בחר קובץ
+                  {t("joinForm_select_file")}
                   <input
                     type="file"
                     className="hidden"
@@ -470,14 +483,14 @@ export const JoinForm: FC = () => {
               <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:bg-slate-50 transition-colors">
                 <FileText className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <h4 className="font-bold text-slate-700 mb-1">
-                  מכתב הצטרפות / הצהרת כוונות (*)
+                  {t("joinForm_intent_letter_title")}
                 </h4>
                 <p className="text-xs text-slate-500 mb-4">
-                  קובץ PDF או Word קצר
+                  {t("joinForm_intent_letter_subtitle")}
                 </p>
                 <label className="cursor-pointer bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm inline-flex items-center">
                   <Upload className="w-4 h-4 ml-2" />
-                  בחר קובץ
+                  {t("joinForm_select_file")}
                   <input
                     type="file"
                     className="hidden"
@@ -494,7 +507,6 @@ export const JoinForm: FC = () => {
             </div>
           </section>
 
-          {/* Section 5: Agreements */}
           <section className="bg-indigo-50/50 p-6 rounded-xl border border-indigo-100">
             <div className="space-y-4">
               <label className="flex items-start cursor-pointer">
@@ -506,15 +518,15 @@ export const JoinForm: FC = () => {
                   className="mt-1 w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
                 />
                 <span className="mr-3 text-sm text-slate-700">
-                  אני מאשר/ת את
+                  {t("joinForm_agreed_to_bylaws_prefix")}
                   <button
                     type="button"
                     onClick={() => setShowBylaws(true)}
                     className="text-indigo-600 font-bold underline mx-1 hover:text-indigo-800"
                   >
-                    תקנון האגודה
+                    {t("joinForm_bylaws_link")}
                   </button>
-                  ומסכים/ה לכל תנאיו (*)
+                  {t("joinForm_agreed_to_bylaws_suffix")}
                 </span>
               </label>
 
@@ -527,8 +539,7 @@ export const JoinForm: FC = () => {
                   className="mt-1 w-5 h-5 text-teal-600 rounded focus:ring-teal-500 border-gray-300"
                 />
                 <span className="mr-3 text-sm text-slate-700">
-                  אני מסכים/ה לקבלת דיוור, עדכונים והזמנות לאירועים במייל (ניתן
-                  להסרה בכל עת)
+                  {t("joinForm_newsletter_agreement")}
                 </span>
               </label>
             </div>
@@ -539,16 +550,15 @@ export const JoinForm: FC = () => {
               type="submit"
               className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-slate-800 shadow-xl shadow-slate-900/10 transition-all transform hover:-translate-y-0.5"
             >
-              שליחת בקשת הצטרפות
+              {t("joinForm_submit_button")}
             </button>
             <p className="text-center text-xs text-slate-400 mt-4">
-              לחיצה על שליחה מהווה הסכמה לתנאי השימוש ומדיניות הפרטיות של האתר.
+              {t("joinForm_submit_notice")}
             </p>
           </div>
         </form>
       </div>
 
-      {/* Styles for cleaner JSX */}
       <style>{`
           .input-field {
               width: 100%;
@@ -564,13 +574,12 @@ export const JoinForm: FC = () => {
           }
       `}</style>
 
-      {/* Bylaws Modal */}
       {showBylaws && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-slide-up">
             <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
               <h3 className="text-xl font-bold text-slate-900">
-                תקנון האגודה והפורום
+                {t("bylawsModal_title")}
               </h3>
               <button
                 onClick={() => setShowBylaws(false)}
@@ -583,33 +592,37 @@ export const JoinForm: FC = () => {
               <div className="flex gap-4">
                 <span className="font-bold text-indigo-600">1.</span>
                 <p>
-                  <strong className="text-slate-900">סודיות ואתיקה:</strong> כל
-                  המידע המשותף בפורום זה נועד לדיון אקדמי/מחקרי בלבד. חל איסור
-                  מוחלט על הפצה או שימוש במידע רגיש מחוץ למסגרת הפורום ללא אישור
-                  מפורש מראש.
+                  <strong className="text-slate-900">
+                    {t("bylawsModal_section1_title")}
+                  </strong>{" "}
+                  {t("bylawsModal_section1_content")}
                 </p>
               </div>
               <div className="flex gap-4">
                 <span className="font-bold text-indigo-600">2.</span>
                 <p>
-                  <strong className="text-slate-900">אימות זהות:</strong> חברות
-                  בפורום מותנית באימות רקע אקדמי/מקצועי בלבד. צוות הניהול שומר
-                  לעצמו את הזכות לסרב או לבטל חברות של משתמשים שאינם עומדים
-                  בקריטריונים אלו.
+                  <strong className="text-slate-900">
+                    {t("bylawsModal_section2_title")}
+                  </strong>{" "}
+                  {t("bylawsModal_section2_content")}
                 </p>
               </div>
               <div className="flex gap-4">
                 <span className="font-bold text-indigo-600">3.</span>
                 <p>
-                  <strong className="text-slate-900">שימוש הוגן:</strong> אין
-                  לפרסם תוכן המפר זכויות יוצרים או קניין רוחני.
+                  <strong className="text-slate-900">
+                    {t("bylawsModal_section3_title")}
+                  </strong>{" "}
+                  {t("bylawsModal_section3_content")}
                 </p>
               </div>
               <div className="flex gap-4">
                 <span className="font-bold text-indigo-600">4.</span>
                 <p>
-                  <strong className="text-slate-900">אכיפה:</strong> חברים שיפרו
-                  את התקנון עלולים להיחסם מהפורום באופן מיידי וללא אזהרה מוקדמת.
+                  <strong className="text-slate-900">
+                    {t("bylawsModal_section4_title")}
+                  </strong>{" "}
+                  {t("bylawsModal_section4_content")}
                 </p>
               </div>
             </div>
@@ -621,7 +634,7 @@ export const JoinForm: FC = () => {
                 }}
                 className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition"
               >
-                קראתי ואני מאשר/ת
+                {t("bylawsModal_confirm_button")}
               </button>
             </div>
           </div>

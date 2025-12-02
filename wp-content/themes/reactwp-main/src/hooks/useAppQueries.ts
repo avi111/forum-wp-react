@@ -8,6 +8,14 @@ export const useSettings = () => {
   });
 };
 
+export const useTemplate = (templateName: string) => {
+  return useQuery({
+    queryKey: ["template", templateName],
+    queryFn: () => api.fetchTemplate(templateName),
+    staleTime: 1000 * 60 * 60, // Cache templates for 1 hour
+  });
+};
+
 export const useResearchers = () => {
   return useQuery({
     queryKey: ["researchers"],

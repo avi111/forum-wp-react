@@ -1,5 +1,10 @@
-
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   useSettings,
@@ -22,6 +27,7 @@ import {
   OnJoin,
 } from "../types";
 import { Brain, Loader2 } from "lucide-react";
+import { initStrings } from "../services/stringService";
 
 interface AppContextType {
   settings: AppSettings;
@@ -42,15 +48,15 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AppProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const queryClient = useQueryClient();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
   const { data: researchers = [], isLoading: loadingRes } = useResearchers();
   const { data: articles = [], isLoading: loadingArticles } = useArticles();
 
-  // Use a larger limit for the homepage to ensure we have enough future events after filtering
-  // Using settings if available, otherwise default to a safe number
   const homeEventsLimit = settings ? settings.eventsItemsPerPage * 3 : 10;
   const { data: eventsData, isLoading: loadingEvents } = useEvents(
     1,
@@ -63,8 +69,14 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const { data: trainings = [], isLoading: loadingTrainings } = useTrainings();
   const { data: newsItems = [], isLoading: loadingNewsItems } = useNews();
 
-  // App State
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
+
+  // Initialize the string service once settings are loaded
+  useEffect(() => {
+    if (settings?.strings) {
+      initStrings(settings.strings);
+    }
+  }, [settings]);
 
   const isLoading =
     loadingSettings ||
@@ -75,7 +87,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     loadingMeetings ||
     loadingTrainings;
 
-  // Calculate user articles
   const userArticles = currentUser
     ? articles.filter((a) => a.authorId === currentUser.id)
     : [];
@@ -84,7 +95,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     data: Omit<Researcher, "id" | "bio" | "status">,
     callback,
   ) => {
-    // Use titleMap from settings if available, otherwise fallback or empty string
     const titleStr =
       data.title && settings?.titleMap && settings.titleMap[data.title]
         ? settings.titleMap[data.title]
