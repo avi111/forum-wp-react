@@ -1,24 +1,15 @@
+
+import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { NewsTicker } from "./NewsTicker";
 import { NAV_ITEMS } from "../mockData";
-import { NewsItem, Researcher } from "../types";
+import { useApp } from "../context/AppContext";
 
-interface LayoutProps {
-  currentUser: Researcher | null;
-  setCurrentUser: (user: Researcher | null) => void;
-  newsItems: NewsItem[];
-  onSimulateApproval: () => void;
-}
-
-export function Layout({
-  currentUser,
-  setCurrentUser,
-  newsItems,
-  onSimulateApproval,
-}: LayoutProps) {
+export function Layout() {
   const navigate = useNavigate();
+  const { currentUser, setCurrentUser, newsItems, simulateAdminApproval } = useApp();
 
   const onLogout = () => {
     setCurrentUser(null);
@@ -42,7 +33,7 @@ export function Layout({
       </main>
       <Footer
         currentUser={currentUser}
-        onSimulateApproval={onSimulateApproval}
+        onSimulateApproval={simulateAdminApproval}
       />
     </div>
   );

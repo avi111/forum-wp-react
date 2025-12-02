@@ -1,14 +1,13 @@
+
 import React from "react";
 import { InfoPage } from "../components/InfoPage";
 import { BookOpen } from "lucide-react";
-import { Training as TrainingType } from "../types";
 import { TrainingList } from "../components/TrainingList";
+import { useApp } from "../context/AppContext";
 
-interface TrainingProps {
-  trainings: TrainingType[];
-}
-
-export const Training: React.FC<TrainingProps> = ({ trainings }) => {
+export const Training: React.FC = () => {
+  const { trainings } = useApp();
+  
   return (
     <InfoPage title="הכשרות וקורסים" icon={BookOpen}>
       <p className="lead text-xl text-slate-600 mb-8">

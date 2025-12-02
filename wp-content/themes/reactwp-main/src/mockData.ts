@@ -1,5 +1,7 @@
+
 import {
   Article,
+  AppSettings,
   CalendarEvent,
   Meeting,
   NavItem,
@@ -9,6 +11,76 @@ import {
   Training,
   UserStatus,
 } from "./types";
+
+export const MOCK_SETTINGS: AppSettings = {
+  institutions: [
+    "מכון וייצמן למדע",
+    "אוניברסיטת תל-אביב",
+    "אוניברסיטת בר-אילן",
+    "אונ' בן-גוריון בנגב",
+    "אונ' חיפה",
+    "אונ' אריאל",
+    "אונ' העברית בירושלים",
+    "המרכז הרפואי עמק",
+    "המכללה האקדמית רייכמן",
+    "בית חולים רפואי איכילוב",
+    "משרד הבריאות",
+    "המרכז להתמכרויות - ICA",
+    "בית חולים תל השומר",
+    "עמותת אקספט (Accept)",
+  ],
+  mainSpecializations: [
+    "פסיכיאטריה",
+    "נוירולוגיה",
+    "מדעי המוח",
+    "פסיכולוגיה קלינית",
+    "קרימינולוגיה",
+    "סוציולוגיה",
+    "ביוטכנולוגיה/ ביוכימיה",
+  ],
+  subSpecializations: [
+    "מחקר קליני",
+    "מדעי המוח ",
+    "פסיכולוגיה קלינית",
+    "פסיכותרפיה בעזרת פסיכדלים",
+    "פרמקולוגיה וכימיה",
+    "מחקר פרה-קליני / בחיות",
+    "סוציולוגיה ואנתרופולוגיה",
+    "היסטוריה ופילוסופיה",
+    "מדיניות רפואית ורגולציה",
+  ],
+  titles: [
+    { value: "prof", label: "פרופ'" },
+    { value: "md", label: 'ד"ר לרפואה (MD)' },
+    { value: "phd", label: 'PhD מחקרי' },
+    { value: "mr", label: "מר" },
+    { value: "ms", label: "גב'" },
+  ],
+  genders: [
+    { value: "male", label: "זכר" },
+    { value: "female", label: "נקבה" },
+    { value: "other", label: "אחר" },
+  ],
+  studentYears: [
+    { value: "1", label: 'שנה א"' },
+    { value: "2", label: 'שנה ב"' },
+    { value: "3", label: 'שנה ג"' },
+    { value: "advanced", label: "תארים מתקדמים" },
+  ],
+  researcherIndexItemsPerPage: 9,
+  editorialItemsPerPage: 2,
+  researcherItemsPerPage: 3,
+  eventsItemsPerPage: 3,
+  latestEditorialLimit: 3,
+  latestResearchLimit: 3,
+  titleMap: {
+    prof: "פרופ'",
+    md: 'ד"ר',
+    phd: 'ד"ר',
+    mr: "מר",
+    ms: "גב'",
+  },
+};
 
 const NAMES = [
   'ד"ר יעל כהן',

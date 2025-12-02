@@ -1,6 +1,6 @@
+
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Training } from "../types";
 import {
   ArrowRight,
   BookOpen,
@@ -9,12 +9,10 @@ import {
   MapPin,
   Users,
 } from "lucide-react";
+import { useApp } from "../context/AppContext";
 
-interface TrainingPageProps {
-  trainings: Training[];
-}
-
-export const TrainingPage: React.FC<TrainingPageProps> = ({ trainings }) => {
+export const TrainingPage: React.FC = () => {
+  const { trainings } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 

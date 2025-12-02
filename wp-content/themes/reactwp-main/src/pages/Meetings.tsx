@@ -1,14 +1,12 @@
+
 import React from "react";
 import { InfoPage } from "../components/InfoPage";
 import { Calendar } from "lucide-react";
-import { Meeting } from "../types";
 import { MeetingsList } from "../components/MeetingsList";
+import { useApp } from "../context/AppContext";
 
-interface MeetingsProps {
-  meetings: Meeting[];
-}
-
-export const Meetings: React.FC<MeetingsProps> = ({ meetings }) => {
+export const Meetings: React.FC = () => {
+  const { meetings } = useApp();
   return (
     <InfoPage title="מפגשי הפורום" icon={Calendar}>
       <p className="text-xl mb-8">

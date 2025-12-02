@@ -1,25 +1,13 @@
+
 import React from "react";
 import { Hero } from "../components/Hero";
 import { ResearcherCarousel } from "../components/ResearcherCarousel";
 import { HomeFeatures } from "../components/HomeFeatures";
 import { HomeLatestUpdates } from "../components/HomeLatestUpdates";
-import { Article, CalendarEvent, Researcher } from "../types";
-import { useLocation } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 
-interface HomeProps {
-  researchers: Researcher[];
-  articles: Article[];
-  events: CalendarEvent[];
-}
-
-export const Home: React.FC<HomeProps> = ({
-  researchers,
-  articles,
-  events,
-}) => {
-  const location = useLocation();
-
-  console.log(location);
+export const Home: React.FC = () => {
+  const { researchers, articles, events, settings } = useApp();
 
   // Filter articles
   const editorialArticles = articles.filter((a) => a.isEditorial);
@@ -37,6 +25,8 @@ export const Home: React.FC<HomeProps> = ({
         editorialArticles={editorialArticles}
         researcherArticles={researcherArticles}
         events={events}
+        editorialLimit={settings.latestEditorialLimit}
+        researchLimit={settings.latestResearchLimit}
       />
     </>
   );

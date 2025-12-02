@@ -4,16 +4,19 @@ import {
   MOCK_EVENTS,
   MOCK_MEETINGS,
   MOCK_NEWS,
+  MOCK_SETTINGS,
   MOCK_TRAININGS,
 } from "../mockData";
 import {
   Article,
+  AppSettings,
   CalendarEvent,
   Meeting,
   NewsItem,
   PaginatedResponse,
   Researcher,
   Training,
+  ContactProps,
 } from "../types";
 
 const SIMULATED_DELAY_MS = 1200;
@@ -21,6 +24,11 @@ const SIMULATED_DELAY_MS = 1200;
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const api = {
+  fetchSettings: async (): Promise<AppSettings> => {
+    await delay(500); // Shorter delay for settings
+    return { ...MOCK_SETTINGS };
+  },
+
   fetchResearchers: async (): Promise<Researcher[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...INITIAL_RESEARCHERS];
@@ -87,5 +95,11 @@ export const api = {
   fetchTrainings: async (): Promise<Training[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...MOCK_TRAININGS];
+  },
+
+  sendContactMessage: async (data: ContactProps): Promise<void> => {
+    await delay(1500);
+    console.log("Contact message sent:", data);
+    return;
   },
 };

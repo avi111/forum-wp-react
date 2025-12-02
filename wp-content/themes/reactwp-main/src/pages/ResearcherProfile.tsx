@@ -1,6 +1,7 @@
+
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Article, getResearcherName, Researcher, UserStatus } from "../types";
+import { getResearcherName, UserStatus } from "../types";
 import {
   ArrowRight,
   Building2,
@@ -12,16 +13,10 @@ import {
   Phone,
   User,
 } from "lucide-react";
+import { useApp } from "../context/AppContext";
 
-interface ResearcherProfileProps {
-  researchers: Researcher[];
-  articles: Article[];
-}
-
-export const ResearcherProfile: React.FC<ResearcherProfileProps> = ({
-  researchers,
-  articles,
-}) => {
+export const ResearcherProfile: React.FC = () => {
+  const { researchers, articles } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 

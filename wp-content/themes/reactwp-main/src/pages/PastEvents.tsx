@@ -1,16 +1,18 @@
+
 import React, { useState } from "react";
 import { InfoPage } from "../components/InfoPage";
 import { ArrowRight, Calendar } from "lucide-react";
 import { EventsList } from "../components/EventsList";
 import { useEvents } from "../hooks/useAppQueries";
 import { useNavigate } from "react-router-dom";
-import { EVENTS_ITEMS_PER_PAGE } from "../consts";
+import { useApp } from "../context/AppContext";
 
 export const PastEvents: React.FC = () => {
+  const { settings } = useApp();
   const [page, setPage] = useState(1);
   const navigate = useNavigate();
   // Fetch only past events
-  const { data, isLoading } = useEvents(page, EVENTS_ITEMS_PER_PAGE, "past");
+  const { data, isLoading } = useEvents(page, settings.eventsItemsPerPage, "past");
 
   const events = data?.data || [];
   const total = data?.total || 0;
@@ -40,7 +42,7 @@ export const PastEvents: React.FC = () => {
         events={events}
         total={total}
         currentPage={page}
-        itemsPerPage={EVENTS_ITEMS_PER_PAGE}
+        itemsPerPage={settings.eventsItemsPerPage}
         onPageChange={setPage}
         isLoading={isLoading}
       />

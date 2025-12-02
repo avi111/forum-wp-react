@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Article, getResearcherName, Researcher, UserStatus } from "../types";
+import { Article, getResearcherName, UserStatus } from "../types";
 import { enhanceBio } from "../services/geminiService";
 import {
   AlertCircle,
@@ -11,28 +12,22 @@ import {
   Sparkles,
   User,
 } from "lucide-react";
+import { useApp } from "../context/AppContext";
+import { useToast } from "../context/ToastContext";
 
-interface DashboardProps {
-  currentUser: Researcher;
-  onUpdateUser: (user: Researcher) => void;
-  userArticles: Article[];
-  onAddArticle: (article: Article) => void;
-}
-
-export const Dashboard: React.FC<DashboardProps> = ({
-  currentUser,
-  onUpdateUser,
-  userArticles,
-  onAddArticle,
-}) => {
+export const Dashboard: React.FC = () => {
+  const { currentUser, onUpdateUser, userArticles, onAddArticle } = useApp();
+  const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState<"profile" | "articles">("profile");
-  const [bioInput, setBioInput] = useState(currentUser.bio);
+  const [bioInput, setBioInput] = useState(currentUser?.bio || "");
   const [isEnhancing, setIsEnhancing] = useState(false);
 
   // Article Form State
   const [isAddingArticle, setIsAddingArticle] = useState(false);
   const [newArticleTitle, setNewArticleTitle] = useState("");
   const [newArticleContent, setNewArticleContent] = useState("");
+
+  if (!currentUser) return null;
 
   const handleEnhanceBio = async () => {
     setIsEnhancing(true);
@@ -47,8 +42,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   const handleSaveProfile = () => {
     onUpdateUser({ ...currentUser, bio: bioInput });
-    // In a real WP/Toolset site, this would trigger a CRED form submission
-    alert("הפרופיל עודכן בהצלחה!");
+    showToast("תודה רבה! הפרופיל עודכן בהצלחה");
   };
 
   const handleSaveArticle = () => {
@@ -67,6 +61,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
       imageUrl: `https://picsum.photos/seed/${Date.now()}/400/300`, // Placeholder for featured image
     };
     onAddArticle(newArticle);
+    showToast("תודה רבה! המאמר פורסם בהצלחה");
     setIsAddingArticle(false);
     setNewArticleTitle("");
     setNewArticleContent("");

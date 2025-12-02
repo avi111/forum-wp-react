@@ -1,15 +1,12 @@
+
 import React, { useState } from "react";
-import { Article } from "../types";
 import { UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PaginationControls } from "../components/PaginationControls";
-import { EDITORIAL_ITEMS_PER_PAGE, RESEARCHER_ITEMS_PER_PAGE } from "../consts";
+import { useApp } from "../context/AppContext";
 
-interface ArticleListProps {
-  articles: Article[];
-}
-
-export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
+export const ArticleList: React.FC = () => {
+  const { articles, settings } = useApp();
   const navigate = useNavigate();
 
   // State for separate pagination
@@ -22,20 +19,20 @@ export const ArticleList: React.FC<ArticleListProps> = ({ articles }) => {
 
   // Calculate Pagination for Editorials
   const totalEditorialPages = Math.ceil(
-    allEditorialArticles.length / EDITORIAL_ITEMS_PER_PAGE,
+    allEditorialArticles.length / settings.editorialItemsPerPage,
   );
   const currentEditorialArticles = allEditorialArticles.slice(
-    (editorialPage - 1) * EDITORIAL_ITEMS_PER_PAGE,
-    editorialPage * EDITORIAL_ITEMS_PER_PAGE,
+    (editorialPage - 1) * settings.editorialItemsPerPage,
+    editorialPage * settings.editorialItemsPerPage,
   );
 
   // Calculate Pagination for Researchers
   const totalResearcherPages = Math.ceil(
-    allResearcherArticles.length / RESEARCHER_ITEMS_PER_PAGE,
+    allResearcherArticles.length / settings.researcherItemsPerPage,
   );
   const currentResearcherArticles = allResearcherArticles.slice(
-    (researcherPage - 1) * RESEARCHER_ITEMS_PER_PAGE,
-    researcherPage * RESEARCHER_ITEMS_PER_PAGE,
+    (researcherPage - 1) * settings.researcherItemsPerPage,
+    researcherPage * settings.researcherItemsPerPage,
   );
 
   const handleArticleClick = (id: string) => {

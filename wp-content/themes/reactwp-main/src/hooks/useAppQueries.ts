@@ -1,6 +1,13 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { api } from "../services/api";
 
+export const useSettings = () => {
+  return useQuery({
+    queryKey: ["settings"],
+    queryFn: api.fetchSettings,
+  });
+};
+
 export const useResearchers = () => {
   return useQuery({
     queryKey: ["researchers"],

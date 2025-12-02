@@ -1,4 +1,3 @@
-
 export const INSTITUTIONS = [
   "מכון וייצמן למדע",
   "אוניברסיטת תל-אביב",

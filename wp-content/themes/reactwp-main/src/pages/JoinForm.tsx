@@ -1,20 +1,13 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
 import { Check, Eye, EyeOff, FileText, Upload, Users, X } from "lucide-react";
 import { Researcher } from "../types";
-import {
-  INSTITUTIONS,
-  MAIN_SPECIALIZATIONS,
-  SUB_SPECIALIZATIONS,
-} from "../consts";
-
 import { useNavigate } from "react-router-dom";
-import { OnJoin } from "../routes";
+import { useApp } from "../context/AppContext";
+import { useToast } from "../context/ToastContext";
 
-interface JoinFormProps {
-  onSubmit: OnJoin;
-}
-
-export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
+export const JoinForm: FC = () => {
+  const { onJoin, settings } = useApp();
+  const { showToast } = useToast();
   const [showBylaws, setShowBylaws] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
@@ -105,7 +98,10 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
       specialization: finalSpec,
     };
 
-    onSubmit(submissionData, () => navigate("/dashboard"));
+    onJoin(submissionData, () => {
+      showToast("תודה רבה! בקשתך התקבלה בהצלחה");
+      navigate("/dashboard");
+    });
   };
 
   return (
@@ -264,9 +260,11 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">בחר...</option>
-                  <option value="male">זכר</option>
-                  <option value="female">נקבה</option>
-                  <option value="other">אחר</option>
+                  {settings.genders.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div>
@@ -280,11 +278,11 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">בחר...</option>
-                  <option value="prof">פרופ&#39;</option>
-                  <option value="md">דפרופ&#34;ר לרפואה (MD)</option>
-                  <option value="phd">PhD מחקרי</option>
-                  <option value="mr">מר</option>
-                  <option value="ms">גב&#39;</option>
+                  {settings.titles.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -313,7 +311,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">בחר מוסד...</option>
-                  {INSTITUTIONS.map((inst) => (
+                  {settings.institutions.map((inst) => (
                     <option key={inst} value={inst}>
                       {inst}
                     </option>
@@ -354,7 +352,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">בחר תחום...</option>
-                  {MAIN_SPECIALIZATIONS.map((spec) => (
+                  {settings.mainSpecializations.map((spec) => (
                     <option key={spec} value={spec}>
                       {spec}
                     </option>
@@ -377,7 +375,7 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   תת-התמחות (ניתן לבחור מספר אפשרויות)
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  {SUB_SPECIALIZATIONS.map((sub) => (
+                  {settings.subSpecializations.map((sub) => (
                     <label
                       key={sub}
                       className="flex items-start space-x-3 space-x-reverse cursor-pointer p-2 hover:bg-white rounded transition-colors"
@@ -422,10 +420,11 @@ export const JoinForm: FC<JoinFormProps> = ({ onSubmit }) => {
                   onChange={handleInputChange}
                 >
                   <option value="">לא רלוונטי</option>
-                  <option value="1">שנה א&#34;</option>
-                  <option value="2">שנה ב&#34;</option>
-                  <option value="3">שנה ג&#34;</option>
-                  <option value="advanced">תארים מתקדמים</option>
+                  {settings.studentYears.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

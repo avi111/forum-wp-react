@@ -1,28 +1,27 @@
+
 import React, { useState } from "react";
-import { getResearcherName, Researcher, UserStatus } from "../types";
-import { MapPin, Search, X } from "lucide-react";
+import { getResearcherName, UserStatus } from "../types";
+import { ChevronLeft, ChevronRight, MapPin, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { PaginationControls } from "../components/PaginationControls";
-import { RESEARCHER_INDEX_ITEMS_PER_PAGE } from "../consts";
+import { useApp } from "../context/AppContext";
 
-interface ResearcherIndexProps {
-  researchers: Researcher[];
-}
-
-export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
-  researchers,
-}) => {
+export const ResearcherIndex: React.FC = () => {
+  const { researchers, settings } = useApp();
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
 
+  const itemsPerPage = settings.researcherIndexItemsPerPage;
+
   // Filter logic: Check name, institution, or specialization
   const filteredResearchers = researchers.filter((r) => {
     const term = searchTerm.toLowerCase();
     const isActive = r.status === UserStatus.ACTIVE;
+    const fullName = getResearcherName(r).toLowerCase();
+
     const matchesSearch =
-      getResearcherName(r).toLowerCase().includes(term) ||
+      fullName.includes(term) ||
       r.institution.toLowerCase().includes(term) ||
       r.specialization.toLowerCase().includes(term);
 
@@ -30,27 +29,30 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
   });
 
   // Pagination Logic
-  const totalPages = Math.ceil(
-    filteredResearchers.length / RESEARCHER_INDEX_ITEMS_PER_PAGE,
-  );
+  const totalPages = Math.ceil(filteredResearchers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
   const currentResearchers = filteredResearchers.slice(
-    (currentPage - 1) * RESEARCHER_INDEX_ITEMS_PER_PAGE,
-    currentPage * RESEARCHER_INDEX_ITEMS_PER_PAGE,
+    startIndex,
+    startIndex + itemsPerPage,
   );
 
-  const handleResearcherClick = (r: Researcher) => {
-    navigate(`/researchers/${r.id}`);
-  };
-
-  const handleSearchChange = (value: string) => {
-    setSearchTerm(value);
-    setCurrentPage(1); // Reset to first page when searching
+  const handleResearcherClick = (id: string) => {
+    navigate(`/researchers/${id}`);
   };
 
   const handleSelectSuggestion = (name: string) => {
     setSearchTerm(name);
-    setCurrentPage(1); // Reset to first page when selecting
-    // No need to set focus false immediately, filtering happens via state
+    setCurrentPage(1); // Reset to first page on selection
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on typing
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -71,9 +73,9 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
           <input
             type="text"
             value={searchTerm}
-            onChange={(e) => handleSearchChange(e.target.value)}
+            onChange={handleSearchChange}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow click on suggestion
+            onBlur={() => setTimeout(() => setIsFocused(false), 200)}
             placeholder="חיפוש חוקר לפי שם, מוסד או התמחות..."
             className="w-full p-4 pr-12 pl-10 border border-slate-200 rounded-full shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none text-lg transition-all"
           />
@@ -81,7 +83,10 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
 
           {searchTerm && (
             <button
-              onClick={() => handleSearchChange("")}
+              onClick={() => {
+                setSearchTerm("");
+                setCurrentPage(1);
+              }}
               className="absolute top-4 left-4 text-slate-300 hover:text-slate-500"
             >
               <X className="w-6 h-6" />
@@ -115,7 +120,7 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
       {/* Results Grid */}
       {filteredResearchers.length > 0 ? (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {currentResearchers.map((researcher) => (
               <div
                 key={researcher.id}
@@ -155,8 +160,8 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
                       חבר פורום
                     </span>
                     <button
-                      className="text-indigo-600 text-sm font-medium hover:underline"
-                      onClick={() => handleResearcherClick(researcher)}
+                      onClick={() => handleResearcherClick(researcher.id)}
+                      className="text-indigo-600 text-sm font-medium hover:underline cursor-pointer"
                     >
                       צפה בפרופיל מלא
                     </button>
@@ -166,11 +171,44 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
             ))}
           </div>
 
-          <PaginationControls
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-8">
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronRight className="w-5 h-5 text-slate-600" />
+              </button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => (
+                    <button
+                      key={page}
+                      onClick={() => goToPage(page)}
+                      className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
+                        currentPage === page
+                          ? "bg-teal-600 text-white shadow-md"
+                          : "text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  ),
+                )}
+              </div>
+
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5 text-slate-600" />
+              </button>
+            </div>
+          )}
         </>
       ) : (
         <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
@@ -178,7 +216,10 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
           <h3 className="text-xl font-bold text-slate-700">לא נמצאו חוקרים</h3>
           <p className="text-slate-500">נסה לחפש מונח אחר או בדוק את האיות</p>
           <button
-            onClick={() => handleSearchChange("")}
+            onClick={() => {
+              setSearchTerm("");
+              setCurrentPage(1);
+            }}
             className="mt-4 text-teal-600 font-bold hover:underline"
           >
             נקה חיפוש

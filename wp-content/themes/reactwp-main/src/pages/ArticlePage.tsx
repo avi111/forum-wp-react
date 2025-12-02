@@ -1,6 +1,6 @@
+
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Article } from "../types";
 import {
   ArrowRight,
   Calendar,
@@ -9,12 +9,10 @@ import {
   Paperclip,
   User,
 } from "lucide-react";
+import { useApp } from "../context/AppContext";
 
-interface ArticlePageProps {
-  articles: Article[];
-}
-
-export const ArticlePage: React.FC<ArticlePageProps> = ({ articles }) => {
+export const ArticlePage: React.FC = () => {
+  const { articles } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 

@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Home } from "./pages/Home";
 import { ResearcherIndex } from "./pages/ResearcherIndex";
@@ -10,126 +11,94 @@ import { Events } from "./pages/Events";
 import { Meetings } from "./pages/Meetings";
 import { PastEvents } from "./pages/PastEvents";
 import { Contact } from "./pages/Contact";
+import { About } from "./pages/About";
 import { ResearcherProfile } from "./pages/ResearcherProfile";
 import { Dashboard } from "./components/Dashboard";
-import {
-  Article,
-  CalendarEvent,
-  Meeting,
-  Researcher,
-  Training as TrainingType,
-} from "./types";
+import { useApp } from "./context/AppContext";
 
-export type OnJoin = (
-  data: Omit<Researcher, "id" | "bio" | "status">,
-  callback: () => void,
-) => void;
+function DashboardWrapper() {
+  const { currentUser } = useApp();
+  
+  if (currentUser) {
+    return <Dashboard />;
+  }
 
-interface RouteProps {
-  researchers: Researcher[];
-  articles: Article[];
-  events: CalendarEvent[];
-  meetings: Meeting[];
-  trainings: TrainingType[];
-  onJoin: OnJoin;
-  currentUser: Researcher | null;
-  onUpdateUser: (u: Researcher) => void;
-  userArticles: Article[];
-  onAddArticle: (a: Article) => void;
+  return (
+    <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-slate-100">
+        <h3 className="text-xl font-bold text-slate-900 mb-2">
+          התחברות נדרשת
+        </h3>
+        <p className="text-slate-500">
+          יש להירשם או להתחבר על מנת לצפות באזור האישי.
+        </p>
+        <Link
+          to="/join"
+          className="mt-4 inline-block text-teal-600 font-bold hover:underline"
+        >
+          להרשמה לחץ כאן
+        </Link>
+      </div>
+    </div>
+  );
 }
 
 export const routeConfig = [
   {
     path: "/",
     index: true,
-    element: (props: RouteProps) => (
-      <Home
-        researchers={props.researchers}
-        articles={props.articles}
-        events={props.events}
-      />
-    ),
+    element: <Home />,
+  },
+  {
+    path: "/about",
+    element: <About />,
   },
   {
     path: "/researchers",
-    element: (props: RouteProps) => (
-      <ResearcherIndex researchers={props.researchers} />
-    ),
+    element: <ResearcherIndex />,
   },
   {
     path: "/researchers/:id",
-    element: (props: RouteProps) => (
-      <ResearcherProfile
-        researchers={props.researchers}
-        articles={props.articles}
-      />
-    ),
+    element: <ResearcherProfile />,
   },
   {
     path: "/articles",
-    element: (props: RouteProps) => <ArticleList articles={props.articles} />,
+    element: <ArticleList />,
   },
   {
     path: "/article/:id",
-    element: (props: RouteProps) => <ArticlePage articles={props.articles} />,
+    element: <ArticlePage />,
   },
   {
     path: "/training",
-    element: (props: RouteProps) => <Training trainings={props.trainings} />,
+    element: <Training />,
   },
   {
     path: "/training/:id",
-    element: (props: RouteProps) => (
-      <TrainingPage trainings={props.trainings} />
-    ),
+    element: <TrainingPage />,
   },
   {
     path: "/events",
-    element: () => <Events />,
+    element: <Events />,
   },
   {
     path: "/events/past",
-    element: () => <PastEvents />,
+    element: <PastEvents />,
   },
   {
     path: "/meetings",
-    element: (props: RouteProps) => <Meetings meetings={props.meetings} />,
+    element: <Meetings />,
   },
   {
     path: "/contact",
-    element: () => <Contact />,
+    element: <Contact />,
   },
   {
     path: "/join",
-    element: (props: RouteProps) => <JoinForm onSubmit={props.onJoin} />,
+    element: <JoinForm />,
   },
   {
     path: "/dashboard",
-    element: (props: RouteProps) =>
-      props.currentUser ? (
-        <Dashboard
-          currentUser={props.currentUser}
-          onUpdateUser={props.onUpdateUser}
-          userArticles={props.userArticles}
-          onAddArticle={props.onAddArticle}
-        />
-      ) : (
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-slate-100">
-            <h3 className="text-xl font-bold text-slate-900 mb-2">
-              התחברות נדרשת
-            </h3>
-            <p className="text-slate-500">
-              יש להירשם או להתחבר על מנת לצפות באזור האישי.
-            </p>
-            <Link
-              to="/join"
-              className="mt-4 inline-block text-teal-600 font-bold hover:underline"
-            >
-              להרשמה לחץ כאן
-            </Link>
-          </div>
-        </div>
-      ),
+    element: <DashboardWrapper />,
   },
 ];

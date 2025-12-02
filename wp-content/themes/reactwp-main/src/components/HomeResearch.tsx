@@ -2,13 +2,16 @@ import React from "react";
 import { Article } from "../types";
 import { ArrowLeft, FlaskConical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { LATEST_RESEARCH_LIMIT } from "../consts";
 
 interface HomeResearchProps {
   articles: Article[];
+  limit: number;
 }
 
-export const HomeResearch: React.FC<HomeResearchProps> = ({ articles }) => {
+export const HomeResearch: React.FC<HomeResearchProps> = ({
+  articles,
+  limit,
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -29,7 +32,7 @@ export const HomeResearch: React.FC<HomeResearchProps> = ({ articles }) => {
       </div>
 
       <div className="space-y-4 flex-1">
-        {articles.slice(0, LATEST_RESEARCH_LIMIT).map((article) => (
+        {articles.slice(0, limit).map((article) => (
           <div
             key={article.id}
             onClick={() => navigate(`/article/${article.id}`)}

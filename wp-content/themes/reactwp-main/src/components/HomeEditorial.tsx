@@ -2,13 +2,16 @@ import React from "react";
 import { Article } from "../types";
 import { FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { LATEST_EDITORIAL_LIMIT } from "../consts";
 
 interface HomeEditorialProps {
   articles: Article[];
+  limit: number;
 }
 
-export const HomeEditorial: React.FC<HomeEditorialProps> = ({ articles }) => {
+export const HomeEditorial: React.FC<HomeEditorialProps> = ({
+  articles,
+  limit,
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -29,7 +32,7 @@ export const HomeEditorial: React.FC<HomeEditorialProps> = ({ articles }) => {
       </div>
 
       <div className="space-y-6 flex-1">
-        {articles.slice(0, LATEST_EDITORIAL_LIMIT).map((article) => (
+        {articles.slice(0, limit).map((article) => (
           <div
             key={article.id}
             className="group cursor-pointer"

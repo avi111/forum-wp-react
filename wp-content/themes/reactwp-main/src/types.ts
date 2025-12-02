@@ -1,5 +1,3 @@
-
-
 export enum UserStatus {
   PENDING = "PENDING",
   ACTIVE = "ACTIVE",
@@ -30,7 +28,7 @@ export interface Researcher {
 export interface ArticleAttachment {
   name: string;
   url: string;
-  type: 'pdf' | 'doc' | 'other';
+  type: "pdf" | "doc" | "other";
   size?: string;
 }
 
@@ -93,12 +91,33 @@ export interface Training {
   instructors?: string[];
   registrationLink?: string;
   imageUrl?: string;
-  colorTheme: 'teal' | 'indigo' | 'purple';
+  colorTheme: "teal" | "indigo" | "purple";
 }
 
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;
+}
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}
+
+export interface AppSettings {
+  institutions: string[];
+  mainSpecializations: string[];
+  subSpecializations: string[];
+  titles: SelectOption[];
+  genders: SelectOption[];
+  studentYears: SelectOption[];
+  researcherIndexItemsPerPage: number;
+  editorialItemsPerPage: number;
+  researcherItemsPerPage: number;
+  eventsItemsPerPage: number;
+  latestEditorialLimit: number;
+  latestResearchLimit: number;
+  titleMap: Record<string, string>;
 }
 
 export enum PageView {
@@ -120,5 +139,16 @@ export interface NavItem {
 }
 
 export const getResearcherName = (r: Researcher): string => {
-  return r.firstName + ' ' + r.lastName;
+  return r.firstName + " " + r.lastName;
+};
+
+export type OnJoin = (
+  data: Omit<Researcher, "id" | "bio" | "status">,
+  callback: () => void,
+) => void;
+
+export type ContactProps = {
+  fullName: string;
+  email: string;
+  message: string;
 };
