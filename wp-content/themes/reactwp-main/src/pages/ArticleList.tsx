@@ -1,17 +1,27 @@
-import React, { useState } from "react";
-import { UserCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Loader2, UserCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { PaginationControls } from "../components/PaginationControls";
 import { useApp } from "../context/AppContext";
 import { t } from "../services/stringService";
 
 export const ArticleList: React.FC = () => {
-  const { articles, settings } = useApp();
+  const { articles, settings, getArticlesFromServer } = useApp();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   // State for separate pagination
   const [editorialPage, setEditorialPage] = useState(1);
   const [researcherPage, setResearcherPage] = useState(1);
+
+  useEffect(() => {
+    if (articles.length === 0) {
+      setIsLoading(true);
+      getArticlesFromServer().finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, [getArticlesFromServer, articles.length]);
 
   // Filter articles
   const allEditorialArticles = articles.filter((a) => a.isEditorial);
@@ -48,6 +58,14 @@ export const ArticleList: React.FC = () => {
     setResearcherPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-teal-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">

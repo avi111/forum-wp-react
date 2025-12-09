@@ -1,4 +1,3 @@
-import React from "react";
 import { CheckCircle, X, XCircle } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 

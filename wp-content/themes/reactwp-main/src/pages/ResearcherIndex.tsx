@@ -1,20 +1,36 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getResearcherName, UserStatus } from "../types";
-import { ChevronLeft, ChevronRight, MapPin, Search, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Loader2,
+  MapPin,
+  Search,
+  X,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
 export const ResearcherIndex: React.FC = () => {
-  const { researchers, settings } = useApp();
+  const { researchers, settings, getResearchersFromServer } = useApp();
   const [searchTerm, setSearchTerm] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch data only if it hasn't been fetched yet.
+    if (researchers.length === 0) {
+      setIsLoading(true);
+      getResearchersFromServer().finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, [getResearchersFromServer, researchers.length]);
 
   const itemsPerPage = settings.researcherIndexItemsPerPage;
 
-  // Filter logic: Check name, institution, or specialization
   const filteredResearchers = researchers.filter((r) => {
     const term = searchTerm.toLowerCase();
     const isActive = r.status === UserStatus.ACTIVE;
@@ -28,7 +44,6 @@ export const ResearcherIndex: React.FC = () => {
     return isActive && matchesSearch;
   });
 
-  // Pagination Logic
   const totalPages = Math.ceil(filteredResearchers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentResearchers = filteredResearchers.slice(
@@ -42,18 +57,26 @@ export const ResearcherIndex: React.FC = () => {
 
   const handleSelectSuggestion = (name: string) => {
     setSearchTerm(name);
-    setCurrentPage(1); // Reset to first page on selection
+    setCurrentPage(1);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on typing
+    setCurrentPage(1);
   };
 
   const goToPage = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-teal-500 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto py-16 px-4 min-h-screen">
@@ -67,7 +90,6 @@ export const ResearcherIndex: React.FC = () => {
         </p>
       </div>
 
-      {/* Search Section with Autocomplete */}
       <div className="mb-12 flex justify-center relative z-20">
         <div className="relative w-full max-w-lg">
           <input
@@ -93,7 +115,6 @@ export const ResearcherIndex: React.FC = () => {
             </button>
           )}
 
-          {/* Autocomplete Dropdown */}
           {isFocused && searchTerm && filteredResearchers.length > 0 && (
             <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-fade-in z-30">
               <div className="max-h-60 overflow-y-auto">
@@ -117,7 +138,6 @@ export const ResearcherIndex: React.FC = () => {
         </div>
       </div>
 
-      {/* Results Grid */}
       {filteredResearchers.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -171,7 +191,6 @@ export const ResearcherIndex: React.FC = () => {
             ))}
           </div>
 
-          {/* Pagination Controls */}
           {totalPages > 1 && (
             <div className="flex justify-center items-center gap-2 mt-8">
               <button

@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { InfoPage } from "../components/InfoPage";
 import { Calendar, History } from "lucide-react";
 import { EventsList } from "../components/EventsList";
@@ -9,13 +8,26 @@ import { useApp } from "../context/AppContext";
 
 export const Events: React.FC = () => {
   const { settings } = useApp();
-  const [page, setPage] = useState(1);
   const navigate = useNavigate();
-  // Fetch only future events
-  const { data, isLoading } = useEvents(page, settings.eventsItemsPerPage, "future");
+
+  const {
+    data,
+    isLoading,
+    page,
+    setPage,
+    totalPages,
+    setTimeFilter,
+  } = useEvents({
+    limit: settings.eventsItemsPerPage,
+    timeFilter: "future",
+  });
+
+  // Ensure the filter is set to 'future' when the component mounts
+  useEffect(() => {
+    setTimeFilter("future");
+  }, [setTimeFilter]);
 
   const events = data?.data || [];
-  const total = data?.total || 0;
 
   return (
     <InfoPage title="אירועים וכנסים" icon={Calendar}>
@@ -41,9 +53,8 @@ export const Events: React.FC = () => {
 
       <EventsList
         events={events}
-        total={total}
+        totalPages={totalPages}
         currentPage={page}
-        itemsPerPage={settings.eventsItemsPerPage}
         onPageChange={setPage}
         isLoading={isLoading}
       />

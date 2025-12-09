@@ -1,10 +1,10 @@
-import React from "react";
-import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import React, { ReactNode } from "react";
 
-export const Hero: React.FC = () => {
-  const navigate = useNavigate();
+interface HeroProps {
+  children?: ReactNode;
+}
 
+export const Hero: React.FC<HeroProps> = ({ children }) => {
   return (
     <div className="relative bg-slate-900 text-white overflow-hidden min-h-[500px] flex items-center">
       <div className="absolute inset-0">
@@ -31,21 +31,7 @@ export const Hero: React.FC = () => {
             הבית של קהילת המחקר הפסיכדלי בישראל. הפלטפורמה המובילה לחיבור בין
             חוקרים, שיתוף ידע וקידום רגולציה מבוססת מדע.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <button
-              onClick={() => navigate("/join")}
-              className="bg-teal-500 hover:bg-teal-400 text-slate-900 font-bold py-4 px-8 rounded-lg shadow-lg shadow-teal-900/50 transition-all transform hover:scale-105 flex items-center justify-center"
-            >
-              הצטרפות כחוקר
-              <ArrowRight className="w-5 h-5 mr-2" />
-            </button>
-            <button 
-              onClick={() => navigate("/about")}
-              className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-white font-medium py-4 px-8 rounded-lg transition-colors"
-            >
-              קרא עוד עלינו
-            </button>
-          </div>
+          {children && <div className="pt-4">{children}</div>}
         </div>
         <div className="hidden md:block flex-1 relative animate-float">
           <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-slate-700">

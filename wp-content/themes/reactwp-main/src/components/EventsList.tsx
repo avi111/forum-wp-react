@@ -4,23 +4,19 @@ import { Calendar, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 
 interface EventsListProps {
   events: CalendarEvent[];
-  total: number;
+  totalPages: number;
   currentPage: number;
-  itemsPerPage: number;
   onPageChange: (page: number) => void;
   isLoading: boolean;
 }
 
 export const EventsList: React.FC<EventsListProps> = ({
   events,
-  total,
+  totalPages,
   currentPage,
-  itemsPerPage,
   onPageChange,
   isLoading,
 }) => {
-  const totalPages = Math.ceil(total / itemsPerPage);
-
   const goToPage = (page: number) => {
     onPageChange(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -37,7 +33,9 @@ export const EventsList: React.FC<EventsListProps> = ({
 
   return (
     <div
-      className={`space-y-6 not-prose relative ${isLoading ? "opacity-70" : ""}`}
+      className={`space-y-6 not-prose relative ${
+        isLoading && events.length > 0 ? "opacity-70" : ""
+      }`}
     >
       {isLoading && events.length === 0 && (
         <div className="flex justify-center py-12">
