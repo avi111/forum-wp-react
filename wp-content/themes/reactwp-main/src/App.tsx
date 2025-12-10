@@ -3,10 +3,12 @@ import { Layout } from "./components/Layout";
 import { routeConfig } from "./routes";
 import { AppProvider } from "./context/AppContext";
 import { ToastProvider } from "./context/ToastContext";
+import { Toast } from "./components/Toast";
 
 export default function App() {
   return (
     <ToastProvider>
+      <Toast />
       <AppProvider>
         <Routes>
           <Route path="/" element={<Layout />}>

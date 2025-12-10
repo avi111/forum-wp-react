@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect } from "react";
 import { Loader2, UserCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { PaginationControls } from "../components/PaginationControls";
 import { useApp } from "../context/AppContext";
 import { t } from "../services/stringService";
+import { TagCloud } from "../components/TagCloud";
 
 export const ArticleList: React.FC = () => {
   const { articles, settings, getArticlesFromServer } = useApp();
@@ -76,6 +78,9 @@ export const ArticleList: React.FC = () => {
         <div className="w-24 h-1.5 bg-indigo-500 mx-auto rounded-full"></div>
       </div>
 
+      {/* Tag Cloud Section */}
+      <TagCloud articles={articles} />
+
       {/* Editorial / Featured Section */}
       <div className="mb-16">
         <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center">
@@ -97,12 +102,14 @@ export const ArticleList: React.FC = () => {
               <div className="relative z-10 p-8 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent">
                 <div className="flex gap-2 mb-3">
                   {article.tags.map((tag) => (
-                    <span
+                    <Link
                       key={tag}
-                      className="text-xs font-bold text-teal-300 bg-teal-900/50 px-2 py-1 rounded backdrop-blur-md"
+                      to={`/tags/${encodeURIComponent(tag)}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-xs font-bold text-teal-300 bg-teal-900/50 px-2 py-1 rounded backdrop-blur-md hover:bg-teal-800 transition-colors"
                     >
                       {tag}
-                    </span>
+                    </Link>
                   ))}
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-2 leading-tight group-hover:text-teal-400 transition-colors">
@@ -145,8 +152,17 @@ export const ArticleList: React.FC = () => {
                   alt={article.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                  {article.tags[0]}
+                <div className="absolute top-4 right-4 flex flex-col gap-1 items-end">
+                   {article.tags.slice(0, 1).map((tag) => (
+                      <Link
+                          key={tag}
+                          to={`/tags/${encodeURIComponent(tag)}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="bg-white/90 backdrop-blur text-xs font-bold px-3 py-1 rounded-full shadow-sm hover:bg-white hover:text-indigo-600 transition-colors"
+                      >
+                        {tag}
+                      </Link>
+                   ))}
                 </div>
               </div>
               <div className="p-6 flex-1 flex flex-col">

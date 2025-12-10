@@ -61,6 +61,15 @@ export interface CalendarEvent {
   month: string;
   location: string;
   type: string;
+  // New fields for detailed view
+  description?: string;
+  fullContent?: string;
+  imageUrl?: string;
+  startTime?: string;
+  endTime?: string;
+  registrationLink?: string;
+  price?: string;
+  speakers?: string[];
 }
 
 export interface Meeting {
@@ -118,7 +127,7 @@ export interface AppSettings {
   latestEditorialLimit: number;
   latestResearchLimit: number;
   titleMap: Record<string, string>;
-  strings: Record<string, string>; // Added this line
+  strings: Record<string, string>; 
 }
 
 export enum PageView {

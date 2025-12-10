@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   ArrowRight,
   Calendar,
@@ -49,7 +49,7 @@ export const ArticlePage: React.FC = () => {
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
-        <div className="absolute bottom-0 left-0 right-0 p-8 max-w-4xl mx-auto w-full z-10">
+        <div className="absolute bottom-0 left-0 right-0 p-10 max-w-4xl mx-auto w-full z-10">
           <button
             onClick={() => navigate(-1)}
             className="mb-6 text-slate-300 hover:text-white flex items-center text-sm font-medium transition-colors w-fit bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm"
@@ -59,12 +59,13 @@ export const ArticlePage: React.FC = () => {
           </button>
           <div className="flex gap-2 mb-4">
             {article.tags.map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className="text-xs font-bold text-teal-300 bg-teal-900/50 px-2 py-1 rounded backdrop-blur-md border border-teal-500/30"
+                to={`/tags/${encodeURIComponent(tag)}`}
+                className="text-xs font-bold text-teal-300 bg-teal-900/50 px-2 py-1 rounded backdrop-blur-md border border-teal-500/30 hover:bg-teal-800/70 hover:text-teal-200 transition-colors"
               >
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight font-heebo drop-shadow-lg">
@@ -84,7 +85,7 @@ export const ArticlePage: React.FC = () => {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 -mt-10 relative z-20">
+      <div className="max-w-4xl mx-auto px-4 -mt-8 relative z-20">
         <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-8 md:p-12">
           <div className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium">
             {article.excerpt}

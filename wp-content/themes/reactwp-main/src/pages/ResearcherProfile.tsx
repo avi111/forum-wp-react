@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import { getResearcherName, UserStatus } from "../types";
 import {
   ArrowRight,
@@ -214,7 +214,8 @@ export const ResearcherProfile: React.FC = () => {
                   {researcherArticles.map((article) => (
                     <div
                       key={article.id}
-                      className="border border-slate-100 rounded-lg p-4 hover:border-teal-100 hover:shadow-md transition-all bg-slate-50/30"
+                      onClick={() => navigate(`/article/${article.id}`)}
+                      className="cursor-pointer border border-slate-100 rounded-lg p-4 hover:border-teal-100 hover:shadow-md transition-all bg-slate-50/30"
                     >
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1">
@@ -227,12 +228,14 @@ export const ResearcherProfile: React.FC = () => {
                           <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
                             <div className="flex gap-2">
                               {article.tags.map((tag) => (
-                                <span
+                                <Link
                                   key={tag}
-                                  className="text-xs font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100"
+                                  to={`/tags/${encodeURIComponent(tag)}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="text-xs font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-100 hover:bg-teal-100 transition-colors"
                                 >
                                   {tag}
-                                </span>
+                                </Link>
                               ))}
                             </div>
                             <div className="flex items-center text-xs text-slate-400">

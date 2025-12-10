@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+
 import { Home } from "./pages/Home";
 import { ResearcherIndex } from "./pages/ResearcherIndex";
 import { ArticleList } from "./pages/ArticleList";
@@ -12,40 +12,13 @@ import { PastEvents } from "./pages/PastEvents";
 import { Contact } from "./pages/Contact";
 import { About } from "./pages/About";
 import { ResearcherProfile } from "./pages/ResearcherProfile";
-import { Dashboard } from "./components/Dashboard";
-import { useApp } from "./context/AppContext";
+import { ProtectedDashboard } from "./pages/ProtectedDashboard";
 import { PageNotFound } from "./pages/PageNotFound";
-
-function DashboardWrapper() {
-  const { currentUser } = useApp();
-
-  if (currentUser) {
-    return <Dashboard />;
-  }
-
-  return (
-    <div className="flex items-center justify-center min-h-[50vh]">
-      <div className="text-center p-8 bg-white rounded-xl shadow-lg border border-slate-100">
-        <h3 className="text-xl font-bold text-slate-900 mb-2">
-          התחברות נדרשת
-        </h3>
-        <p className="text-slate-500">
-          יש להירשם או להתחבר על מנת לצפות באזור האישי.
-        </p>
-        <Link
-          to="/join"
-          className="mt-4 inline-block text-teal-600 font-bold hover:underline"
-        >
-          להרשמה לחץ כאן
-        </Link>
-      </div>
-    </div>
-  );
-}
+import { TagPage } from "./pages/TagPage";
+import { EventPage } from "./pages/EventPage";
 
 export const routeConfig = [
   {
-    path: "/",
     index: true,
     element: <Home />,
   },
@@ -70,6 +43,10 @@ export const routeConfig = [
     element: <ArticlePage />,
   },
   {
+    path: "/tags/:tag",
+    element: <TagPage />,
+  },
+  {
     path: "/training",
     element: <Training />,
   },
@@ -86,6 +63,10 @@ export const routeConfig = [
     element: <PastEvents />,
   },
   {
+    path: "/events/:id",
+    element: <EventPage />,
+  },
+  {
     path: "/meetings",
     element: <Meetings />,
   },
@@ -99,7 +80,7 @@ export const routeConfig = [
   },
   {
     path: "/dashboard",
-    element: <DashboardWrapper />,
+    element: <ProtectedDashboard />,
   },
   {
     path: "*",

@@ -3,21 +3,18 @@ import { InfoPage } from "../components/InfoPage";
 import { Mail, MapPin, Loader2, Send } from "lucide-react";
 import { api } from "../services/api";
 import { useToast } from "../context/ToastContext";
-import { ContactProps } from "../types.ts";
 
 export const Contact: React.FC = () => {
   const { showToast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<ContactProps>({
+  const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    message: "",
+    message: ""
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +30,6 @@ export const Contact: React.FC = () => {
       showToast("תודה רבה! ההודעה נשלחה בהצלחה");
       setFormData({ fullName: "", email: "", message: "" });
     } catch (error) {
-      console.log(error);
       showToast("אירעה שגיאה בשליחת ההודעה", "error");
     } finally {
       setIsSubmitting(false);
@@ -60,10 +56,7 @@ export const Contact: React.FC = () => {
             </div>
           </div>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-4 bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative"
-        >
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white p-6 rounded-xl border border-slate-200 shadow-sm relative">
           <input
             type="text"
             name="fullName"
@@ -88,7 +81,7 @@ export const Contact: React.FC = () => {
             rows={4}
             className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
           ></textarea>
-          <button
+          <button 
             disabled={isSubmitting}
             className="w-full bg-slate-900 text-white py-3 rounded-lg font-bold hover:bg-slate-800 transition-colors flex items-center justify-center disabled:opacity-70 disabled:cursor-not-allowed"
           >

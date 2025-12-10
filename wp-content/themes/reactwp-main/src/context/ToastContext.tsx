@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
-import { Toast } from '../components/Toast';
 
 type ToastType = 'success' | 'error';
 
@@ -33,7 +32,6 @@ export const ToastProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   return (
     <ToastContext.Provider value={{ toast, showToast, hideToast }}>
       {children}
-      <Toast />
     </ToastContext.Provider>
   );
 };
