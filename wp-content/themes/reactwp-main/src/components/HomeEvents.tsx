@@ -10,15 +10,11 @@ interface HomeEventsProps {
 export const HomeEvents: React.FC<HomeEventsProps> = ({ events }) => {
   const navigate = useNavigate();
 
-  // Filter to show only future events (date >= today) and limit to 3
-  const futureEvents = events
-    .filter((event) => {
-      const eventDate = new Date(event.date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return eventDate >= today;
-    })
-    .slice(0, 3);
+  const futureEvents = events.slice(0, 3);
+
+  const handleEventClick = (eventId: string) => {
+    navigate(`/events/${eventId}`);
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 flex flex-col h-full">
@@ -40,8 +36,12 @@ export const HomeEvents: React.FC<HomeEventsProps> = ({ events }) => {
       <div className="space-y-4 flex-1">
         {futureEvents.length > 0 ? (
           futureEvents.map((event) => (
-            <div key={event.id} className="flex gap-4 items-start group">
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-2 text-center min-w-[60px] group-hover:border-purple-300 transition-colors">
+            <div
+              key={event.id}
+              onClick={() => handleEventClick(event.id)}
+              className="flex gap-4 items-start group cursor-pointer p-2 -m-2 rounded-lg hover:bg-slate-50"
+            >
+              <div className="bg-slate-100 border border-slate-200 rounded-lg p-2 text-center min-w-[60px] group-hover:border-purple-300 transition-colors">
                 <span className="block text-xl font-bold text-slate-900">
                   {event.day}
                 </span>
@@ -69,7 +69,10 @@ export const HomeEvents: React.FC<HomeEventsProps> = ({ events }) => {
       <div className="mt-auto pt-4">
         <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-4 text-white text-center">
           <p className="font-bold text-sm mb-2">רוצה להישאר מעודכן?</p>
-          <button className="bg-white/20 hover:bg-white/30 w-full py-1.5 rounded-lg text-xs font-bold transition-colors">
+          <button
+            onClick={() => navigate("/join")}
+            className="bg-white/20 hover:bg-white/30 w-full py-1.5 rounded-lg text-xs font-bold transition-colors"
+          >
             הרשמה לניוזלטר
           </button>
         </div>

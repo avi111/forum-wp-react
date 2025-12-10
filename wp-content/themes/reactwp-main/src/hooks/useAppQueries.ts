@@ -1,43 +1,52 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { api } from "../services/api";
+import { useAPI } from "../services/api";
 import { useState, useMemo } from "react";
 
 export const useSettings = () => {
+  const { fetchSettings } = useAPI();
   return useQuery({
     queryKey: ["settings"],
-    queryFn: api.fetchSettings,
+    queryFn: fetchSettings,
   });
 };
 
 export const useTemplate = (templateName: string) => {
+  const { fetchTemplate } = useAPI();
+
   return useQuery({
     queryKey: ["template", templateName],
-    queryFn: () => api.fetchTemplate(templateName),
+    queryFn: () => fetchTemplate(templateName),
     staleTime: 1000 * 60 * 60,
   });
 };
 
 export const useResearchers = () => {
+  const { fetchResearchers } = useAPI();
+
   return useQuery({
     queryKey: ["researchers"],
-    queryFn: api.fetchResearchers,
+    queryFn: fetchResearchers,
     enabled: false,
   });
 };
 
 export const useArticles = () => {
+  const { fetchArticles } = useAPI();
+
   return useQuery({
     queryKey: ["articles"],
-    queryFn: api.fetchArticles,
+    queryFn: fetchArticles,
     enabled: false,
   });
 };
 
 export const useNews = () => {
+  const { fetchNews } = useAPI();
+
   return useQuery({
     // Added a version number to the key to invalidate the cache
     queryKey: ["news", "v2"],
-    queryFn: api.fetchNews,
+    queryFn: fetchNews,
     enabled: false,
   });
 };
@@ -55,9 +64,11 @@ export const useEvents = (initialParams: UseEventsParams = {}) => {
     initialParams.timeFilter || "all",
   );
 
+  const { fetchEvents } = useAPI();
+
   const queryInfo = useQuery({
     queryKey: ["events", page, limit, timeFilter],
-    queryFn: () => api.fetchEvents(page, limit, timeFilter),
+    queryFn: () => fetchEvents(page, limit, timeFilter),
     placeholderData: keepPreviousData,
   });
 
@@ -78,17 +89,21 @@ export const useEvents = (initialParams: UseEventsParams = {}) => {
 };
 
 export const useMeetings = () => {
+  const { fetchMeetings } = useAPI();
+
   return useQuery({
     queryKey: ["meetings"],
-    queryFn: api.fetchMeetings,
+    queryFn: fetchMeetings,
     enabled: false,
   });
 };
 
 export const useTrainings = () => {
+  const { fetchTrainings } = useAPI();
+
   return useQuery({
     queryKey: ["trainings"],
-    queryFn: api.fetchTrainings,
+    queryFn: fetchTrainings,
     enabled: false,
   });
 };

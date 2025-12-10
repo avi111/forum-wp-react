@@ -4,6 +4,7 @@ import { routeConfig } from "./routes";
 import { AppProvider } from "./context/AppContext";
 import { ToastProvider } from "./context/ToastContext";
 import { Toast } from "./components/Toast";
+import "./index.css";
 
 export default function App() {
   return (

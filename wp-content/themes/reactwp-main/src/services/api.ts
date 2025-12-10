@@ -6,25 +6,33 @@ import {
   MOCK_NEWS,
   MOCK_SETTINGS,
   MOCK_TRAININGS,
+  object,
 } from "../mockData";
 import {
-  Article,
   AppSettings,
+  Article,
   CalendarEvent,
+  ContactProps,
   Meeting,
   NewsItem,
   PaginatedResponse,
   Researcher,
   Training,
-  ContactProps,
 } from "../types";
+import { useCallback } from "react";
+
+export const getAdminAjaxUrl = () => {
+  if (import.meta.env.DEV) {
+    window.object = object;
+  }
+  const { site } = window.object || {};
+  const { admin_ajax_url: adminAjaxUrl } = site || {};
+  return adminAjaxUrl;
+};
 
 const SIMULATED_DELAY_MS = 1200;
-
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// In a real app, this would be fetched from a server.
-// We are mocking it by storing the raw HTML content.
 const MOCK_TEMPLATES: Record<string, string> = {
   "bylaws-modal": `
     <div class="space-y-4">
@@ -129,84 +137,143 @@ const MOCK_TEMPLATES: Record<string, string> = {
   `,
 };
 
-export const api = {
-  fetchSettings: async (): Promise<AppSettings> => {
+type WpPostFetcher = <T>(
+  action: string,
+  data?: Record<string, never>,
+) => Promise<T>;
+
+export const useAPI = () => {
+  const post: WpPostFetcher = useCallback(async (action, data = {}) => {
+    const url = getAdminAjaxUrl();
+    if (!url) {
+      throw new Error("Admin AJAX URL is not configured.");
+    }
+
+    const formData = new FormData();
+    formData.append("action", action);
+
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        formData.append(key, data[key]);
+      }
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseText = await response.text();
+      try {
+        return JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse JSON response:", e);
+        throw new Error(`Failed to parse JSON response: ${responseText}`);
+      }
+    } catch (error) {
+      console.error("WordPress request failed:", error);
+      throw error;
+    }
+  }, []);
+
+  const fetchTemplate = useCallback(
+    async (templateName: string): Promise<string | null> => {
+      await delay(800);
+      return MOCK_TEMPLATES[templateName] || null;
+    },
+    [],
+  );
+
+  const fetchSettings = useCallback(async (): Promise<AppSettings> => {
     await delay(500);
     return { ...MOCK_SETTINGS };
-  },
+  }, []);
 
-  fetchTemplate: async (templateName: string): Promise<string | null> => {
-    await delay(800);
-    return MOCK_TEMPLATES[templateName] || null;
-  },
-
-  fetchResearchers: async (): Promise<Researcher[]> => {
+  const fetchResearchers = useCallback(async (): Promise<Researcher[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...INITIAL_RESEARCHERS];
-  },
+  }, []);
 
-  fetchArticles: async (): Promise<Article[]> => {
+  const fetchArticles = useCallback(async (): Promise<Article[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...INITIAL_ARTICLES];
-  },
+  }, []);
 
-  fetchNews: async (): Promise<NewsItem[]> => {
+  const fetchNews = useCallback(async (): Promise<NewsItem[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...MOCK_NEWS];
-  },
+  }, []);
 
-  fetchEvents: async (
-    page = 1,
-    limit = 100,
-    timeFilter: "future" | "past" | "all" = "all",
-  ): Promise<PaginatedResponse<CalendarEvent>> => {
-    await delay(SIMULATED_DELAY_MS);
+  const fetchEvents = useCallback(
+    async (
+      page = 1,
+      limit = 100,
+      timeFilter: "future" | "past" | "all" = "all",
+    ): Promise<PaginatedResponse<CalendarEvent>> => {
+      await delay(SIMULATED_DELAY_MS);
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      let filteredEvents = MOCK_EVENTS;
+      if (timeFilter === "future") {
+        filteredEvents = MOCK_EVENTS.filter(
+          (event) => new Date(event.date) >= now,
+        );
+      } else if (timeFilter === "past") {
+        filteredEvents = MOCK_EVENTS.filter(
+          (event) => new Date(event.date) < now,
+        );
+      }
+      if (timeFilter === "past") {
+        filteredEvents.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        );
+      } else {
+        filteredEvents.sort(
+          (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+        );
+      }
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      const data = filteredEvents.slice(start, end);
+      return { data, total: filteredEvents.length };
+    },
+    [],
+  );
 
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
-
-    let filteredEvents = MOCK_EVENTS;
-
-    if (timeFilter === "future") {
-      filteredEvents = MOCK_EVENTS.filter(
-        (event) => new Date(event.date) >= now,
-      );
-    } else if (timeFilter === "past") {
-      filteredEvents = MOCK_EVENTS.filter(
-        (event) => new Date(event.date) < now,
-      );
-    }
-
-    if (timeFilter === "past") {
-      filteredEvents.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
-      );
-    } else {
-      filteredEvents.sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      );
-    }
-
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    const data = filteredEvents.slice(start, end);
-
-    return { data, total: filteredEvents.length };
-  },
-
-  fetchMeetings: async (): Promise<Meeting[]> => {
+  const fetchMeetings = useCallback(async (): Promise<Meeting[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...MOCK_MEETINGS];
-  },
+  }, []);
 
-  fetchTrainings: async (): Promise<Training[]> => {
+  const fetchTrainings = useCallback(async (): Promise<Training[]> => {
     await delay(SIMULATED_DELAY_MS);
     return [...MOCK_TRAININGS];
-  },
+  }, []);
 
-  sendContactMessage: async (data: ContactProps): Promise<void> => {
-    await delay(1500);
-    console.log("Contact message sent:", data);
-    return;
-  },
+  const sendContactMessage = useCallback(
+    async (data: ContactProps): Promise<void> => {
+      await delay(1500);
+      console.log("Contact message sent:", data);
+      return;
+    },
+    [],
+  );
+
+  return {
+    post,
+    fetchSettings,
+    fetchTemplate,
+    fetchResearchers,
+    fetchArticles,
+    fetchNews,
+    fetchEvents,
+    fetchMeetings,
+    fetchTrainings,
+    sendContactMessage,
+  };
 };

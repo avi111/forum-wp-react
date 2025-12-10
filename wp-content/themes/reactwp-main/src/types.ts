@@ -163,3 +163,22 @@ export type ContactProps = {
   email: string;
   message: string;
 };
+
+export type SiteOptions = {
+  site_name: string; // Site title
+  site_description: string; // Site tagline/description
+  site_url: string; // WordPress Address (URL)
+  home_url: string; // Site Address (URL)
+  admin_email: string; // Admin email address
+  charset: string; // Site charset (e.g., UTF-8)
+  timezone: string; // Timezone string
+  date_format: string; // Date format
+  time_format: string; // Time format
+  start_of_week: string; // Starting day of the week (0 = Sunday, 1 = Monday, etc.)
+  language: string; // Site language
+  admin_ajax_url: string; // Admin AJAX URL
+};
+
+export type InjectedProps = {
+  site: SiteOptions;
+};

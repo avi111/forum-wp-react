@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { InfoPage } from "../components/InfoPage";
 import { Mail, MapPin, Loader2, Send } from "lucide-react";
-import { api } from "../services/api";
+import { useAPI } from "../services/api";
 import { useToast } from "../context/ToastContext";
 
 export const Contact: React.FC = () => {
   const { showToast } = useToast();
+  const { sendContactMessage } = useAPI();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -28,7 +30,7 @@ export const Contact: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      await api.sendContactMessage(formData);
+      await sendContactMessage(formData);
       showToast("תודה רבה! ההודעה נשלחה בהצלחה");
       setFormData({ fullName: "", email: "", message: "" });
     } catch (error) {

@@ -1,19 +1,19 @@
 import React, {
   createContext,
-  useContext,
-  useState,
   ReactNode,
-  useEffect,
   useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 import { QueryObserverResult, useQueryClient } from "@tanstack/react-query";
 import {
-  useSettings,
-  useResearchers,
   useArticles,
   useMeetings,
-  useTrainings,
   useNews,
+  useResearchers,
+  useSettings,
+  useTrainings,
 } from "../hooks/useAppQueries";
 import {
   AppSettings,
@@ -21,15 +21,15 @@ import {
   CalendarEvent,
   Meeting,
   NewsItem,
+  OnJoin,
+  PaginatedResponse,
   Researcher,
   Training,
   UserStatus,
-  OnJoin,
-  PaginatedResponse,
 } from "../types";
 import { Brain } from "lucide-react";
 import { initStrings } from "../services/stringService";
-import { api } from "../services/api";
+import { useAPI } from "../services/api";
 
 type Fetcher<T> = () => Promise<QueryObserverResult<T, Error>>;
 type EventsFetcher = (
@@ -66,6 +66,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const queryClient = useQueryClient();
+  const { fetchEvents } = useAPI();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
 
@@ -106,10 +107,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     (page, limit, timeFilter) => {
       return queryClient.fetchQuery({
         queryKey: ["events", page, limit, timeFilter],
-        queryFn: () => api.fetchEvents(page, limit, timeFilter),
+        queryFn: () => fetchEvents(page, limit, timeFilter),
       });
     },
-    [queryClient],
+    [queryClient, fetchEvents],
   );
 
   const userArticles = currentUser

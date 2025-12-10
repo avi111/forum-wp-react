@@ -831,3 +831,20 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "מפגשים", view: PageView.MEETINGS },
   { label: "צור קשר", view: PageView.CONTACT },
 ];
+
+export const object = {
+  site: {
+    site_name: "example",
+    site_description: "tagline",
+    site_url: "http://localhost:8888/wordpress",
+    home_url: "http://localhost:8888/wordpress",
+    admin_email: "avi111@gmail.com",
+    charset: "UTF-8",
+    timezone: "",
+    date_format: "F j, Y",
+    time_format: "g:i a",
+    start_of_week: "1",
+    language: "",
+    admin_ajax_url: "http://localhost:8888/wordpress/wp-admin/admin-ajax.php",
+  },
+};
