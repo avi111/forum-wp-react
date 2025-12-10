@@ -12,7 +12,6 @@ require_once('includes/subscribe.php');
 require_once('includes/subscriptions_table.php');
 require_once('includes/edit_scholar.php');
 require_once('includes/add_papers.php');
-require_once('includes/send_newsletter.php');
 require_once('includes/import_csv.php');
 
 function mytheme_custom_logo_setup() {

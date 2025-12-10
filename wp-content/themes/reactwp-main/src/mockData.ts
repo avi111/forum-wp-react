@@ -63,18 +63,6 @@ export const MOCK_SETTINGS: AppSettings = {
     joinForm_submit_notice:
       "לחיצה על שליחה מהווה הסכמה לתנאי השימוש ומדיניות הפרטיות של האתר.",
     bylawsModal_title: "תקנון האגודה והפורום",
-    bylawsModal_section1_title: "סודיות ואתיקה:",
-    bylawsModal_section1_content:
-      "כל המידע המשותף בפורום זה נועד לדיון אקדמי/מחקרי בלבד. חל איסור מוחלט על הפצה או שימוש במידע רגיש מחוץ למסגרת הפורום ללא אישור מפורש מראש.",
-    bylawsModal_section2_title: "אימות זהות:",
-    bylawsModal_section2_content:
-      "חברות בפורום מותנית באימות רקע אקדמי/מקצועי בלבד. צוות הניהול שומר לעצמו את הזכות לסרב או לבטל חברות של משתמשים שאינם עומדים בקריטריונים אלו.",
-    bylawsModal_section3_title: "שימוש הוגן:",
-    bylawsModal_section3_content:
-      "אין לפרסם תוכן המפר זכויות יוצרים או קניין רוחני.",
-    bylawsModal_section4_title: "אכיפה:",
-    bylawsModal_section4_content:
-      "חברים שיפרו את התקנון עלולים להיחסם מהפורום באופן מיידי וללא אזהרה מוקדמת.",
     bylawsModal_confirm_button: "קראתי ואני מאשר/ת",
 
     // Article List
@@ -122,7 +110,7 @@ export const MOCK_SETTINGS: AppSettings = {
   titles: [
     { value: "prof", label: "פרופ'" },
     { value: "md", label: 'ד"ר לרפואה (MD)' },
-    { value: "phd", label: 'PhD מחקרי' },
+    { value: "phd", label: "PhD מחקרי" },
     { value: "mr", label: "מר" },
     { value: "ms", label: "גב'" },
   ],
@@ -249,30 +237,40 @@ export const MOCK_NEWS: NewsItem[] = [
     title: "נפתח הרישום לכנס השנתי למחקר פסיכדלי 2025",
     date: "21/05/2025",
     link: "#",
+    content:
+      "ההרשמה לכנס השנתי הגדול בישראל פתוחה כעת. הכנס יתקיים באוניברסיטת תל אביב ויכלול הרצאות של בכירי החוקרים מהארץ ומהעולם. מהרו להבטיח את מקומכם.",
   },
   {
     id: "2",
     title: "פרסום הנחיות חדשות של משרד הבריאות לטיפול ב-MDMA",
     date: "18/05/2025",
     link: "#",
+    content:
+      "משרד הבריאות פרסם היום את ההנחיות המעודכנות לטיפול חמלה באמצעות MDMA. ההנחיות מרחיבות את הקריטריונים וצפויות לאפשר למטופלים נוספים לקבל את הטיפול.",
   },
   {
     id: "3",
     title: "קול קורא להגשת תקצירים לגיליון מיוחד בנושא פסילוסיבין",
     date: "15/05/2025",
     link: "#",
+    content:
+      "כתב העת 'פסיכיאטריה ישראלית' מזמין חוקרים להגיש תקצירים לגיליון מיוחד שיוקדש למחקרים חדשים בתחום הטיפול בפסילוסיבין. המועד האחרון להגשה: 01/08/2025.",
   },
   {
     id: "4",
     title: "וובינר מיוחד עם פרופ' ריק דובלין - הירשמו עכשיו",
     date: "10/05/2025",
     link: "#",
+    content:
+      "מייסד ארגון MAPS, פרופ' ריק דובלין, יתארח לוובינר מיוחד עם קהילת הפורום ויספר על הדרך לאישור ה-FDA ועל העתיד של טיפולים פסיכדליים בעולם.",
   },
   {
     id: "5",
     title: "מחקר חדש מישראל פורסם ב-Nature Medicine",
     date: "05/05/2025",
     link: "#",
+    content:
+      "מחקר פורץ דרך של צוות חוקרים ממכון ויצמן והמרכז הרפואי שיבא, המדגים מנגנון נוירופלסטי חדש המופעל על ידי DMT, פורסם בכתב העת היוקרתי Nature Medicine.",
   },
 ];
 
@@ -286,8 +284,10 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "נובמבר",
     location: "אוניברסיטת תל אביב",
     type: "כנס",
-    imageUrl: "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&q=80&w=1200",
-    description: "הכנס המוביל בישראל המאגד חוקרים, מטפלים ואנשי רוח לדיון בהתפתחויות האחרונות.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&q=80&w=1200",
+    description:
+      "הכנס המוביל בישראל המאגד חוקרים, מטפלים ואנשי רוח לדיון בהתפתחויות האחרונות.",
     fullContent: `
       <p>אנו נרגשים להזמינכם לכנס השנתי החמישי למחקר פסיכדלי בישראל. השנה הכנס יעסוק בנושא "ממעבדה לקליניקה: אתגרים והזדמנויות".</p>
       <p>הכנס יכלול הרצאות מליאה של דוברים בינלאומיים מובילים, מושבים מקבילים בנושאי נוירוביולוגיה, פסיכותרפיה, ואנתרופולוגיה, וכן סדנאות מעשיות.</p>
@@ -303,8 +303,8 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     startTime: "09:00",
     endTime: "17:00",
     price: "350 ₪",
-    speakers: ["פרופ' דוד לוי", 'ד"ר שרה אברהם', 'פרופ\' ריק דובלין (אורח)'],
-    registrationLink: "#"
+    speakers: ["פרופ' דוד לוי", 'ד"ר שרה אברהם', "פרופ' ריק דובלין (אורח)"],
+    registrationLink: "#",
   },
   {
     id: "2",
@@ -314,7 +314,8 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "דצמבר",
     location: "Online (Zoom)",
     type: "וובינר",
-    imageUrl: "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1588196749597-9ff075ee6b5b?auto=format&fit=crop&q=80&w=1200",
     description: "סקירה של הפרוטוקולים הטיפוליים העדכניים לטיפול ב-PTSD.",
     fullContent: `
       <p>וובינר מקצועי המיועד למטפלים בבריאות הנפש. בוובינר נסקור את התוצאות של מחקרי פאזה 3 של MAPS ואת המשמעויות הקליניות שלהן.</p>
@@ -324,7 +325,7 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     endTime: "19:30",
     price: "חינם לחברי הפורום",
     speakers: ['ד"ר יעל כהן'],
-    registrationLink: "#"
+    registrationLink: "#",
   },
   {
     id: "3",
@@ -334,7 +335,8 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "ינואר",
     location: "מרכז בינתחומי הרצליה",
     type: "סדנה",
-    imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=1200",
     description: "כלים מעשיים לעבודה עם מטופלים שעברו חוויות משנות תודעה.",
     fullContent: `
       <p>סדנה מעשית בת יום אחד המתמקדת במיומנויות אינטגרציה. הסדנה מיועדת לפסיכולוגים, עובדים סוציאליים ופסיכיאטרים הפוגשים בקליניקה מטופלים המשתמשים בחומרים פסיכדליים.</p>
@@ -343,7 +345,7 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     startTime: "10:00",
     endTime: "15:00",
     price: "400 ₪",
-    registrationLink: "#"
+    registrationLink: "#",
   },
   {
     id: "4",
@@ -353,7 +355,8 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "פברואר",
     location: "מכון ויצמן למדע",
     type: "מפגש",
-    imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200",
     description: "במה להצגת עבודות תזה ודוקטורט בתחום הפסיכדלי.",
     fullContent: `
       <p>הפורום שמח לארח את מפגש החוקרים הצעירים השנתי. המפגש נועד לאפשר לסטודנטים לתארים מתקדמים להציג את מחקריהם, לקבל משוב מעמיתים ומחוקרים בכירים, וליצור שיתופי פעולה.</p>
@@ -361,7 +364,7 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     startTime: "16:00",
     endTime: "20:00",
     price: "חינם",
-    registrationLink: "#"
+    registrationLink: "#",
   },
   {
     id: "5",
@@ -371,7 +374,8 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "מרץ",
     location: "סינמטק תל אביב",
     type: "תרבות",
-    imageUrl: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&q=80&w=1200",
     description: "הקרנה מיוחדת של הסרט הדוקומנטרי הישראלי המהפכני.",
     fullContent: `
       <p>הצטרפו אלינו לערב מרתק הכולל הקרנה של הסרט "טריפ של חמלה", העוקב אחר מטופלים ישראלים שהשתתפו במחקר ה-MDMA הראשון בבית החולים באר יעקב.</p>
@@ -380,7 +384,7 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     startTime: "19:00",
     endTime: "22:00",
     price: "50 ₪",
-    registrationLink: "#"
+    registrationLink: "#",
   },
   {
     id: "6",
@@ -390,7 +394,8 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "אפריל",
     location: "אוניברסיטת בן גוריון",
     type: "קורס",
-    imageUrl: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=1200",
     description: "קורס יסוד להבנת מנגנוני הפעולה של חומרים פסיכדליים.",
     fullContent: `
       <p>הקורס יקנה ידע בסיסי בפרמקולוגיה של מערכת העצבים המרכזית, עם דגש על המערכת הסרוטונרגית והגלוטמטרגית.</p>
@@ -398,7 +403,7 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     startTime: "17:00",
     endTime: "20:00",
     price: "1200 ₪ (סדרה של 4 מפגשים)",
-    registrationLink: "#"
+    registrationLink: "#",
   },
   {
     id: "7",
@@ -408,13 +413,15 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "מאי",
     location: "Online (Zoom)",
     type: "וובינר",
-    imageUrl: "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&q=80&w=1200",
     description: "דיון בסוגיות אתיות מורכבות במחקר ובטיפול פסיכדלי.",
-    fullContent: "<p>נדון בנושאים כמו הסכמה מדעת תחת השפעה, מגע בטיפול, וגבולות הקשר הטיפולי.</p>",
+    fullContent:
+      "<p>נדון בנושאים כמו הסכמה מדעת תחת השפעה, מגע בטיפול, וגבולות הקשר הטיפולי.</p>",
     startTime: "18:00",
     endTime: "19:30",
     price: "חינם",
-    registrationLink: "#"
+    registrationLink: "#",
   },
 
   // Past Events (2023-2024)
@@ -426,11 +433,12 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "אוקטובר",
     location: "זום",
     type: "כנס",
-    imageUrl: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1200",
     description: "מפגש מקוון לפתיחת הפעילות האקדמית של הפורום.",
     fullContent: "<p>סיכום שנה וקבלת פנים לחוקרים החדשים שהצטרפו לפורום.</p>",
     startTime: "18:00",
-    endTime: "20:00"
+    endTime: "20:00",
   },
   {
     id: "102",
@@ -440,12 +448,14 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "פברואר",
     location: "אוניברסיטת תל אביב",
     type: "הרצאה",
-    imageUrl: "https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80&w=1200",
     description: "הרצאה מרתקת על מודל ה-REBUS והמוח האנטרופי.",
-    fullContent: "<p>פרופ' קרהארט-האריס הציג את מחקרי ה-fMRI האחרונים שלו ואת התיאוריה המאחדת שלו לגבי פעולה פסיכדלית.</p>",
+    fullContent:
+      "<p>פרופ' קרהארט-האריס הציג את מחקרי ה-fMRI האחרונים שלו ואת התיאוריה המאחדת שלו לגבי פעולה פסיכדלית.</p>",
     startTime: "19:00",
     endTime: "21:00",
-    speakers: ["פרופ' רובין קרהארט-האריס"]
+    speakers: ["פרופ' רובין קרהארט-האריס"],
   },
   {
     id: "103",
@@ -455,11 +465,13 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "אפריל",
     location: "מכללת תל-חי",
     type: "דיון",
-    imageUrl: "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1533174072545-e8d4aa97edf9?auto=format&fit=crop&q=80&w=1200",
     description: "דיון בשיתוף הרשות למלחמה בסמים וארגוני מזעור נזקים.",
-    fullContent: "<p>דיון מעמיק על חשיבות המרחבים הבטוחים בפסטיבלי טראנס ודרכים למזעור פגיעה נפשית בקרב משתמשים.</p>",
+    fullContent:
+      "<p>דיון מעמיק על חשיבות המרחבים הבטוחים בפסטיבלי טראנס ודרכים למזעור פגיעה נפשית בקרב משתמשים.</p>",
     startTime: "10:00",
-    endTime: "14:00"
+    endTime: "14:00",
   },
   {
     id: "104",
@@ -469,11 +481,13 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     month: "דצמבר",
     location: "פרדס חנה",
     type: "סדנה",
-    imageUrl: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200",
+    imageUrl:
+      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=1200",
     description: "התנסות מעשית בטכניקות נשימה לשינוי מצב תודעה.",
-    fullContent: "<p>סדנה חוויתית המאפשרת חקירה של מצבי תודעה לא-רגילים ללא שימוש בחומרים, באמצעות נשימה ומוזיקה.</p>",
+    fullContent:
+      "<p>סדנה חוויתית המאפשרת חקירה של מצבי תודעה לא-רגילים ללא שימוש בחומרים, באמצעות נשימה ומוזיקה.</p>",
     startTime: "09:00",
-    endTime: "18:00"
+    endTime: "18:00",
   },
 ];
 

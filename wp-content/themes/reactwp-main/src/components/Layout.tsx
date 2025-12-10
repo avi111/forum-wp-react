@@ -8,10 +8,22 @@ import { useApp } from "../context/AppContext";
 
 export function Layout() {
   const navigate = useNavigate();
-  const { currentUser, setCurrentUser, newsItems, simulateAdminApproval } =
-    useApp();
+  const {
+    currentUser,
+    setCurrentUser,
+    newsItems,
+    getNewsFromServer,
+    simulateAdminApproval,
+  } = useApp();
 
   const { pathname } = useLocation();
+
+  // Fetch news when the layout mounts
+  useEffect(() => {
+    if (newsItems.length === 0) {
+      getNewsFromServer();
+    }
+  }, [getNewsFromServer, newsItems.length]);
 
   // Scroll to top on route change
   useEffect(() => {

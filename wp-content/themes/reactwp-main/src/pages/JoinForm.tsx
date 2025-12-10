@@ -5,6 +5,49 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useToast } from "../context/ToastContext";
 import { t } from "../services/stringService";
+import { useTemplate } from "../hooks/useAppQueries";
+import { ContentNotFound } from "../components/ContentNotFound";
+
+const BylawsModal: FC<{
+  onClose: () => void;
+  onConfirm: () => void;
+}> = ({ onClose, onConfirm }) => {
+  const { data: content, isLoading } = useTemplate("bylaws-modal");
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-slide-up">
+        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
+          <h3 className="text-xl font-bold text-slate-900">
+            {t("bylawsModal_title")}
+          </h3>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-200 rounded-full transition"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        <div className="p-8 overflow-y-auto leading-relaxed text-slate-600">
+          {isLoading && <p>טוען תקנון...</p>}
+          {content ? (
+            <div dangerouslySetInnerHTML={{ __html: content }} />
+          ) : (
+            !isLoading && <ContentNotFound />
+          )}
+        </div>
+        <div className="p-6 border-t border-slate-100 bg-slate-50 rounded-b-2xl flex justify-end">
+          <button
+            onClick={onConfirm}
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition"
+          >
+            {t("bylawsModal_confirm_button")}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const JoinForm: FC = () => {
   const { onJoin, settings } = useApp();
@@ -575,70 +618,13 @@ export const JoinForm: FC = () => {
       `}</style>
 
       {showBylaws && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-slide-up">
-            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
-              <h3 className="text-xl font-bold text-slate-900">
-                {t("bylawsModal_title")}
-              </h3>
-              <button
-                onClick={() => setShowBylaws(false)}
-                className="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-200 rounded-full transition"
-              >
-                <X size={20} />
-              </button>
-            </div>
-            <div className="p-8 overflow-y-auto leading-relaxed text-slate-600 space-y-4">
-              <div className="flex gap-4">
-                <span className="font-bold text-indigo-600">1.</span>
-                <p>
-                  <strong className="text-slate-900">
-                    {t("bylawsModal_section1_title")}
-                  </strong>{" "}
-                  {t("bylawsModal_section1_content")}
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <span className="font-bold text-indigo-600">2.</span>
-                <p>
-                  <strong className="text-slate-900">
-                    {t("bylawsModal_section2_title")}
-                  </strong>{" "}
-                  {t("bylawsModal_section2_content")}
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <span className="font-bold text-indigo-600">3.</span>
-                <p>
-                  <strong className="text-slate-900">
-                    {t("bylawsModal_section3_title")}
-                  </strong>{" "}
-                  {t("bylawsModal_section3_content")}
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <span className="font-bold text-indigo-600">4.</span>
-                <p>
-                  <strong className="text-slate-900">
-                    {t("bylawsModal_section4_title")}
-                  </strong>{" "}
-                  {t("bylawsModal_section4_content")}
-                </p>
-              </div>
-            </div>
-            <div className="p-6 border-t border-slate-100 bg-slate-50 rounded-b-2xl flex justify-end">
-              <button
-                onClick={() => {
-                  setFormData((prev) => ({ ...prev, agreedToBylaws: true }));
-                  setShowBylaws(false);
-                }}
-                className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition"
-              >
-                {t("bylawsModal_confirm_button")}
-              </button>
-            </div>
-          </div>
-        </div>
+        <BylawsModal
+          onClose={() => setShowBylaws(false)}
+          onConfirm={() => {
+            setFormData((prev) => ({ ...prev, agreedToBylaws: true }));
+            setShowBylaws(false);
+          }}
+        />
       )}
     </div>
   );

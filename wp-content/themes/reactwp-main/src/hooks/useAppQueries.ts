@@ -35,7 +35,8 @@ export const useArticles = () => {
 
 export const useNews = () => {
   return useQuery({
-    queryKey: ["news"],
+    // Added a version number to the key to invalidate the cache
+    queryKey: ["news", "v2"],
     queryFn: api.fetchNews,
     enabled: false,
   });

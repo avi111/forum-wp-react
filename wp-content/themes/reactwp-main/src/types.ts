@@ -51,6 +51,7 @@ export interface NewsItem {
   title: string;
   date: string;
   link: string;
+  content?: string;
 }
 
 export interface CalendarEvent {
@@ -127,7 +128,7 @@ export interface AppSettings {
   latestEditorialLimit: number;
   latestResearchLimit: number;
   titleMap: Record<string, string>;
-  strings: Record<string, string>; 
+  strings: Record<string, string>;
 }
 
 export enum PageView {

@@ -18,17 +18,25 @@ import {
 import {
   AppSettings,
   Article,
+  CalendarEvent,
   Meeting,
   NewsItem,
   Researcher,
   Training,
   UserStatus,
   OnJoin,
+  PaginatedResponse,
 } from "../types";
 import { Brain } from "lucide-react";
 import { initStrings } from "../services/stringService";
+import { api } from "../services/api";
 
 type Fetcher<T> = () => Promise<QueryObserverResult<T, Error>>;
+type EventsFetcher = (
+  page?: number,
+  limit?: number,
+  timeFilter?: "future" | "past" | "all",
+) => Promise<QueryObserverResult<PaginatedResponse<CalendarEvent>, Error>>;
 
 interface AppContextType {
   settings: AppSettings;
@@ -46,6 +54,7 @@ interface AppContextType {
   simulateAdminApproval: () => void;
   getResearchersFromServer: Fetcher<Researcher[]>;
   getArticlesFromServer: Fetcher<Article[]>;
+  getEventsFromServer: EventsFetcher;
   getMeetingsFromServer: Fetcher<Meeting[]>;
   getTrainingsFromServer: Fetcher<Training[]>;
   getNewsFromServer: Fetcher<NewsItem[]>;
@@ -92,6 +101,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     [refetchTrainings],
   );
   const getNewsFromServer = useCallback(() => refetchNews(), [refetchNews]);
+
+  const getEventsFromServer: EventsFetcher = useCallback(
+    (page, limit, timeFilter) => {
+      return queryClient.fetchQuery({
+        queryKey: ["events", page, limit, timeFilter],
+        queryFn: () => api.fetchEvents(page, limit, timeFilter),
+      });
+    },
+    [queryClient],
+  );
 
   const userArticles = currentUser
     ? articles.filter((a) => a.authorId === currentUser.id)
@@ -197,6 +216,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     simulateAdminApproval,
     getResearchersFromServer,
     getArticlesFromServer,
+    getEventsFromServer,
     getMeetingsFromServer,
     getTrainingsFromServer,
     getNewsFromServer,

@@ -26,6 +26,38 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // In a real app, this would be fetched from a server.
 // We are mocking it by storing the raw HTML content.
 const MOCK_TEMPLATES: Record<string, string> = {
+  "bylaws-modal": `
+    <div class="space-y-4">
+      <div class="flex gap-4">
+        <span class="font-bold text-indigo-600">1.</span>
+        <p>
+          <strong class="text-slate-900">סודיות ואתיקה:</strong> 
+          כל המידע המשותף בפורום זה נועד לדיון אקדמי/מחקרי בלבד. חל איסור מוחלט על הפצה או שימוש במידע רגיש מחוץ למסגרת הפורום ללא אישור מפורש מראש.
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <span class="font-bold text-indigo-600">2.</span>
+        <p>
+          <strong class="text-slate-900">אימות זהות:</strong> 
+          חברות בפורום מותנית באימות רקע אקדמי/מקצועי בלבד. צוות הניהול שומר לעצמו את הזכות לסרב או לבטל חברות של משתמשים שאינם עומדים בקריטריונים אלו.
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <span class="font-bold text-indigo-600">3.</span>
+        <p>
+          <strong class="text-slate-900">שימוש הוגן:</strong> 
+          אין לפרסם תוכן המפר זכויות יוצרים או קניין רוחני.
+        </p>
+      </div>
+      <div class="flex gap-4">
+        <span class="font-bold text-indigo-600">4.</span>
+        <p>
+          <strong class="text-slate-900">אכיפה:</strong> 
+          חברים שיפרו את התקנון עלולים להיחסם מהפורום באופן מיידי וללא אזהרה מוקדמת.
+        </p>
+      </div>
+    </div>
+  `,
   about: `
     <!-- Header Section -->
     <div class="bg-slate-900 text-white relative py-20 overflow-hidden">

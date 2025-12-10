@@ -1,7 +1,8 @@
 import { GoogleGenAI } from "@google/genai";
 
 // Safeguard against ReferenceError if process is not defined in the environment
-const apiKey = (typeof process !== "undefined" && process.env?.API_KEY) || "";
+const apiKey =
+  (typeof process !== "undefined" && import.meta.env?.API_KEY) || "";
 const ai = new GoogleGenAI({ apiKey });
 
 export const enhanceBio = async (

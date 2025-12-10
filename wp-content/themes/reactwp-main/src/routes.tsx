@@ -1,4 +1,3 @@
-
 import { Home } from "./pages/Home";
 import { ResearcherIndex } from "./pages/ResearcherIndex";
 import { ArticleList } from "./pages/ArticleList";
@@ -16,6 +15,7 @@ import { ProtectedDashboard } from "./pages/ProtectedDashboard";
 import { PageNotFound } from "./pages/PageNotFound";
 import { TagPage } from "./pages/TagPage";
 import { EventPage } from "./pages/EventPage";
+import { NewsPage } from "./pages/NewsPage";
 
 export const routeConfig = [
   {
@@ -25,6 +25,10 @@ export const routeConfig = [
   {
     path: "/about",
     element: <About />,
+  },
+  {
+    path: "/news",
+    element: <NewsPage />,
   },
   {
     path: "/researchers",
