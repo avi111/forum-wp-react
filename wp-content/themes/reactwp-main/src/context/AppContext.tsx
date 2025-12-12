@@ -1,19 +1,19 @@
 import React, {
   createContext,
-  ReactNode,
-  useCallback,
   useContext,
-  useEffect,
   useState,
+  ReactNode,
+  useEffect,
+  useCallback,
 } from "react";
 import { QueryObserverResult, useQueryClient } from "@tanstack/react-query";
 import {
+  useSettings,
+  useResearchers,
   useArticles,
   useMeetings,
-  useNews,
-  useResearchers,
-  useSettings,
   useTrainings,
+  useNews,
 } from "../hooks/useAppQueries";
 import {
   AppSettings,
@@ -21,11 +21,12 @@ import {
   CalendarEvent,
   Meeting,
   NewsItem,
-  OnJoin,
-  PaginatedResponse,
   Researcher,
   Training,
   UserStatus,
+  OnJoin,
+  PaginatedResponse,
+  SiteOptions,
 } from "../types";
 import { Brain } from "lucide-react";
 import { initStrings } from "../services/stringService";
@@ -58,6 +59,7 @@ interface AppContextType {
   getMeetingsFromServer: Fetcher<Meeting[]>;
   getTrainingsFromServer: Fetcher<Training[]>;
   getNewsFromServer: Fetcher<NewsItem[]>;
+  site: SiteOptions;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -66,7 +68,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const queryClient = useQueryClient();
-  const { fetchEvents } = useAPI();
+  const { fetchEvents, fetchCurrentUser } = useAPI();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
 
@@ -78,12 +80,31 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const { data: newsItems = [], refetch: refetchNews } = useNews();
 
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
     if (settings?.strings) {
       initStrings(settings.strings);
     }
   }, [settings]);
+
+  // Check for logged-in user on mount
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const user = await fetchCurrentUser();
+        if (user) {
+          setCurrentUser(user);
+        }
+      } catch (error) {
+        console.error("Failed to fetch current user:", error);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    void checkUser();
+  }, [fetchCurrentUser]);
 
   const getResearchersFromServer = useCallback(
     () => refetchResearchers(),
@@ -187,7 +208,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [currentUser, onUpdateUser]);
 
-  if (loadingSettings || !settings) {
+  // Wait for both settings and user authentication check
+  if (loadingSettings || !settings || isAuthLoading) {
     return (
       <div
         className="min-h-screen bg-slate-900 flex flex-col items-center justify-center text-white"
@@ -195,7 +217,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       >
         <Brain className="w-24 h-24 text-teal-500 animate-pulse" />
         <h2 className="text-2xl font-heebo font-bold tracking-wide mt-4">
-          טוען הגדרות...
+          {isAuthLoading ? "מאמת משתמש..." : "טוען הגדרות..."}
         </h2>
       </div>
     );
@@ -221,6 +243,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     getMeetingsFromServer,
     getTrainingsFromServer,
     getNewsFromServer,
+    site: window.object.site,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

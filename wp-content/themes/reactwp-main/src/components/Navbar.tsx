@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { NavItem, PageView, Researcher } from "../types";
 import { Brain, LogOut, Menu, UserCircle, X } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useApp } from "../context/AppContext";
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -16,8 +17,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   navItems,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
+  const { site } = useApp(); // Get site info from context
 
   const getPath = (view: PageView) => {
     switch (view) {
@@ -36,7 +37,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       case PageView.JOIN:
         return "/join";
       case PageView.DASHBOARD:
-        return "/dashboard";
+        return site.site_url + "/wp-admin/";
       case PageView.MEETINGS:
         return "/meetings";
       case PageView.LOGIN:
@@ -47,13 +48,15 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const handleNavClick = (view: PageView) => {
-    navigate(getPath(view));
+    window.location.href = getPath(view);
     setIsOpen(false);
   };
 
   const isActive = (view: PageView) => {
     const path = getPath(view);
     if (path === "/") return location.pathname === "/";
+    // For external links, don't show as active
+    if (path.startsWith("http")) return false;
     return location.pathname.startsWith(path);
   };
 

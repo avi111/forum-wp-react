@@ -19,7 +19,7 @@ const BylawsModal: FC<{
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[80vh] flex flex-col animate-slide-up">
         <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
           <h3 className="text-xl font-bold text-slate-900">
-            {t("bylawsModal_title")}
+            {t("bylawsmodal_title")}
           </h3>
           <button
             onClick={onClose}
@@ -41,7 +41,7 @@ const BylawsModal: FC<{
             onClick={onConfirm}
             className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition"
           >
-            {t("bylawsModal_confirm_button")}
+            {t("bylawsmodal_confirm_button")}
           </button>
         </div>
       </div>
@@ -118,11 +118,11 @@ export const JoinForm: FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert(t("joinForm_passwords_not_match"));
+      alert(t("joinform_passwords_not_match"));
       return;
     }
     if (!formData.agreedToBylaws) {
-      alert(t("joinForm_bylaws_not_agreed"));
+      alert(t("joinform_bylaws_not_agreed"));
       return;
     }
 
@@ -142,7 +142,7 @@ export const JoinForm: FC = () => {
     };
 
     onJoin(submissionData, () => {
-      showToast(t("joinForm_request_successful"));
+      showToast(t("joinform_request_successful"));
       navigate("/dashboard");
     });
   };
@@ -156,10 +156,10 @@ export const JoinForm: FC = () => {
               <Users className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-3xl font-bold font-heebo">
-              {t("joinForm_title")}
+              {t("joinform_title")}
             </h2>
             <p className="text-teal-200 mt-2 text-lg">
-              {t("joinForm_subtitle")}
+              {t("joinform_subtitle")}
             </p>
           </div>
           <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500 rounded-full mix-blend-overlay filter blur-3xl opacity-20 -translate-y-1/2 translate-x-1/2"></div>
@@ -172,13 +172,13 @@ export const JoinForm: FC = () => {
                 1
               </span>
               <h3 className="text-xl font-bold text-slate-800">
-                {t("joinForm_section1_title")}
+                {t("joinform_section1_title")}
               </h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_username_label")}
+                  {t("joinform_username_label")}
                 </label>
                 <input
                   type="text"
@@ -190,7 +190,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_email_label")}
+                  {t("joinform_email_label")}
                 </label>
                 <input
                   type="email"
@@ -202,7 +202,7 @@ export const JoinForm: FC = () => {
               </div>
               <div className="relative">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_password_label")}
+                  {t("joinform_password_label")}
                 </label>
                 <div className="relative">
                   <input
@@ -223,7 +223,7 @@ export const JoinForm: FC = () => {
               </div>
               <div className="relative">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_confirm_password_label")}
+                  {t("joinform_confirm_password_label")}
                 </label>
                 <input
                   type="password"
@@ -242,13 +242,13 @@ export const JoinForm: FC = () => {
                 2
               </span>
               <h3 className="text-xl font-bold text-slate-800">
-                {t("joinForm_section2_title")}
+                {t("joinform_section2_title")}
               </h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_firstName_label")}
+                  {t("joinform_firstname_label")}
                 </label>
                 <input
                   type="text"
@@ -260,7 +260,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_lastName_label")}
+                  {t("joinform_lastname_label")}
                 </label>
                 <input
                   type="text"
@@ -272,7 +272,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_idNumber_label")}
+                  {t("joinform_idnumber_label")}
                 </label>
                 <input
                   type="text"
@@ -284,7 +284,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_phone_label")}
+                  {t("joinform_phone_label")}
                 </label>
                 <input
                   type="tel"
@@ -296,7 +296,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_gender_label")}
+                  {t("joinform_gender_label")}
                 </label>
                 <select
                   name="gender"
@@ -304,7 +304,7 @@ export const JoinForm: FC = () => {
                   onChange={handleInputChange}
                 >
                   <option value="">
-                    {t("joinForm_gender_select_placeholder")}
+                    {t("joinform_gender_select_placeholder")}
                   </option>
                   {settings.genders.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -315,7 +315,7 @@ export const JoinForm: FC = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_title_label")}
+                  {t("joinform_title_label")}
                 </label>
                 <select
                   name="title"
@@ -324,7 +324,7 @@ export const JoinForm: FC = () => {
                   onChange={handleInputChange}
                 >
                   <option value="">
-                    {t("joinForm_title_select_placeholder")}
+                    {t("joinform_title_select_placeholder")}
                   </option>
                   {settings.titles.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -342,14 +342,14 @@ export const JoinForm: FC = () => {
                 3
               </span>
               <h3 className="text-xl font-bold text-slate-800">
-                {t("joinForm_section3_title")}
+                {t("joinform_section3_title")}
               </h3>
             </div>
 
             <div className="grid grid-cols-1 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_institution_label")}
+                  {t("joinform_institution_label")}
                 </label>
                 <select
                   name="institution"
@@ -358,7 +358,7 @@ export const JoinForm: FC = () => {
                   onChange={handleInputChange}
                 >
                   <option value="">
-                    {t("joinForm_institution_select_placeholder")}
+                    {t("joinform_institution_select_placeholder")}
                   </option>
                   {settings.institutions.map((inst) => (
                     <option key={inst} value={inst}>
@@ -366,14 +366,14 @@ export const JoinForm: FC = () => {
                     </option>
                   ))}
                   <option value="other">
-                    {t("joinForm_institution_other")}
+                    {t("joinform_institution_other")}
                   </option>
                 </select>
                 {formData.institution === "other" && (
                   <input
                     type="text"
                     name="institutionOther"
-                    placeholder={t("joinForm_institution_other_placeholder")}
+                    placeholder={t("joinform_institution_other_placeholder")}
                     className="input-field bg-slate-50"
                     onChange={handleInputChange}
                   />
@@ -382,7 +382,7 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_faculty_label")}
+                  {t("joinform_faculty_label")}
                 </label>
                 <input
                   type="text"
@@ -395,7 +395,7 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_main_specialization_label")}
+                  {t("joinform_main_specialization_label")}
                 </label>
                 <select
                   name="mainSpecialization"
@@ -403,7 +403,7 @@ export const JoinForm: FC = () => {
                   onChange={handleInputChange}
                 >
                   <option value="">
-                    {t("joinForm_main_specialization_select_placeholder")}
+                    {t("joinform_main_specialization_select_placeholder")}
                   </option>
                   {settings.mainSpecializations.map((spec) => (
                     <option key={spec} value={spec}>
@@ -411,7 +411,7 @@ export const JoinForm: FC = () => {
                     </option>
                   ))}
                   <option value="other">
-                    {t("joinForm_main_specialization_other")}
+                    {t("joinform_main_specialization_other")}
                   </option>
                 </select>
                 {formData.mainSpecialization === "other" && (
@@ -419,7 +419,7 @@ export const JoinForm: FC = () => {
                     type="text"
                     name="mainSpecializationOther"
                     placeholder={t(
-                      "joinForm_main_specialization_other_placeholder",
+                      "joinform_main_specialization_other_placeholder",
                     )}
                     className="input-field bg-slate-50"
                     onChange={handleInputChange}
@@ -429,7 +429,7 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-3">
-                  {t("joinForm_sub_specialization_label")}
+                  {t("joinform_sub_specialization_label")}
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
                   {settings.subSpecializations.map((sub) => (
@@ -449,14 +449,14 @@ export const JoinForm: FC = () => {
                   <div className="md:col-span-2 mt-2 pt-2 border-t border-slate-200">
                     <label className="flex items-center space-x-3 space-x-reverse">
                       <span className="text-sm font-bold text-slate-700 ml-2">
-                        {t("joinForm_sub_specialization_other_label")}
+                        {t("joinform_sub_specialization_other_label")}
                       </span>
                       <input
                         type="text"
                         name="subSpecializationOther"
                         className="input-field text-sm py-1"
                         placeholder={t(
-                          "joinForm_sub_specialization_other_placeholder",
+                          "joinform_sub_specialization_other_placeholder",
                         )}
                         onChange={handleInputChange}
                       />
@@ -467,7 +467,7 @@ export const JoinForm: FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t("joinForm_student_year_label")}
+                  {t("joinform_student_year_label")}
                 </label>
                 <select
                   name="studentYear"
@@ -475,7 +475,7 @@ export const JoinForm: FC = () => {
                   onChange={handleInputChange}
                 >
                   <option value="">
-                    {t("joinForm_student_year_select_placeholder")}
+                    {t("joinform_student_year_select_placeholder")}
                   </option>
                   {settings.studentYears.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -493,7 +493,7 @@ export const JoinForm: FC = () => {
                 4
               </span>
               <h3 className="text-xl font-bold text-slate-800">
-                {t("joinForm_section4_title")}
+                {t("joinform_section4_title")}
               </h3>
             </div>
 
@@ -501,14 +501,14 @@ export const JoinForm: FC = () => {
               <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:bg-slate-50 transition-colors">
                 <FileText className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <h4 className="font-bold text-slate-700 mb-1">
-                  {t("joinForm_verification_doc_title")}
+                  {t("joinform_verification_doc_title")}
                 </h4>
                 <p className="text-xs text-slate-500 mb-4">
-                  {t("joinForm_verification_doc_subtitle")}
+                  {t("joinform_verification_doc_subtitle")}
                 </p>
                 <label className="cursor-pointer bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm inline-flex items-center">
                   <Upload className="w-4 h-4 ml-2" />
-                  {t("joinForm_select_file")}
+                  {t("joinform_select_file")}
                   <input
                     type="file"
                     className="hidden"
@@ -526,14 +526,14 @@ export const JoinForm: FC = () => {
               <div className="border-2 border-dashed border-slate-300 rounded-xl p-6 text-center hover:bg-slate-50 transition-colors">
                 <FileText className="w-10 h-10 text-slate-400 mx-auto mb-3" />
                 <h4 className="font-bold text-slate-700 mb-1">
-                  {t("joinForm_intent_letter_title")}
+                  {t("joinform_intent_letter_title")}
                 </h4>
                 <p className="text-xs text-slate-500 mb-4">
-                  {t("joinForm_intent_letter_subtitle")}
+                  {t("joinform_intent_letter_subtitle")}
                 </p>
                 <label className="cursor-pointer bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-slate-50 shadow-sm inline-flex items-center">
                   <Upload className="w-4 h-4 ml-2" />
-                  {t("joinForm_select_file")}
+                  {t("joinform_select_file")}
                   <input
                     type="file"
                     className="hidden"
@@ -561,15 +561,15 @@ export const JoinForm: FC = () => {
                   className="mt-1 w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300"
                 />
                 <span className="mr-3 text-sm text-slate-700">
-                  {t("joinForm_agreed_to_bylaws_prefix")}
+                  {t("joinform_agreed_to_bylaws_prefix")}
                   <button
                     type="button"
                     onClick={() => setShowBylaws(true)}
                     className="text-indigo-600 font-bold underline mx-1 hover:text-indigo-800"
                   >
-                    {t("joinForm_bylaws_link")}
+                    {t("joinform_bylaws_link")}
                   </button>
-                  {t("joinForm_agreed_to_bylaws_suffix")}
+                  {t("joinform_agreed_to_bylaws_suffix")}
                 </span>
               </label>
 
@@ -582,7 +582,7 @@ export const JoinForm: FC = () => {
                   className="mt-1 w-5 h-5 text-teal-600 rounded focus:ring-teal-500 border-gray-300"
                 />
                 <span className="mr-3 text-sm text-slate-700">
-                  {t("joinForm_newsletter_agreement")}
+                  {t("joinform_newsletter_agreement")}
                 </span>
               </label>
             </div>
@@ -593,10 +593,10 @@ export const JoinForm: FC = () => {
               type="submit"
               className="w-full bg-slate-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-slate-800 shadow-xl shadow-slate-900/10 transition-all transform hover:-translate-y-0.5"
             >
-              {t("joinForm_submit_button")}
+              {t("joinform_submit_button")}
             </button>
             <p className="text-center text-xs text-slate-400 mt-4">
-              {t("joinForm_submit_notice")}
+              {t("joinform_submit_notice")}
             </p>
           </div>
         </form>

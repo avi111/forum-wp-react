@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { NewsTicker } from "./NewsTicker";
@@ -7,13 +7,13 @@ import { NAV_ITEMS } from "../mockData";
 import { useApp } from "../context/AppContext";
 
 export function Layout() {
-  const navigate = useNavigate();
   const {
     currentUser,
     setCurrentUser,
     newsItems,
     getNewsFromServer,
     simulateAdminApproval,
+    site,
   } = useApp();
 
   const { pathname } = useLocation();
@@ -31,8 +31,10 @@ export function Layout() {
   }, [pathname]);
 
   const onLogout = () => {
+    // Clear the user from React's state
     setCurrentUser(null);
-    navigate("/");
+    // Redirect to the WordPress logout URL
+    window.location.href = `${site.home_url}/wp-login.php?action=logout`;
   };
 
   return (

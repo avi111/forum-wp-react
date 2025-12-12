@@ -2,6 +2,10 @@
 add_theme_support('menus');
 add_theme_support('title-tag');
 
+// Include API endpoints and Toolset setup
+require_once get_template_directory() . '/inc/api-endpoints.php';
+require_once get_template_directory() . '/inc/toolset-setup.php';
+
 function my_theme_enqueue_scripts()
 {
   wp_enqueue_style('default-style', get_stylesheet_uri(), [], '1.0.0', 'all'); //default styles.css
