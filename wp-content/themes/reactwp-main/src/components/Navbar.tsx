@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavItem, PageView, Researcher } from "../types";
 import { Brain, LogOut, Menu, UserCircle, X } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 
 interface NavbarProps {
@@ -19,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const { site } = useApp(); // Get site info from context
+  const navigate = useNavigate();
 
   const getPath = (view: PageView) => {
     switch (view) {
@@ -48,7 +49,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   const handleNavClick = (view: PageView) => {
-    window.location.href = getPath(view);
+    const path = getPath(view);
+
+    // If it's an external link (WP Admin), use window.location
+    if (
+      path.startsWith("http") ||
+      path.includes(site.site_url + "/wp-admin/")
+    ) {
+      window.location.href = path;
+    } else {
+      navigate(path);
+    }
     setIsOpen(false);
   };
 

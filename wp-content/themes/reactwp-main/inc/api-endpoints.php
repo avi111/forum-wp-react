@@ -135,7 +135,7 @@ add_action('wp_ajax_nopriv_fetchResearchers', 'iprf_fetch_researchers');
 
 function iprf_fetch_researchers() {
     $args = [
-        'role'    => 'researcher',
+        'role'    => 'contributor',
         'number'  => -1,
         'orderby' => 'display_name'
     ];
@@ -247,22 +247,25 @@ function iprf_fetch_events() {
     $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10;
     $time_filter = isset($_POST['timeFilter']) ? sanitize_text_field($_POST['timeFilter']) : 'all';
     
-    $today = current_time('timestamp');
-
     $args = [
         'post_type' => 'event',
         'posts_per_page' => $limit,
         'paged' => $page,
-        'post_status' => 'publish',
-        'meta_key' => 'wpcf-event-date',
-        'orderby' => 'meta_value_num',
+        'post_status' => ['publish', 'future'],
+        'orderby' => 'date',
     ];
 
     if ($time_filter === 'future') {
-        $args['meta_query'] = [['key' => 'wpcf-event-date', 'compare' => '>=', 'value' => $today, 'type' => 'NUMERIC']];
+        $args['date_query'] = [[
+            'after' => 'today',
+            'inclusive' => true
+        ]];
         $args['order'] = 'ASC';
     } elseif ($time_filter === 'past') {
-        $args['meta_query'] = [['key' => 'wpcf-event-date', 'compare' => '<', 'value' => $today, 'type' => 'NUMERIC']];
+        $args['date_query'] = [[
+            'before' => 'today',
+            'inclusive' => false
+        ]];
         $args['order'] = 'DESC';
     }
 
@@ -272,8 +275,7 @@ function iprf_fetch_events() {
     while ($query->have_posts()) {
         $query->the_post();
         
-        $raw_date = iprf_get_field(get_the_ID(), 'event-date');
-        $date_ts = intval($raw_date);
+        $date_ts = (int)get_the_date('U');
         
         $events[] = [
             'id' => (string)get_the_ID(),
@@ -309,15 +311,16 @@ add_action('wp_ajax_fetchMeetings', 'iprf_fetch_meetings');
 add_action('wp_ajax_nopriv_fetchMeetings', 'iprf_fetch_meetings');
 
 function iprf_fetch_meetings() {
-    $today = current_time('timestamp');
-    
     $args = [
         'post_type' => 'meeting',
         'posts_per_page' => -1,
-        'meta_key' => 'wpcf-meeting-date',
-        'orderby' => 'meta_value_num',
+        'orderby' => 'date',
         'order' => 'ASC',
-        'meta_query' => [['key' => 'wpcf-meeting-date', 'compare' => '>=', 'value' => $today, 'type' => 'NUMERIC']]
+        'post_status' => ['publish', 'future'],
+        'date_query' => [[
+            'after' => 'today',
+            'inclusive' => true
+        ]]
     ];
 
     $query = new WP_Query($args);
@@ -325,8 +328,7 @@ function iprf_fetch_meetings() {
 
     while ($query->have_posts()) {
         $query->the_post();
-        $raw_date = iprf_get_field(get_the_ID(), 'meeting-date');
-        $date_ts = intval($raw_date);
+        $date_ts = (int)get_the_date('U');
 
         $meetings[] = [
             'id' => (string)get_the_ID(),
@@ -335,7 +337,7 @@ function iprf_fetch_meetings() {
             'day' => $date_ts ? date('d', $date_ts) : '',
             'month' => $date_ts ? date_i18n('F Y', $date_ts) : '',
             'description' => get_the_excerpt(),
-            'buttonText' => iprf_get_field(get_the_ID(), 'button-text') ?: 'הרשמה',
+            'buttonText' => 'הרשמה',
         ];
     }
     wp_reset_postdata();
@@ -361,16 +363,11 @@ function iprf_fetch_trainings() {
         $query->the_post();
         
         $syllabus = [];
-        if (have_rows('syllabus')) {
-            while (have_rows('syllabus')) {
-                the_row();
-                $topics_string = get_sub_field('topics');
-                $topics = explode("\n", $topics_string);
-                $syllabus[] = [
-                    'title' => get_sub_field('module_title'),
-                    'topics' => array_map('trim', $topics),
-                ];
-            }
+        // This is a placeholder. For a real Toolset RFG, you'd need a more complex query.
+        $syllabus_content = iprf_get_field(get_the_ID(), 'syllabus-content');
+        if (!empty($syllabus_content)) {
+            // A simple way if you just use one WYSIWYG field for the whole syllabus
+            $syllabus[] = ['title' => 'Syllabus', 'topics' => [$syllabus_content]];
         }
 
         $trainings[] = [
@@ -426,7 +423,6 @@ function iprf_send_contact_message() {
 
 /**
  * 10. Fetch Current User
- * Checks if user is logged in and returns their details.
  */
 add_action('wp_ajax_fetchCurrentUser', 'iprf_fetch_current_user');
 add_action('wp_ajax_nopriv_fetchCurrentUser', 'iprf_fetch_current_user');
