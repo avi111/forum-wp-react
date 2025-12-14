@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { NavItem, PageView, Researcher } from "../types";
 import { Brain, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -21,32 +21,35 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { site } = useApp(); // Get site info from context
   const navigate = useNavigate();
 
-  const getPath = (view: PageView) => {
-    switch (view) {
-      case PageView.HOME:
-        return "/";
-      case PageView.RESEARCHERS:
-        return "/researchers";
-      case PageView.ARTICLES:
-        return "/articles";
-      case PageView.TRAINING:
-        return "/training";
-      case PageView.EVENTS:
-        return "/events";
-      case PageView.CONTACT:
-        return "/contact";
-      case PageView.JOIN:
-        return "/join";
-      case PageView.DASHBOARD:
-        return site.site_url + "/wp-admin/";
-      case PageView.MEETINGS:
-        return "/meetings";
-      case PageView.LOGIN:
-        return "/login";
-      default:
-        return "/";
-    }
-  };
+  const getPath = useCallback(
+    (view: PageView) => {
+      switch (view) {
+        case PageView.HOME:
+          return "/";
+        case PageView.RESEARCHERS:
+          return "/researchers";
+        case PageView.ARTICLES:
+          return "/articles";
+        case PageView.TRAINING:
+          return "/training";
+        case PageView.EVENTS:
+          return "/events";
+        case PageView.CONTACT:
+          return "/contact";
+        case PageView.JOIN:
+          return "/join";
+        case PageView.DASHBOARD:
+          return site.site_url + "/wp-admin/";
+        case PageView.MEETINGS:
+          return "/meetings";
+        case PageView.LOGIN:
+          return "/login";
+        default:
+          return "/";
+      }
+    },
+    [site],
+  );
 
   const handleNavClick = (view: PageView) => {
     const path = getPath(view);
@@ -63,13 +66,41 @@ export const Navbar: React.FC<NavbarProps> = ({
     setIsOpen(false);
   };
 
-  const isActive = (view: PageView) => {
-    const path = getPath(view);
-    if (path === "/") return location.pathname === "/";
-    // For external links, don't show as active
-    if (path.startsWith("http")) return false;
-    return location.pathname.startsWith(path);
-  };
+  const isActive = useCallback(
+    (view: PageView) => {
+      const path = getPath(view);
+      if (path === "/") return location.pathname === "/";
+      // For external links, don't show as active
+      if (path.startsWith("http")) return false;
+      return location.pathname.startsWith(path);
+    },
+    [location],
+  );
+
+  const splitTextByWords = useCallback(
+    (
+      text: string,
+    ): {
+      firstHalf: string;
+      secondHalf: string;
+    } => {
+      const words: string[] = text.trim().split(/\s+/);
+
+      if (words.length === 1 && words[0] === "") {
+        return { firstHalf: "", secondHalf: "" };
+      }
+
+      const midIndex: number = Math.floor(words.length / 2);
+
+      const firstHalf: string = words.slice(0, midIndex).join(" ");
+      const secondHalf: string = words.slice(midIndex).join(" ");
+
+      return { firstHalf, secondHalf };
+    },
+    [],
+  );
+
+  const { firstHalf, secondHalf } = splitTextByWords(site.site_name);
 
   return (
     <nav className="bg-slate-900 text-white sticky top-0 z-50 shadow-xl border-b border-slate-800">
@@ -86,11 +117,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-xl tracking-wide font-heebo leading-none">
-                הפורום הישראלי
+                {firstHalf}
               </span>
-              <span className="text-sm text-teal-400 font-light tracking-wider">
-                למחקר פסיכדלי
-              </span>
+              {secondHalf && (
+                <span className="text-sm text-teal-400 font-light tracking-wider">
+                  {secondHalf}
+                </span>
+              )}
             </div>
           </div>
 

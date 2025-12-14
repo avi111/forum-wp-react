@@ -1,6 +1,7 @@
 import React from "react";
 import { Researcher, UserStatus } from "../types";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext.tsx";
 
 interface FooterProps {
   currentUser: Researcher | null;
@@ -12,7 +13,9 @@ export const Footer: React.FC<FooterProps> = ({
   onSimulateApproval,
 }) => {
   const navigate = useNavigate();
-
+  const {
+    site: { site_description, site_name },
+  } = useApp();
   const handleLinkClick = (path: string) => {
     navigate(path);
     window.scrollTo(0, 0);
@@ -22,13 +25,8 @@ export const Footer: React.FC<FooterProps> = ({
     <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-right">
         <div>
-          <h4 className="text-white font-bold text-lg mb-4">
-            הפורום הישראלי למחקר פסיכדלי
-          </h4>
-          <p className="text-sm leading-relaxed max-w-xs">
-            עמותה לקידום המחקר, החינוך והטיפול בתחום הפסיכדלי בישראל. פועלים
-            בשקיפות ומקצועיות לרווחת הציבור.
-          </p>
+          <h4 className="text-white font-bold text-lg mb-4">{site_name}</h4>
+          <p className="text-sm leading-relaxed max-w-xs">{site_description}</p>
         </div>
         <div>
           <h4 className="text-white font-bold text-lg mb-4">קישורים מהירים</h4>
@@ -74,9 +72,7 @@ export const Footer: React.FC<FooterProps> = ({
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-slate-800 text-center text-xs opacity-50 flex justify-between items-center flex-col md:flex-row">
-        <p>
-          &copy; 2024 IPRF - Israel Psychedelic Research Forum. Theme Prototype.
-        </p>
+        <p>&copy; 2025 {site_name}.</p>
 
         {/* Dev Tool Trigger for user flow testing */}
         {currentUser &&

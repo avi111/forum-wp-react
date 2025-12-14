@@ -306,7 +306,7 @@ export const JoinForm: FC = () => {
                   <option value="">
                     {t("joinform_gender_select_placeholder")}
                   </option>
-                  {settings.genders.map((option) => (
+                  {(settings.genders || []).map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -326,7 +326,7 @@ export const JoinForm: FC = () => {
                   <option value="">
                     {t("joinform_title_select_placeholder")}
                   </option>
-                  {settings.titles.map((option) => (
+                  {(settings.titles || []).map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>
@@ -360,7 +360,7 @@ export const JoinForm: FC = () => {
                   <option value="">
                     {t("joinform_institution_select_placeholder")}
                   </option>
-                  {settings.institutions.map((inst) => (
+                  {(settings.institutions || []).map((inst) => (
                     <option key={inst} value={inst}>
                       {inst}
                     </option>
@@ -405,7 +405,7 @@ export const JoinForm: FC = () => {
                   <option value="">
                     {t("joinform_main_specialization_select_placeholder")}
                   </option>
-                  {settings.mainSpecializations.map((spec) => (
+                  {(settings.mainSpecializations || []).map((spec) => (
                     <option key={spec} value={spec}>
                       {spec}
                     </option>
@@ -432,7 +432,7 @@ export const JoinForm: FC = () => {
                   {t("joinform_sub_specialization_label")}
                 </label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-                  {settings.subSpecializations.map((sub) => (
+                  {(settings.subSpecializations || []).map((sub) => (
                     <label
                       key={sub}
                       className="flex items-start space-x-3 space-x-reverse cursor-pointer p-2 hover:bg-white rounded transition-colors"
@@ -477,7 +477,7 @@ export const JoinForm: FC = () => {
                   <option value="">
                     {t("joinform_student_year_select_placeholder")}
                   </option>
-                  {settings.studentYears.map((option) => (
+                  {(settings.studentYears || []).map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}
                     </option>

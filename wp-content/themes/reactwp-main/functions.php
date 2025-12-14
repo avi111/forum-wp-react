@@ -12,6 +12,30 @@ function my_theme_enqueue_scripts()
 }
 
 add_action('wp_enqueue_scripts', 'my_theme_enqueue_scripts');
+
+// Enqueue styles for the Block Editor (Gutenberg)
+function my_theme_enqueue_editor_scripts() {
+    // Load Tailwind CSS from CDN for the editor
+    wp_enqueue_script(
+        'tailwindcss-cdn',
+        'https://cdn.tailwindcss.com',
+        [],
+        '3.4.1',
+        false
+    );
+    
+    // Optional: Configure Tailwind to work correctly in the editor if needed
+    // wp_add_inline_script('tailwindcss-cdn', "tailwind.config = { ... }");
+}
+add_action('enqueue_block_editor_assets', 'my_theme_enqueue_editor_scripts');
+
+// Register Custom Blocks
+add_action('init', 'iprf_register_blocks');
+function iprf_register_blocks() {
+    register_block_type( get_template_directory() . '/blocks/home-feature' );
+    register_block_type( get_template_directory() . '/blocks/features-container' );
+}
+
 function get_data_map()
 {
   $site_options = array(
@@ -33,6 +57,7 @@ function get_data_map()
   }
   // Add the admin AJAX URL
   $site_options['admin_ajax_url'] = admin_url('admin-ajax.php');
+  $site_options['admin_url'] = admin_url(); // Added admin_url for dashboard link
 
 
   $map = array(

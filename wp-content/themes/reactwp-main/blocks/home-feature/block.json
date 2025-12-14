@@ -1,0 +1,33 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/home-feature",
+  "version": "1.0.0",
+  "title": "IPRF Home Feature",
+  "category": "design",
+  "icon": "star-filled",
+  "description": "A feature box with an icon, title, and description.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "כותרת"
+    },
+    "description": {
+      "type": "string",
+      "default": "תיאור קצר."
+    },
+    "iconSvg": {
+      "type": "string",
+      "default": "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle></svg>"
+    },
+    "iconColor": {
+      "type": "string",
+      "default": "teal"
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

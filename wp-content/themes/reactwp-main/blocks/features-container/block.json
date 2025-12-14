@@ -1,0 +1,16 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/features-container",
+  "version": "1.0.0",
+  "title": "IPRF Features Container",
+  "category": "design",
+  "icon": "grid-view",
+  "description": "A container for feature blocks.",
+  "supports": {
+    "html": false,
+    "align": ["full", "wide"]
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

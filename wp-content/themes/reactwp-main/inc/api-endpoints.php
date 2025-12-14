@@ -70,6 +70,52 @@ function iprf_get_strings_map($post_type) {
 }
 
 /**
+ * Helper function to convert WP List block to Tailwind Steps
+ */
+function iprf_convert_list_to_tailwind_steps($html) {
+    if (empty($html)) return '';
+
+    $dom = new DOMDocument();
+    // Suppress warnings for invalid HTML structure (common with partial HTML)
+    libxml_use_internal_errors(true);
+    // Load HTML with UTF-8 encoding hack
+    $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    libxml_clear_errors();
+
+    $list_items = $dom->getElementsByTagName('li');
+    
+    if ($list_items->length === 0) {
+        return $html; // Return original if no list items found
+    }
+
+    $output = '<div class="space-y-4">';
+    $counter = 1;
+
+    foreach ($list_items as $li) {
+        // Get inner HTML of the LI
+        $inner_html = '';
+        foreach ($li->childNodes as $child) {
+            $inner_html .= $dom->saveHTML($child);
+        }
+
+        // Replace strong tags with Tailwind classes if needed, or keep as is.
+        // The requirement is to wrap strong in <strong class="text-slate-900">
+        $inner_html = str_replace('<strong>', '<strong class="text-slate-900">', $inner_html);
+
+        $output .= '<div class="flex gap-4">';
+        $output .= '<span class="font-bold text-indigo-600">' . $counter . '.</span>';
+        $output .= '<p>' . $inner_html . '</p>';
+        $output .= '</div>';
+        
+        $counter++;
+    }
+
+    $output .= '</div>';
+
+    return $output;
+}
+
+/**
  * 1. Fetch Settings
  */
 add_action('wp_ajax_fetchSettings', 'iprf_fetch_settings');
@@ -82,10 +128,10 @@ function iprf_fetch_settings() {
         'titles' => iprf_get_options_from_cpt('title'),
         'studentYears' => iprf_get_options_from_cpt('student-year'),
         
-        // For taxonomies
-        'institutions' => get_terms(['taxonomy' => 'institution', 'hide_empty' => false, 'fields' => 'names']),
-        'mainSpecializations' => get_terms(['taxonomy' => 'specialization', 'hide_empty' => false, 'fields' => 'names']),
-        'subSpecializations' => get_terms(['taxonomy' => 'sub-specialization', 'hide_empty' => false, 'fields' => 'names']),
+        // TODO: For taxonomies
+        'institutions' => [],
+        'mainSpecializations' => [],
+        'subSpecializations' => [],
 
         // Fetch strings from 'string' CPT
         'strings' => iprf_get_strings_map('string'),
@@ -110,6 +156,7 @@ function iprf_fetch_settings() {
 
 /**
  * 2. Fetch Template
+ * Fetches post_content of a post with the given slug ($template_name).
  */
 add_action('wp_ajax_fetchTemplate', 'iprf_fetch_template');
 add_action('wp_ajax_nopriv_fetchTemplate', 'iprf_fetch_template');
@@ -119,9 +166,31 @@ function iprf_fetch_template() {
     $html = '';
 
     if ($template_name) {
-        ob_start();
-        get_template_part('template-parts/dynamic/' . $template_name);
-        $html = ob_get_clean();
+        $args = [
+            'name'        => $template_name,
+            'post_type'   => ['page'], // Add any other CPTs here
+            'post_status' => 'publish',
+            'numberposts' => 1
+        ];
+        
+        $query = new WP_Query($args);
+        
+        if ($query->have_posts()) {
+            $query->the_post();
+            $content = get_the_content();
+            
+            // Apply standard filters first
+            $html = apply_filters('the_content', $content);
+
+            // Special processing for bylaws-modal
+            if ($template_name === 'bylaws-modal') {
+                // If the content contains a list block, convert it
+                if (strpos($html, '<ul') !== false) {
+                    $html = iprf_convert_list_to_tailwind_steps($html);
+                }
+            }
+        }
+        wp_reset_postdata();
     }
 
     iprf_send_response($html);
