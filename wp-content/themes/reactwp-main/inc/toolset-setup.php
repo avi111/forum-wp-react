@@ -24,6 +24,9 @@ function iprf_register_post_types() {
         'title' => ['תארים', 'תואר', 'dashicons-awards', 21, false],
         'student-year' => ['שנות לימוד', 'שנת לימוד', 'dashicons-welcome-learn-more', 22, false],
         'string' => ['מחרוזות', 'מחרוזת', 'dashicons-translation', 23, false],
+        'specialization' => ['התמחויות', 'התמחות', 'dashicons-star-filled', 24, false],
+        'sub-specialization' => ['תת-התמחויות', 'תת-התמחות', 'dashicons-star-half', 25, false], // Added Sub-Specialization CPT
+        'institution' => ['מוסדות', 'מוסד', 'dashicons-building', 26, false], // Added Institution CPT
         'research-paper' => ['מאמרי מחקר', 'מאמר מחקר', 'dashicons-media-document', 5, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields']],
         'news' => ['חדשות', 'חדשה', 'dashicons-megaphone', 6, true, ['title', 'editor', 'custom-fields']],
         'event' => ['אירועים', 'אירוע', 'dashicons-calendar-alt', 7, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],

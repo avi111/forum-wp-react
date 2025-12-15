@@ -1,22 +1,40 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowRight,
   BookOpen,
   Calendar,
   CheckCircle,
+  Loader2,
   MapPin,
   Users,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
 export const TrainingPage: React.FC = () => {
-  const { trainings } = useApp();
+  const { trainings, getTrainingsFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (trainings.length === 0) {
+      setIsLoading(true);
+      getTrainingsFromServer().finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, [getTrainingsFromServer, trainings.length]);
 
   const training = trainings.find((t) => t.id === id);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-teal-500 animate-spin" />
+      </div>
+    );
+  }
 
   if (!training) {
     return (

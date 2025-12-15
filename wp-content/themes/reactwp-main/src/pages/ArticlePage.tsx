@@ -1,22 +1,40 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
   ArrowRight,
   Calendar,
   Eye,
   FileDown,
+  Loader2,
   Paperclip,
   User,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
 export const ArticlePage: React.FC = () => {
-  const { articles } = useApp();
+  const { articles, getArticlesFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (articles.length === 0) {
+      setIsLoading(true);
+      getArticlesFromServer().finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, [getArticlesFromServer, articles.length]);
 
   const article = articles.find((a) => a.id === id);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-teal-500 animate-spin" />
+      </div>
+    );
+  }
 
   if (!article) {
     return (

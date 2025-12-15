@@ -46,6 +46,27 @@ function iprf_get_options_from_cpt($post_type) {
     return $options;
 }
 
+function iprf_get_options_list_from_cpt($post_type) {
+    $options = [];
+    $query = new WP_Query([
+        'post_type' => $post_type,
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'orderby' => 'title',
+        'order' => 'ASC',
+    ]);
+
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $options[] = get_the_title();
+        }
+    }
+    wp_reset_postdata();
+    return $options;
+}
+
+
 /**
  * Helper function to get strings map from a Custom Post Type.
  * Returns associative array { slug: title }
@@ -83,7 +104,7 @@ function iprf_convert_list_to_tailwind_steps($html) {
     libxml_clear_errors();
 
     $list_items = $dom->getElementsByTagName('li');
-    
+
     if ($list_items->length === 0) {
         return $html; // Return original if no list items found
     }
@@ -106,7 +127,7 @@ function iprf_convert_list_to_tailwind_steps($html) {
         $output .= '<span class="font-bold text-indigo-600">' . $counter . '.</span>';
         $output .= '<p>' . $inner_html . '</p>';
         $output .= '</div>';
-        
+
         $counter++;
     }
 
@@ -128,10 +149,9 @@ function iprf_fetch_settings() {
         'titles' => iprf_get_options_from_cpt('title'),
         'studentYears' => iprf_get_options_from_cpt('student-year'),
         
-        // TODO: For taxonomies
-        'institutions' => [],
-        'mainSpecializations' => [],
-        'subSpecializations' => [],
+        'institutions' => iprf_get_options_list_from_cpt('institution'),
+        'mainSpecializations' => iprf_get_options_list_from_cpt('specialization'),
+        'subSpecializations' => iprf_get_options_list_from_cpt('sub-specialization'),
 
         // Fetch strings from 'string' CPT
         'strings' => iprf_get_strings_map('string'),
@@ -142,13 +162,7 @@ function iprf_fetch_settings() {
         'eventsItemsPerPage' => 3,
         'latestEditorialLimit' => 3,
         'latestResearchLimit' => 3,
-        'titleMap' => [
-            'prof' => "פרופ'",
-            'md' => 'ד"ר',
-            'phd' => 'ד"ר',
-            'mr' => "מר",
-            'ms' => "גב'",
-        ],
+        'titleMap' => iprf_get_strings_map('title'), // Changed this line
     ];
 
     iprf_send_response($settings);

@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { getResearcherName, UserStatus } from "../types";
 import {
@@ -8,6 +7,7 @@ import {
   Calendar,
   FileText,
   GraduationCap,
+  Loader2,
   Mail,
   MapPin,
   Phone,
@@ -16,11 +16,29 @@ import {
 import { useApp } from "../context/AppContext";
 
 export const ResearcherProfile: React.FC = () => {
-  const { researchers, articles } = useApp();
+  const { researchers, articles, getResearchersFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (researchers.length === 0) {
+      setIsLoading(true);
+      getResearchersFromServer().finally(() => setIsLoading(false));
+    } else {
+      setIsLoading(false);
+    }
+  }, [getResearchersFromServer, researchers.length]);
 
   const researcher = researchers.find((r) => r.id === id);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 className="w-12 h-12 text-teal-500 animate-spin" />
+      </div>
+    );
+  }
 
   if (!researcher) {
     return (
