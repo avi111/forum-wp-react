@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { NavItem, PageView, Researcher } from "../types";
 import { Brain, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -79,11 +79,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const splitTextByWords = useCallback(
     (
-      text: string,
+      text?: string,
     ): {
       firstHalf: string;
       secondHalf: string;
     } => {
+      if (!text) {
+        return { firstHalf: "", secondHalf: "" };
+      }
+
       const words: string[] = text.trim().split(/\s+/);
 
       if (words.length === 1 && words[0] === "") {
@@ -100,7 +104,10 @@ export const Navbar: React.FC<NavbarProps> = ({
     [],
   );
 
-  const { firstHalf, secondHalf } = splitTextByWords(site.site_name);
+  const { firstHalf, secondHalf } = useMemo(
+    () => splitTextByWords(site.site_name),
+    [site],
+  );
 
   return (
     <nav className="bg-slate-900 text-white sticky top-0 z-50 shadow-xl border-b border-slate-800">

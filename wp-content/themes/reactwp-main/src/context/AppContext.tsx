@@ -31,6 +31,7 @@ import {
 import { Brain } from "lucide-react";
 import { initStrings } from "../services/stringService";
 import { useAPI } from "../services/api";
+import { NewsletterModal } from "../components/NewsletterModal";
 
 type Fetcher<T> = () => Promise<QueryObserverResult<T, Error>>;
 type EventsFetcher = (
@@ -60,6 +61,10 @@ interface AppContextType {
   getTrainingsFromServer: Fetcher<Training[]>;
   getNewsFromServer: Fetcher<NewsItem[]>;
   site: SiteOptions;
+  openNewsletterModal: () => void;
+  subscribeToNewsletter: (
+    email: string,
+  ) => Promise<{ success: boolean; message: string }>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -68,7 +73,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const queryClient = useQueryClient();
-  const { fetchEvents, fetchCurrentUser } = useAPI();
+  const { fetchEvents, fetchCurrentUser, subscribeToNewsletter } = useAPI();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
 
@@ -81,6 +86,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
 
   useEffect(() => {
     if (settings?.strings) {
@@ -88,7 +94,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [settings]);
 
-  // Check for logged-in user on mount
   useEffect(() => {
     const checkUser = async () => {
       try {
@@ -102,8 +107,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
         setIsAuthLoading(false);
       }
     };
-
-    void checkUser();
+    checkUser();
   }, [fetchCurrentUser]);
 
   const getResearchersFromServer = useCallback(
@@ -208,7 +212,6 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     }
   }, [currentUser, onUpdateUser]);
 
-  // Wait for both settings and user authentication check
   if (loadingSettings || !settings || isAuthLoading) {
     return (
       <div
@@ -244,9 +247,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     getTrainingsFromServer,
     getNewsFromServer,
     site: window.object.site,
+    openNewsletterModal: () => setIsNewsletterOpen(true),
+    subscribeToNewsletter,
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={value}>
+      {children}
+      <NewsletterModal
+        isOpen={isNewsletterOpen}
+        onClose={() => setIsNewsletterOpen(false)}
+      />
+    </AppContext.Provider>
+  );
 };
 
 export const useApp = () => {

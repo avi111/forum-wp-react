@@ -79,6 +79,22 @@ export const useAPI = () => {
     }
   }, []);
 
+  const subscribeToNewsletter = useCallback(
+    async (email: string): Promise<{ success: boolean; message: string }> => {
+      try {
+        return await post("subscribe_newsletter", { email });
+      } catch (error) {
+        console.error("Newsletter subscription failed:", error);
+        // In case of network failure, return a generic error.
+        return {
+          success: false,
+          message: "אירעה שגיאה בתקשורת עם השרת.",
+        };
+      }
+    },
+    [post],
+  );
+
   const fetchCurrentUser = useCallback(async (): Promise<Researcher | null> => {
     try {
       return await post("fetchCurrentUser");
@@ -88,8 +104,6 @@ export const useAPI = () => {
         error,
       );
       if (import.meta.env.DEV) {
-        // In dev, you might want to return a mock user for testing
-        // return INITIAL_RESEARCHERS[0];
         return null;
       }
       throw error;
@@ -268,7 +282,6 @@ export const useAPI = () => {
         await post("sendContactMessage", data);
       } catch (error) {
         console.error("Failed to send contact message:", error);
-        // Optionally, handle the error in the UI
       }
     },
     [post],
@@ -276,6 +289,7 @@ export const useAPI = () => {
 
   return {
     post,
+    subscribeToNewsletter,
     fetchCurrentUser,
     fetchSettings,
     fetchTemplate,

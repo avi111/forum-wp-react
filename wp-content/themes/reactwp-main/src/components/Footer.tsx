@@ -15,6 +15,7 @@ export const Footer: React.FC<FooterProps> = ({
   const navigate = useNavigate();
   const {
     site: { site_description, site_name },
+    openNewsletterModal,
   } = useApp();
   const handleLinkClick = (path: string) => {
     navigate(path);
@@ -58,15 +59,13 @@ export const Footer: React.FC<FooterProps> = ({
           </ul>
         </div>
         <div>
-          <h4 className="text-white font-bold text-lg mb-4">הרשמה לניוזלטר</h4>
-          <div className="flex gap-2 justify-center md:justify-start">
-            <input
-              type="email"
-              placeholder="הכנס אימייל..."
-              className="bg-slate-800 border-none rounded-lg px-4 py-2 text-sm text-white w-full max-w-[200px]"
-            />
-            <button className="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded-lg text-sm font-bold">
-              הרשמה
+          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-4 text-white text-center">
+            <p className="font-bold text-sm mb-2">רוצה להישאר מעודכן?</p>
+            <button
+              onClick={openNewsletterModal}
+              className="bg-white/20 hover:bg-white/30 w-full py-1.5 rounded-lg text-xs font-bold transition-colors"
+            >
+              הרשמה לניוזלטר
             </button>
           </div>
         </div>

@@ -66,17 +66,6 @@ export const HomeEvents: React.FC<HomeEventsProps> = ({ events }) => {
           </div>
         )}
       </div>
-      <div className="mt-auto pt-4">
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl p-4 text-white text-center">
-          <p className="font-bold text-sm mb-2">רוצה להישאר מעודכן?</p>
-          <button
-            onClick={() => navigate("/join")}
-            className="bg-white/20 hover:bg-white/30 w-full py-1.5 rounded-lg text-xs font-bold transition-colors"
-          >
-            הרשמה לניוזלטר
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
