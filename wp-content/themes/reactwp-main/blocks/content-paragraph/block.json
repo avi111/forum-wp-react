@@ -1,0 +1,15 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/content-paragraph",
+  "version": "1.0.0",
+  "title": "IPRF Content Paragraph",
+  "category": "design",
+  "icon": "text",
+  "description": "A paragraph container that can hold other text blocks.",
+  "supports": {
+    "html": false
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

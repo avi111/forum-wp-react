@@ -20,12 +20,12 @@ add_action('init', 'iprf_register_all_components');
  */
 function iprf_register_post_types() {
     $cpts = [
-        'gender' => ['מגדרים', 'מגדר', 'dashicons-universal-access', 20, false],
-        'title' => ['תארים', 'תואר', 'dashicons-awards', 21, false],
-        'student-year' => ['שנות לימוד', 'שנת לימוד', 'dashicons-welcome-learn-more', 22, false],
-        'string' => ['מחרוזות', 'מחרוזת', 'dashicons-translation', 23, false],
-        'specialization' => ['התמחויות', 'התמחות', 'dashicons-star-filled', 24, false],
-        'sub-specialization' => ['תת-התמחויות', 'תת-התמחות', 'dashicons-star-half', 25, false], // Added Sub-Specialization CPT
+        'gender' => ['מגדרים', 'מגדר', 'dashicons-universal-access', 20, true, ['title']],
+        'title' => ['תארים', 'תואר', 'dashicons-awards', 21, true, ['title']],
+        'student-year' => ['שנות לימוד', 'שנת לימוד', 'dashicons-welcome-learn-more', 22, true, ['title']],
+        'string' => ['מחרוזות', 'מחרוזת', 'dashicons-translation', 23, true, ['title']],
+        'specialization' => ['התמחויות', 'התמחות', 'dashicons-star-filled', 24, true, ['title']],
+        'sub-specialization' => ['תת-התמחויות', 'תת-התמחות', 'dashicons-star-half', 25, true, ['title']], // Added Sub-Specialization CPT
         'institution' => ['מוסדות', 'מוסד', 'dashicons-building', 26, false], // Added Institution CPT
         'research-paper' => ['מאמרי מחקר', 'מאמר מחקר', 'dashicons-media-document', 5, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields']],
         'news' => ['חדשות', 'חדשה', 'dashicons-megaphone', 6, true, ['title', 'editor', 'custom-fields']],

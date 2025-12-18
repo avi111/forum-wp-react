@@ -1,0 +1,21 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/decorative-box",
+  "version": "1.0.0",
+  "title": "IPRF Decorative Box",
+  "category": "design",
+  "icon": "square",
+  "description": "A decorative box with rotation and opacity.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "isAbsolute": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

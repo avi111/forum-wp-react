@@ -23,9 +23,6 @@ function my_theme_enqueue_editor_scripts() {
         '3.4.1',
         false
     );
-    
-    // Optional: Configure Tailwind to work correctly in the editor if needed
-    // wp_add_inline_script('tailwindcss-cdn', "tailwind.config = { ... }");
 }
 add_action('enqueue_block_editor_assets', 'my_theme_enqueue_editor_scripts');
 
@@ -34,6 +31,15 @@ add_action('init', 'iprf_register_blocks');
 function iprf_register_blocks() {
     register_block_type( get_template_directory() . '/blocks/home-feature' );
     register_block_type( get_template_directory() . '/blocks/features-container' );
+    register_block_type( get_template_directory() . '/blocks/core-pillar-item' );
+    register_block_type( get_template_directory() . '/blocks/core-pillars' );
+    register_block_type( get_template_directory() . '/blocks/header-section' );
+    register_block_type( get_template_directory() . '/blocks/main-content-container' );
+    register_block_type( get_template_directory() . '/blocks/chip' );
+    register_block_type( get_template_directory() . '/blocks/section-subtitle' );
+    register_block_type( get_template_directory() . '/blocks/content-paragraph' );
+    register_block_type( get_template_directory() . '/blocks/decorative-box' );
+    register_block_type( get_template_directory() . '/blocks/grid-container' );
 }
 
 function get_data_map()

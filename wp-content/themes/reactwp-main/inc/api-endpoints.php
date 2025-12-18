@@ -7,14 +7,16 @@ if (!defined('ABSPATH')) {
 /**
  * Helper function to format response
  */
-function iprf_send_response($data) {
+function iprf_send_response($data)
+{
     wp_send_json_success($data);
 }
 
 /**
  * Helper to get Toolset field value (raw)
  */
-function iprf_get_field($post_id, $field_slug, $single = true) {
+function iprf_get_field($post_id, $field_slug, $single = true)
+{
     // Toolset usually prefixes fields with 'wpcf-'
     return get_post_meta($post_id, 'wpcf-' . $field_slug, $single);
 }
@@ -23,7 +25,8 @@ function iprf_get_field($post_id, $field_slug, $single = true) {
  * Helper function to get options from a Custom Post Type.
  * Returns array of { value: slug, label: title }
  */
-function iprf_get_options_from_cpt($post_type) {
+function iprf_get_options_from_cpt($post_type)
+{
     $options = [];
     $query = new WP_Query([
         'post_type' => $post_type,
@@ -46,7 +49,8 @@ function iprf_get_options_from_cpt($post_type) {
     return $options;
 }
 
-function iprf_get_options_list_from_cpt($post_type) {
+function iprf_get_options_list_from_cpt($post_type)
+{
     $options = [];
     $query = new WP_Query([
         'post_type' => $post_type,
@@ -71,7 +75,8 @@ function iprf_get_options_list_from_cpt($post_type) {
  * Helper function to get strings map from a Custom Post Type.
  * Returns associative array { slug: title }
  */
-function iprf_get_strings_map($post_type) {
+function iprf_get_strings_map($post_type)
+{
     $strings = [];
     $query = new WP_Query([
         'post_type' => $post_type,
@@ -93,7 +98,8 @@ function iprf_get_strings_map($post_type) {
 /**
  * Helper function to convert WP List block to Tailwind Steps
  */
-function iprf_convert_list_to_tailwind_steps($html) {
+function iprf_convert_list_to_tailwind_steps($html)
+{
     if (empty($html)) return '';
 
     $dom = new DOMDocument();
@@ -142,13 +148,14 @@ function iprf_convert_list_to_tailwind_steps($html) {
 add_action('wp_ajax_fetchSettings', 'iprf_fetch_settings');
 add_action('wp_ajax_nopriv_fetchSettings', 'iprf_fetch_settings');
 
-function iprf_fetch_settings() {
+function iprf_fetch_settings()
+{
     $settings = [
         // Fetch options from CPTs
         'genders' => iprf_get_options_from_cpt('gender'),
         'titles' => iprf_get_options_from_cpt('title'),
         'studentYears' => iprf_get_options_from_cpt('student-year'),
-        
+
         'institutions' => iprf_get_options_list_from_cpt('institution'),
         'mainSpecializations' => iprf_get_options_list_from_cpt('specialization'),
         'subSpecializations' => iprf_get_options_list_from_cpt('sub-specialization'),
@@ -175,24 +182,25 @@ function iprf_fetch_settings() {
 add_action('wp_ajax_fetchTemplate', 'iprf_fetch_template');
 add_action('wp_ajax_nopriv_fetchTemplate', 'iprf_fetch_template');
 
-function iprf_fetch_template() {
+function iprf_fetch_template()
+{
     $template_name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
     $html = '';
 
     if ($template_name) {
         $args = [
-            'name'        => $template_name,
-            'post_type'   => ['page'], // Add any other CPTs here
+            'name' => $template_name,
+            'post_type' => ['page'], // Add any other CPTs here
             'post_status' => 'publish',
             'numberposts' => 1
         ];
-        
+
         $query = new WP_Query($args);
-        
+
         if ($query->have_posts()) {
             $query->the_post();
             $content = get_the_content();
-            
+
             // Apply standard filters first
             $html = apply_filters('the_content', $content);
 
@@ -216,10 +224,11 @@ function iprf_fetch_template() {
 add_action('wp_ajax_fetchResearchers', 'iprf_fetch_researchers');
 add_action('wp_ajax_nopriv_fetchResearchers', 'iprf_fetch_researchers');
 
-function iprf_fetch_researchers() {
+function iprf_fetch_researchers()
+{
     $args = [
-        'role'    => 'contributor',
-        'number'  => -1,
+        'role' => 'contributor',
+        'number' => -1,
         'orderby' => 'display_name'
     ];
 
@@ -255,7 +264,8 @@ function iprf_fetch_researchers() {
 add_action('wp_ajax_fetchArticles', 'iprf_fetch_articles');
 add_action('wp_ajax_nopriv_fetchArticles', 'iprf_fetch_articles');
 
-function iprf_fetch_articles() {
+function iprf_fetch_articles()
+{
     $args = [
         'post_type' => ['post', 'research-paper'],
         'posts_per_page' => 20,
@@ -268,7 +278,7 @@ function iprf_fetch_articles() {
     while ($query->have_posts()) {
         $query->the_post();
         $is_editorial = get_post_type() === 'post';
-        
+
         $articles[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
@@ -280,7 +290,7 @@ function iprf_fetch_articles() {
             'isEditorial' => $is_editorial,
             'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
             'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
-            'attachments' => [] 
+            'attachments' => []
         ];
     }
     wp_reset_postdata();
@@ -294,7 +304,8 @@ function iprf_fetch_articles() {
 add_action('wp_ajax_fetchNews', 'iprf_fetch_news');
 add_action('wp_ajax_nopriv_fetchNews', 'iprf_fetch_news');
 
-function iprf_fetch_news() {
+function iprf_fetch_news()
+{
     $args = [
         'post_type' => 'news',
         'posts_per_page' => 5,
@@ -325,11 +336,12 @@ function iprf_fetch_news() {
 add_action('wp_ajax_fetchEvents', 'iprf_fetch_events');
 add_action('wp_ajax_nopriv_fetchEvents', 'iprf_fetch_events');
 
-function iprf_fetch_events() {
+function iprf_fetch_events()
+{
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
     $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10;
     $time_filter = isset($_POST['timeFilter']) ? sanitize_text_field($_POST['timeFilter']) : 'all';
-    
+
     $args = [
         'post_type' => 'event',
         'posts_per_page' => $limit,
@@ -357,9 +369,9 @@ function iprf_fetch_events() {
 
     while ($query->have_posts()) {
         $query->the_post();
-        
+
         $date_ts = (int)get_the_date('U');
-        
+
         $events[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
@@ -382,7 +394,7 @@ function iprf_fetch_events() {
         'data' => $events,
         'total' => $query->found_posts
     ];
-    
+
     wp_reset_postdata();
     iprf_send_response($response);
 }
@@ -393,7 +405,8 @@ function iprf_fetch_events() {
 add_action('wp_ajax_fetchMeetings', 'iprf_fetch_meetings');
 add_action('wp_ajax_nopriv_fetchMeetings', 'iprf_fetch_meetings');
 
-function iprf_fetch_meetings() {
+function iprf_fetch_meetings()
+{
     $args = [
         'post_type' => 'meeting',
         'posts_per_page' => -1,
@@ -433,7 +446,8 @@ function iprf_fetch_meetings() {
 add_action('wp_ajax_fetchTrainings', 'iprf_fetch_trainings');
 add_action('wp_ajax_nopriv_fetchTrainings', 'iprf_fetch_trainings');
 
-function iprf_fetch_trainings() {
+function iprf_fetch_trainings()
+{
     $args = [
         'post_type' => 'training',
         'posts_per_page' => -1,
@@ -444,7 +458,7 @@ function iprf_fetch_trainings() {
 
     while ($query->have_posts()) {
         $query->the_post();
-        
+
         $syllabus = [];
         // This is a placeholder. For a real Toolset RFG, you'd need a more complex query.
         $syllabus_content = iprf_get_field(get_the_ID(), 'syllabus-content');
@@ -479,7 +493,8 @@ function iprf_fetch_trainings() {
 add_action('wp_ajax_sendContactMessage', 'iprf_send_contact_message');
 add_action('wp_ajax_nopriv_sendContactMessage', 'iprf_send_contact_message');
 
-function iprf_send_contact_message() {
+function iprf_send_contact_message()
+{
     $full_name = sanitize_text_field($_POST['fullName']);
     $email = sanitize_email($_POST['email']);
     $message = sanitize_textarea_field($_POST['message']);
@@ -510,7 +525,8 @@ function iprf_send_contact_message() {
 add_action('wp_ajax_fetchCurrentUser', 'iprf_fetch_current_user');
 add_action('wp_ajax_nopriv_fetchCurrentUser', 'iprf_fetch_current_user');
 
-function iprf_fetch_current_user() {
+function iprf_fetch_current_user()
+{
     if (!is_user_logged_in()) {
         iprf_send_response(null);
         return;

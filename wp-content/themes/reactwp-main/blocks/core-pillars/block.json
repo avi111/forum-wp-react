@@ -1,0 +1,16 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/core-pillars",
+  "version": "1.0.0",
+  "title": "IPRF Core Pillars Container",
+  "category": "design",
+  "icon": "grid-view",
+  "description": "A container for the core pillar items.",
+  "supports": {
+    "html": false,
+    "align": ["full", "wide"]
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

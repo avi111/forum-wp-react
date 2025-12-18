@@ -1,0 +1,26 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/header-section",
+  "version": "1.0.0",
+  "title": "IPRF Header Section",
+  "category": "design",
+  "icon": "cover-image",
+  "description": "A header section with title and subtitle on a dark background.",
+  "supports": {
+    "html": false,
+    "align": ["full", "wide"]
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "כותרת העמוד"
+    },
+    "subtitle": {
+      "type": "string",
+      "default": "תיאור קצר של העמוד."
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

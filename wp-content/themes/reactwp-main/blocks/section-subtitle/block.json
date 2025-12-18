@@ -1,0 +1,21 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/section-subtitle",
+  "version": "1.0.0",
+  "title": "IPRF Section Subtitle",
+  "category": "design",
+  "icon": "heading",
+  "description": "A styled subtitle for sections.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "default": "כותרת משנה"
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

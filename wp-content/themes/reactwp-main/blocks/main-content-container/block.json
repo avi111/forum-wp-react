@@ -1,0 +1,16 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/main-content-container",
+  "version": "1.0.0",
+  "title": "IPRF Main Content Container",
+  "category": "design",
+  "icon": "layout",
+  "description": "A container for the main content section.",
+  "supports": {
+    "html": false,
+    "align": ["full", "wide"]
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

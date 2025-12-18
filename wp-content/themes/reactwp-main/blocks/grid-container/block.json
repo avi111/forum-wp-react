@@ -1,0 +1,30 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/grid-container",
+  "version": "1.0.0",
+  "title": "IPRF Grid Container",
+  "category": "design",
+  "icon": "grid-view",
+  "description": "A flexible grid container.",
+  "supports": {
+    "html": false,
+    "align": ["full", "wide"]
+  },
+  "attributes": {
+    "columns": {
+      "type": "number",
+      "default": 2
+    },
+    "breakpoint": {
+      "type": "string",
+      "default": "md"
+    },
+    "gap": {
+      "type": "number",
+      "default": 12
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

@@ -1,0 +1,25 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/chip",
+  "version": "1.0.0",
+  "title": "IPRF Chip",
+  "category": "design",
+  "icon": "tag",
+  "description": "A small chip with an icon and text.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "default": "החזון שלנו"
+    },
+    "iconSvg": {
+      "type": "string",
+      "default": "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'></circle><circle cx='12' cy='12' r='6'></circle><circle cx='12' cy='12' r='2'></circle></svg>"
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}
