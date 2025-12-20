@@ -1,35 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { ArrowRight, Tag, UserCircle, Calendar, FileText } from "lucide-react";
-import { Loader2 } from "lucide-react";
+import { ArrowRight, Tag, UserCircle, Calendar, FileText, Loader2 } from "lucide-react";
+import { PaginationControls } from "../components/PaginationControls";
+import { useArticlesByTag } from "../hooks/useAppQueries";
 
 export const TagPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
-  const { articles, getArticlesFromServer } = useApp();
+  const { settings } = useApp();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
 
-  const decodedTag = tag ? decodeURIComponent(tag) : "";
+  const decodedTag = useMemo(() => (tag ? decodeURIComponent(tag) : ""), [tag]);
 
-  useEffect(() => {
-    if (articles.length === 0) {
-      setIsLoading(true);
-      getArticlesFromServer().finally(() => setIsLoading(false));
-    } else {
-      setIsLoading(false);
-    }
-  }, [getArticlesFromServer, articles.length]);
+  // Pagination state
+  const [page, setPage] = useState(1);
+  const limit = settings.editorialItemsPerPage;
 
-  const filteredArticles = articles.filter((a) =>
-    a.tags.some((t) => t === decodedTag),
-  );
+  // Server-side fetch by tag with pagination (both post types)
+  const query = useArticlesByTag(page, limit, decodedTag);
+  const articles = query.data?.data || [];
+  const total = query.data?.total || 0;
+  const totalPages = useMemo(() => (total > 0 ? Math.ceil(total / limit) : 0), [total, limit]);
 
   const handleArticleClick = (id: string) => {
     navigate(`/article/${id}`);
   };
 
-  if (isLoading) {
+  if (query.isLoading && articles.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-12 h-12 text-teal-500 animate-spin" />
@@ -60,16 +57,16 @@ export const TagPage: React.FC = () => {
             מאמרים בנושא: <span className="text-teal-400">{decodedTag}</span>
           </h1>
           <p className="text-slate-300 text-lg">
-            נמצאו {filteredArticles.length} מאמרים הקשורים לתגית זו
+            נמצאו {total} מאמרים הקשורים לתגית זו
           </p>
         </div>
       </div>
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 py-12">
-        {filteredArticles.length > 0 ? (
+        {articles.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredArticles.map((article) => (
+            {articles.map((article) => (
               <div
                 key={article.id}
                 onClick={() => handleArticleClick(article.id)}
@@ -141,6 +138,17 @@ export const TagPage: React.FC = () => {
             >
               חזרה לרשימת המאמרים
             </button>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="mt-10">
+            <PaginationControls
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(p) => setPage(p)}
+            />
           </div>
         )}
       </div>

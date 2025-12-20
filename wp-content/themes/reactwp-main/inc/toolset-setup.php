@@ -13,6 +13,12 @@ function iprf_register_all_components() {
 }
 add_action('init', 'iprf_register_all_components');
 
+function connect_tags_to_research_paper() {
+    // מחבר את התגיות (post_tag) לפוסט טייפ החדש
+    register_taxonomy_for_object_type('post_tag', 'research_paper');
+}
+
+add_action('init', 'connect_tags_to_research_paper');
 
 /**
  * Registers all Custom Post Types for the IPRF site.
@@ -20,6 +26,7 @@ add_action('init', 'iprf_register_all_components');
  */
 function iprf_register_post_types() {
     $cpts = [
+        // מבנה: [label רבים, label יחיד, אייקון, מיקום בתפריט, ציבורי?, supports, taxonomies?]
         'gender' => ['מגדרים', 'מגדר', 'dashicons-universal-access', 20, true, ['title']],
         'title' => ['תארים', 'תואר', 'dashicons-awards', 21, true, ['title']],
         'student-year' => ['שנות לימוד', 'שנת לימוד', 'dashicons-welcome-learn-more', 22, true, ['title']],
@@ -27,7 +34,8 @@ function iprf_register_post_types() {
         'specialization' => ['התמחויות', 'התמחות', 'dashicons-star-filled', 24, true, ['title']],
         'sub-specialization' => ['תת-התמחויות', 'תת-התמחות', 'dashicons-star-half', 25, true, ['title']], // Added Sub-Specialization CPT
         'institution' => ['מוסדות', 'מוסד', 'dashicons-building', 26, false], // Added Institution CPT
-        'research-paper' => ['מאמרי מחקר', 'מאמר מחקר', 'dashicons-media-document', 5, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields']],
+        // מוסיפים תמיכה בהגדרת טקסונומיות דרך המערך (כאן לדוגמה: תגיות למאמרי מחקר)
+        'research-paper' => ['מאמרי מחקר', 'מאמר מחקר', 'dashicons-media-document', 5, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields'], ['post_tag']],
         'news' => ['חדשות', 'חדשה', 'dashicons-megaphone', 6, true, ['title', 'editor', 'custom-fields']],
         'event' => ['אירועים', 'אירוע', 'dashicons-calendar-alt', 7, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],
         'meeting' => ['מפגשים', 'מפגש', 'dashicons-groups', 8, true, ['title', 'editor', 'excerpt', 'custom-fields']],
@@ -35,12 +43,12 @@ function iprf_register_post_types() {
     ];
 
     foreach ($cpts as $slug => $details) {
-        list($plural, $singular, $icon, $position, $is_public, $supports) = array_pad($details, 6, null);
+        // תומך באיבר 7 אופציונלי עבור טקסונומיות
+        list($plural, $singular, $icon, $position, $is_public, $supports, $taxonomies) = array_pad($details, 7, null);
         if ($supports === null) {
             $supports = ['title'];
         }
-
-        register_post_type($slug, [
+        $args = [
             'labels' => [
                 'name' => $plural,
                 'singular_name' => $singular,
@@ -63,6 +71,13 @@ function iprf_register_post_types() {
             'rewrite' => ['slug' => $slug],
             'has_archive' => $is_public,
             'show_in_rest' => true, // Enable Gutenberg and REST API
-        ]);
+        ];
+
+        // אם הוגדרו טקסונומיות, נצרף אותן לארגומנטים. אם לא – לא נצרף כלום.
+        if (!empty($taxonomies) && is_array($taxonomies)) {
+            $args['taxonomies'] = $taxonomies;
+        }
+
+        register_post_type($slug, $args);
     }
 }

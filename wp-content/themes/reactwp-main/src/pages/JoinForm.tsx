@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { Check, Eye, EyeOff, FileText, Upload, Users, X } from "lucide-react";
 import { Researcher } from "../types";
 import { useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ const BylawsModal: FC<{
 };
 
 export const JoinForm: FC = () => {
-  const { onJoin, settings } = useApp();
+  const { onJoin, settings, currentUser } = useApp();
   const { showToast } = useToast();
   const [showBylaws, setShowBylaws] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -79,6 +79,12 @@ export const JoinForm: FC = () => {
     verificationDoc: null as File | null,
     intentLetter: null as File | null,
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/", { replace: true });
+    }
+  }, [currentUser, navigate]);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
@@ -146,6 +152,12 @@ export const JoinForm: FC = () => {
       navigate("/dashboard");
     });
   };
+
+  // If user is logged in, this component will redirect.
+  // We can return null or a loading indicator while the redirect happens.
+  if (currentUser) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">

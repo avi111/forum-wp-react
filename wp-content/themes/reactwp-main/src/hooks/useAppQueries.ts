@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAPI } from "../services/api";
 import { useState, useMemo } from "react";
+import { PaginatedResponse, Article } from "../types";
 
 export const useSettings = () => {
   const { fetchSettings } = useAPI();
@@ -37,6 +38,47 @@ export const useArticles = () => {
     queryKey: ["articles"],
     queryFn: fetchArticles,
     enabled: false,
+  });
+};
+
+// Paginated editorial articles
+export const useEditorialArticles = (
+  page: number,
+  limit: number,
+) => {
+  const { fetchArticlesPaged } = useAPI();
+  return useQuery<PaginatedResponse<Article>>({
+    queryKey: ["articles", "editorial", page, limit],
+    queryFn: () => fetchArticlesPaged("editorial", page, limit),
+    placeholderData: keepPreviousData,
+  });
+};
+
+// Paginated research articles
+export const useResearchArticles = (
+  page: number,
+  limit: number,
+) => {
+  const { fetchArticlesPaged } = useAPI();
+  return useQuery<PaginatedResponse<Article>>({
+    queryKey: ["articles", "research", page, limit],
+    queryFn: () => fetchArticlesPaged("research", page, limit),
+    placeholderData: keepPreviousData,
+  });
+};
+
+// Paginated articles by tag (both types)
+export const useArticlesByTag = (
+  page: number,
+  limit: number,
+  tag: string,
+) => {
+  const { fetchArticlesPaged } = useAPI();
+  return useQuery<PaginatedResponse<Article>>({
+    queryKey: ["articles", "byTag", tag, page, limit],
+    queryFn: () => fetchArticlesPaged("", page, limit, tag),
+    placeholderData: keepPreviousData,
+    enabled: !!tag,
   });
 };
 

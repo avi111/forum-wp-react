@@ -44,6 +44,10 @@ interface AppContextType {
   settings: AppSettings;
   researchers: Researcher[];
   articles: Article[];
+  // Tags cloud data
+  tagsData: { tag: string; count: number }[] | null;
+  isTagsLoading: boolean;
+  getTagsFromServer: () => Promise<void>;
   meetings: Meeting[];
   trainings: Training[];
   newsItems: NewsItem[];
@@ -73,7 +77,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const queryClient = useQueryClient();
-  const { fetchEvents, fetchCurrentUser, subscribeToNewsletter } = useAPI();
+  const { fetchEvents, fetchCurrentUser, subscribeToNewsletter, fetchTags } =
+    useAPI();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
 
@@ -87,6 +92,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
+  const [tagsData, setTagsData] = useState<
+    { tag: string; count: number }[] | null
+  >(null);
+  const [isTagsLoading, setIsTagsLoading] = useState(false);
 
   useEffect(() => {
     if (settings?.strings) {
@@ -141,6 +150,19 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const userArticles = currentUser
     ? articles.filter((a) => a.authorId === currentUser.id)
     : [];
+
+  const getTagsFromServer = useCallback(async () => {
+    if (tagsData || isTagsLoading) return;
+    setIsTagsLoading(true);
+    try {
+      const data = await fetchTags();
+      setTagsData(data);
+    } catch (e) {
+      console.error("Failed to fetch tags:", e);
+    } finally {
+      setIsTagsLoading(false);
+    }
+  }, [tagsData, isTagsLoading, fetchTags]);
 
   const onJoin: OnJoin = useCallback(
     (data, callback) => {
@@ -230,6 +252,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     settings,
     researchers,
     articles,
+    tagsData,
+    isTagsLoading,
+    getTagsFromServer,
     meetings,
     trainings,
     newsItems,

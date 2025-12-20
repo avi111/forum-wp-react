@@ -1,40 +1,37 @@
 
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { Article } from "../types";
 import { Hash } from "lucide-react";
 
-interface TagCloudProps {
-  articles: Article[];
+interface TagDatum {
+  tag: string;
+  count: number;
 }
 
-export const TagCloud: React.FC<TagCloudProps> = ({ articles }) => {
-  const tagsData = useMemo(() => {
-    // 1. Count occurrences
-    const counts: Record<string, number> = {};
-    articles.forEach((article) => {
-      article.tags.forEach((tag) => {
-        counts[tag] = (counts[tag] || 0) + 1;
-      });
-    });
+interface TagCloudProps {
+  tagsData: TagDatum[];
+}
 
-    // 2. Convert to array and sort by count (descending)
-    const sortedTags = Object.entries(counts)
-      .sort(([, countA], [, countB]) => countB - countA)
-      .slice(0, 30); // Limit to top 30 tags
+export const TagCloud: React.FC<TagCloudProps> = ({ tagsData }) => {
+  const sizedTags = useMemo(() => {
+    // Ensure sorted and limited to top 30 if larger set is provided
+    const limited = [...tagsData]
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 30);
 
-    if (sortedTags.length === 0) return [];
+    if (limited.length === 0) return [] as Array<{
+      tag: string;
+      sizeClass: string;
+      opacityClass: string;
+    }>;
 
-    // 3. Determine min/max for sizing
-    const maxCount = sortedTags[0][1];
-    const minCount = sortedTags[sortedTags.length - 1][1];
+    const maxCount = limited[0].count;
+    const minCount = limited[limited.length - 1].count;
 
-    // 4. Map to size classes
-    return sortedTags.map(([tag, count]) => {
+    return limited.map(({ tag, count }) => {
       let sizeClass = "text-sm";
       let opacityClass = "opacity-70";
-      
-      // Simple normalization
+
       const range = maxCount - minCount;
       const normalized = range === 0 ? 0.5 : (count - minCount) / range;
 
@@ -52,11 +49,11 @@ export const TagCloud: React.FC<TagCloudProps> = ({ articles }) => {
         opacityClass = "opacity-80";
       }
 
-      return { tag, count, sizeClass, opacityClass };
+      return { tag, sizeClass, opacityClass };
     });
-  }, [articles]);
+  }, [tagsData]);
 
-  if (tagsData.length === 0) return null;
+  if (sizedTags.length === 0) return null;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 mb-16 relative overflow-hidden">
@@ -70,7 +67,7 @@ export const TagCloud: React.FC<TagCloudProps> = ({ articles }) => {
             </h3>
             
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 leading-loose max-w-4xl mx-auto">
-                {tagsData.map(({ tag, sizeClass, opacityClass }) => (
+                {sizedTags.map(({ tag, sizeClass, opacityClass }) => (
                 <Link
                     key={tag}
                     to={`/tags/${encodeURIComponent(tag)}`}

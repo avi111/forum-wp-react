@@ -177,6 +177,80 @@ export const useAPI = () => {
     }
   }, [post]);
 
+  const fetchArticlesPaged = useCallback(
+    async (
+      type: "editorial" | "research" | "",
+      page: number,
+      limit: number,
+      tag?: string,
+    ): Promise<PaginatedResponse<Article>> => {
+      try {
+        const payload: Record<string, string> = {
+          type,
+          page: `${page}`,
+          limit: `${limit}`,
+        };
+        if (tag && tag.trim()) {
+          payload.tag = tag.trim();
+        }
+        return await post("fetchArticlesPaged", payload);
+      } catch (error) {
+        console.warn(
+          "Failed to fetch paged articles from server, falling back to mock. If you're on DEV this is expected.",
+          error,
+        );
+        if (import.meta.env.DEV) {
+          await delay(300);
+          let filtered = [...INITIAL_ARTICLES];
+          if (type === "editorial") {
+            filtered = filtered.filter((a) => a.isEditorial === true);
+          } else if (type === "research") {
+            filtered = filtered.filter((a) => a.isEditorial === false);
+          }
+          if (tag && tag.trim()) {
+            const tagNorm = tag.trim();
+            filtered = filtered.filter((a) => a.tags.includes(tagNorm));
+          }
+          const total = filtered.length;
+          const start = (page - 1) * limit;
+          const end = start + limit;
+          const data = filtered.slice(start, end);
+          return { data, total };
+        }
+        throw error;
+      }
+    },
+    [post],
+  );
+
+  const fetchTags = useCallback(
+    async (): Promise<{ tag: string; count: number }[]> => {
+      try {
+        return await post("fetchTags");
+      } catch (error) {
+        console.warn(
+          "Failed to fetch tags from server, falling back to mock.",
+          error,
+        );
+        if (import.meta.env.DEV) {
+          await delay(300);
+          const counts: Record<string, number> = {};
+          INITIAL_ARTICLES.forEach((a) => {
+            a.tags.forEach((tag) => {
+              counts[tag] = (counts[tag] || 0) + 1;
+            });
+          });
+          return Object.entries(counts).map(([tag, count]) => ({
+            tag,
+            count,
+          }));
+        }
+        throw error;
+      }
+    },
+    [post],
+  );
+
   const fetchNews = useCallback(async (): Promise<NewsItem[]> => {
     try {
       return await post("fetchNews");
@@ -295,6 +369,8 @@ export const useAPI = () => {
     fetchTemplate,
     fetchResearchers,
     fetchArticles,
+    fetchArticlesPaged,
+    fetchTags,
     fetchNews,
     fetchEvents,
     fetchMeetings,
