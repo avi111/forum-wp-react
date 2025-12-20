@@ -837,6 +837,7 @@ export const object = {
     site_name: "example",
     site_description: "tagline",
     site_url: "http://localhost:8888/wordpress",
+    rest_url: "http://localhost:8888/wordpress/wp-json/",
     home_url: "http://localhost:8888/wordpress",
     admin_email: "avi111@gmail.com",
     charset: "UTF-8",

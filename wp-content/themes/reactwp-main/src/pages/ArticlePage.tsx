@@ -108,29 +108,10 @@ export const ArticlePage: React.FC = () => {
           <div className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium">
             {article.excerpt}
           </div>
-          <div className="prose prose-slate prose-lg max-w-none text-slate-800 leading-loose">
-            {/* Rendering content paragraphs */}
-            {article.content.split("\n").map((paragraph, idx) => (
-              <p key={idx}>{paragraph}</p>
-            ))}
-
-            {/* Fallback for mock content */}
-            {article.content === "..." && (
-              <div className="text-slate-400 italic bg-slate-50 p-6 rounded-lg border border-dashed border-slate-200">
-                <p>זהו טקסט דמה (Mock Data) עבור התצוגה.</p>
-                <p>
-                  במערכת אמיתית, כאן יופיע התוכן המלא של המאמר כפי שהוזן על ידי
-                  החוקר או המערכת, כולל פסקאות, תמונות משובצות וקישורים למקורות.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
-              </div>
-            )}
-          </div>
+          <div
+            className="prose prose-slate prose-lg max-w-none text-slate-800 leading-loose"
+            dangerouslySetInnerHTML={{ __html: article.content }}
+          />
 
           {/* Attachments Section */}
           {article.attachments && article.attachments.length > 0 && (

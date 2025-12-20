@@ -40,6 +40,30 @@ type EventsFetcher = (
   timeFilter?: "future" | "past" | "all",
 ) => Promise<QueryObserverResult<PaginatedResponse<CalendarEvent>, Error>>;
 
+export type Wpcf7Status =
+  | "mail_sent" // הצלחה
+  | "validation_failed" // שגיאת ולסדציה (שדה חובה חסר, אימייל לא תקין וכו')
+  | "aborted" // נכשל (למשל בעיות שרת)
+  | "spam" // נחסם על ידי מסנני ספאם (כמו Recaptcha או Akismet)
+  | "mail_failed"; // השרת לא הצליח לשלוח את המייל
+
+// 2. מבנה של שגיאת שדה ספציפית (מופיע רק ב-validation_failed)
+export interface Wpcf7InvalidField {
+  into: string; // ה-Selector של השדה (למשל: "span.wpcf7-form-control-wrap.your-email")
+  message: string; // הודעת השגיאה הספציפית לשדה
+  idref: null | string;
+  error_id: string; // מזהה השגיאה (למשל: "-ve-your-email")
+}
+
+export interface Wpcf7Response {
+  contact_form_id: number;
+  status: Wpcf7Status;
+  message: string; // ההודעה הכללית למשתמש (למשל "Thank you for your message...")
+  posted_data_hash: string;
+  into: string; // ה-ID של הקונטיינר של הטופס
+  invalid_fields: Wpcf7InvalidField[]; // מערך ריק במקרה של הצלחה
+}
+
 interface AppContextType {
   settings: AppSettings;
   researchers: Researcher[];
@@ -69,6 +93,10 @@ interface AppContextType {
   subscribeToNewsletter: (
     email: string,
   ) => Promise<{ success: boolean; message: string }>;
+  sendContactForm7: (
+    formId: number,
+    data: Record<string, string>,
+  ) => Promise<Wpcf7Response>;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -77,8 +105,13 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const queryClient = useQueryClient();
-  const { fetchEvents, fetchCurrentUser, subscribeToNewsletter, fetchTags } =
-    useAPI();
+  const {
+    fetchTags,
+    fetchEvents,
+    fetchCurrentUser,
+    subscribeToNewsletter,
+    sendContactForm7,
+  } = useAPI();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
 
@@ -274,6 +307,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     site: window.object.site,
     openNewsletterModal: () => setIsNewsletterOpen(true),
     subscribeToNewsletter,
+    sendContactForm7,
   };
 
   return (

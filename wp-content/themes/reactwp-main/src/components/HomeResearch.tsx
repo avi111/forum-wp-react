@@ -1,6 +1,6 @@
 import React from "react";
 import { Article } from "../types";
-import { ArrowLeft, FlaskConical } from "lucide-react";
+import { FlaskConical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface HomeResearchProps {
@@ -53,12 +53,6 @@ export const HomeResearch: React.FC<HomeResearchProps> = ({
           </div>
         ))}
       </div>
-      <button
-        onClick={() => navigate("/join")}
-        className="mt-4 w-full py-2 text-sm text-slate-500 hover:text-teal-600 font-medium border border-slate-200 rounded-lg hover:border-teal-300 transition-colors flex items-center justify-center"
-      >
-        הגש מחקר לפרסום <ArrowLeft className="w-4 h-4 mr-1" />
-      </button>
     </div>
   );
 };

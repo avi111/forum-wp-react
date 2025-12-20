@@ -61,9 +61,10 @@ function get_data_map()
   if (!$site_options['language']) {
     $site_options['language'] = '';
   }
-  // Add the admin AJAX URL
+  // Add WordPress URLs
   $site_options['admin_ajax_url'] = admin_url('admin-ajax.php');
-  $site_options['admin_url'] = admin_url(); // Added admin_url for dashboard link
+  $site_options['admin_url'] = admin_url();
+  $site_options['rest_url'] = rest_url();
 
 
   $map = array(

@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { InfoPage } from "../components/InfoPage";
 import { Mail, MapPin, Loader2, Send } from "lucide-react";
-import { useAPI } from "../services/api";
+import { useApp } from "../context/AppContext";
 import { useToast } from "../context/ToastContext";
 
 export const Contact: React.FC = () => {
   const { showToast } = useToast();
-  const { sendContactMessage } = useAPI();
+  const { sendContactForm7 } = useApp();
+  const FORM_ID = 48; // The ID of your Contact Form 7
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    message: "",
+    "your-name": "",
+    "your-email": "",
+    "your-message": "",
   });
 
   const handleChange = (
@@ -23,18 +24,23 @@ export const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.email || !formData.message) {
-      showToast("אנא מלא את כל השדות", "error");
+    if (!formData["your-name"] || !formData["your-email"]) {
+      showToast("אנא מלא את שדות החובה", "error");
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await sendContactMessage(formData);
-      showToast("תודה רבה! ההודעה נשלחה בהצלחה");
-      setFormData({ fullName: "", email: "", message: "" });
+      const response = await sendContactForm7(FORM_ID, formData);
+
+      if (response.status === "mail_sent") {
+        showToast(response.message);
+        setFormData({ "your-name": "", "your-email": "", "your-message": "" });
+      } else {
+        showToast(response.message || "אירעה שגיאה", "error");
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       showToast("אירעה שגיאה בשליחת ההודעה", "error");
     } finally {
       setIsSubmitting(false);
@@ -67,25 +73,27 @@ export const Contact: React.FC = () => {
         >
           <input
             type="text"
-            name="fullName"
-            value={formData.fullName}
+            name="your-name"
+            value={formData["your-name"]}
             onChange={handleChange}
             placeholder="שם מלא"
+            required
             className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
           />
           <input
             type="email"
-            name="email"
-            value={formData.email}
+            name="your-email"
+            value={formData["your-email"]}
             onChange={handleChange}
             placeholder="אימייל לחזרה"
+            required
             className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
           />
           <textarea
-            name="message"
-            value={formData.message}
+            name="your-message"
+            value={formData["your-message"]}
             onChange={handleChange}
-            placeholder="תוכן ההודעה"
+            placeholder="תוכן ההודעה (אופציונאלי)"
             rows={4}
             className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none"
           ></textarea>

@@ -168,6 +168,7 @@ export type SiteOptions = {
   site_name: string; // Site title
   site_description: string; // Site tagline/description
   site_url: string; // WordPress Address (URL)
+  rest_url: string;
   home_url: string; // Site Address (URL)
   admin_email: string; // Admin email address
   charset: string; // Site charset (e.g., UTF-8)

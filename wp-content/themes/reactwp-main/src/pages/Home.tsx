@@ -4,18 +4,16 @@ import { ResearcherCarousel } from "../components/ResearcherCarousel";
 import { HomeFeatures } from "../components/HomeFeatures";
 import { HomeLatestUpdates } from "../components/HomeLatestUpdates";
 import { useApp } from "../context/AppContext";
-import { useEvents } from "../hooks/useAppQueries";
+import {
+  useEditorialArticles,
+  useResearchArticles,
+  useEvents,
+} from "../hooks/useAppQueries";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 export const Home: React.FC = () => {
-  const {
-    researchers,
-    articles,
-    settings,
-    getResearchersFromServer,
-    getArticlesFromServer,
-  } = useApp();
+  const { researchers, settings, getResearchersFromServer } = useApp();
   const navigate = useNavigate();
 
   // Fetch events specifically for this component
@@ -25,22 +23,19 @@ export const Home: React.FC = () => {
   });
   const events = eventsData?.data || [];
 
+  // Fetch only what the Home page needs: latest editorial and research articles
+  const editorialLimit = settings.latestEditorialLimit || 3;
+  const researchLimit = settings.latestResearchLimit || 3;
+  const editorialQuery = useEditorialArticles(1, editorialLimit);
+  const researchQuery = useResearchArticles(1, researchLimit);
+  const editorialArticles = editorialQuery.data?.data || [];
+  const researcherArticles = researchQuery.data?.data || [];
+
   useEffect(() => {
     // Set filter and fetch initial data for components on this page
     setTimeFilter("future");
     if (researchers.length === 0) getResearchersFromServer();
-    if (articles.length === 0) getArticlesFromServer();
-  }, [
-    getResearchersFromServer,
-    getArticlesFromServer,
-    setTimeFilter,
-    researchers.length,
-    articles.length,
-  ]);
-
-  // Filter articles
-  const editorialArticles = articles.filter((a) => a.isEditorial);
-  const researcherArticles = articles.filter((a) => !a.isEditorial);
+  }, [getResearchersFromServer, setTimeFilter, researchers.length]);
 
   return (
     <>

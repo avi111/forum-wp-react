@@ -270,7 +270,7 @@ function iprf_fetch_articles() {
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
             'excerpt' => get_the_excerpt(),
-            'content' => get_the_content(),
+            'content' => apply_filters('the_content', get_the_content()),
             'authorId' => (string)get_the_author_meta('ID'),
             'authorName' => get_the_author(),
             'date' => get_the_date('d/m/Y'),
@@ -345,7 +345,7 @@ function iprf_fetch_articles_paged() {
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
             'excerpt' => get_the_excerpt(),
-            'content' => get_the_content(),
+            'content' => apply_filters('the_content', get_the_content()),
             'authorId' => (string)get_the_author_meta('ID'),
             'authorName' => get_the_author(),
             'date' => get_the_date('d/m/Y'),
@@ -421,7 +421,7 @@ function iprf_fetch_news() {
             'title' => get_the_title(),
             'date' => get_the_date('d/m/Y'),
             'link' => get_permalink(),
-            'content' => get_the_content(),
+            'content' => apply_filters('the_content', get_the_content()),
         ];
     }
     wp_reset_postdata();

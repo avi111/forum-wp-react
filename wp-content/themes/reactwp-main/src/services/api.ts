@@ -31,6 +31,15 @@ export const getAdminAjaxUrl = () => {
   return adminAjaxUrl;
 };
 
+export const getRestUrl = () => {
+  if (import.meta.env.DEV) {
+    window.object = object;
+  }
+  const { site } = window.object || {};
+  const { rest_url: restUrl } = site || {};
+  return restUrl;
+};
+
 const SIMULATED_DELAY_MS = 1200;
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -79,13 +88,55 @@ export const useAPI = () => {
     }
   }, []);
 
+  const sendContactForm7 = useCallback(
+    async (formId: number, data: Record<string, string>) => {
+      const restUrl = getRestUrl();
+      if (!restUrl) {
+        console.warn("REST URL not found, falling back to mock.");
+        if (import.meta.env.DEV) {
+          await delay(1000);
+          return { status: "mail_sent", message: "ההודעה נשלחה בהצלחה (Mock)" };
+        }
+        throw new Error("REST URL is not configured.");
+      }
+
+      const url = `${restUrl}contact-form-7/v1/contact-forms/${formId}/feedback`;
+      const formData = new FormData();
+
+      // Add required CF7 hidden fields
+      formData.append("_wpcf7", formId.toString());
+      formData.append("_wpcf7_version", "5.9.3"); // Example version
+      formData.append("_wpcf7_locale", "he_IL");
+      formData.append("_wpcf7_unit_tag", `wpcf7-f${formId}-p1-o1`);
+      formData.append("_wpcf7_container_post", "0");
+
+      for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+          formData.append(key, data[key]);
+        }
+      }
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          body: formData,
+        });
+
+        return await response.json();
+      } catch (error) {
+        console.error("CF7 submission failed:", error);
+        throw error;
+      }
+    },
+    [],
+  );
+
   const subscribeToNewsletter = useCallback(
     async (email: string): Promise<{ success: boolean; message: string }> => {
       try {
         return await post("subscribe_newsletter", { email });
       } catch (error) {
         console.error("Newsletter subscription failed:", error);
-        // In case of network failure, return a generic error.
         return {
           success: false,
           message: "אירעה שגיאה בתקשורת עם השרת.",
@@ -223,33 +274,32 @@ export const useAPI = () => {
     [post],
   );
 
-  const fetchTags = useCallback(
-    async (): Promise<{ tag: string; count: number }[]> => {
-      try {
-        return await post("fetchTags");
-      } catch (error) {
-        console.warn(
-          "Failed to fetch tags from server, falling back to mock.",
-          error,
-        );
-        if (import.meta.env.DEV) {
-          await delay(300);
-          const counts: Record<string, number> = {};
-          INITIAL_ARTICLES.forEach((a) => {
-            a.tags.forEach((tag) => {
-              counts[tag] = (counts[tag] || 0) + 1;
-            });
+  const fetchTags = useCallback(async (): Promise<
+    { tag: string; count: number }[]
+  > => {
+    try {
+      return await post("fetchTags");
+    } catch (error) {
+      console.warn(
+        "Failed to fetch tags from server, falling back to mock.",
+        error,
+      );
+      if (import.meta.env.DEV) {
+        await delay(300);
+        const counts: Record<string, number> = {};
+        INITIAL_ARTICLES.forEach((a) => {
+          a.tags.forEach((tag) => {
+            counts[tag] = (counts[tag] || 0) + 1;
           });
-          return Object.entries(counts).map(([tag, count]) => ({
-            tag,
-            count,
-          }));
-        }
-        throw error;
+        });
+        return Object.entries(counts).map(([tag, count]) => ({
+          tag,
+          count,
+        }));
       }
-    },
-    [post],
-  );
+      throw error;
+    }
+  }, [post]);
 
   const fetchNews = useCallback(async (): Promise<NewsItem[]> => {
     try {
@@ -363,6 +413,7 @@ export const useAPI = () => {
 
   return {
     post,
+    sendContactForm7,
     subscribeToNewsletter,
     fetchCurrentUser,
     fetchSettings,
