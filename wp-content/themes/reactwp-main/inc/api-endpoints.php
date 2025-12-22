@@ -649,3 +649,150 @@ function iprf_fetch_current_user() {
 
     iprf_send_response($user_data);
 }
+
+/**
+ * 11. Subscribe to Newsletter (MailPoet)
+ */
+add_action('wp_ajax_subscribe_newsletter', 'iprf_subscribe_newsletter');
+add_action('wp_ajax_nopriv_subscribe_newsletter', 'iprf_subscribe_newsletter');
+
+function iprf_subscribe_newsletter() {
+    $email = sanitize_email($_POST['email']);
+
+    if (!is_email($email)) {
+        wp_send_json_error(['message' => 'כתובת אימייל לא תקינה']);
+    }
+
+    // Check if MailPoet is active
+    if (class_exists(\MailPoet\API\API::class)) {
+        try {
+            $mailpoet_api = \MailPoet\API\API::MP('v1');
+            
+            // Get the default list (usually ID 1, or find by name)
+            // You can also create a specific list for this form
+            $list_id = 3;
+            
+            // Check if subscriber exists
+            try {
+                $subscriber = $mailpoet_api->getSubscriber($email);
+            } catch (\Exception $e) {
+                $subscriber = false;
+            }
+
+            if (!$subscriber) {
+                // Create new subscriber
+                $subscriber = $mailpoet_api->addSubscriber([
+                    'email' => $email,
+                    'first_name' => '',
+                    'last_name' => ''
+                ], [$list_id]);
+            } else {
+                // Subscribe existing user to the list
+                $mailpoet_api->subscribeToList($subscriber['id'], $list_id);
+            }
+
+            iprf_send_response(['message' => 'נרשמת בהצלחה לניוזלטר!']);
+
+        } catch (\Exception $e) {
+            // Log error for admin
+            error_log('MailPoet Error: ' . $e->getMessage());
+            wp_send_json_error(['message' => 'אירעה שגיאה בהרשמה. אנא נסה שנית מאוחר יותר.']);
+        }
+    } else {
+        // Fallback if MailPoet is not installed (e.g. save to options or send email to admin)
+        // For now, just return success to simulate
+        iprf_send_response(['message' => 'נרשמת בהצלחה! (MailPoet לא מותקן)']);
+    }
+}
+
+/**
+ * 12. Handle Join Form Submission
+ */
+add_action('wp_ajax_nopriv_join_form_submit', 'iprf_join_form_submit');
+
+function iprf_join_form_submit() {
+    // 1. Sanitize and Validate Email
+    $email = sanitize_email($_POST['email']);
+    if (!is_email($email)) {
+        wp_send_json_error(['message' => 'כתובת האימייל אינה תקינה.']);
+    }
+    if (email_exists($email)) {
+        wp_send_json_error(['message' => 'כתובת האימייל כבר רשומה במערכת.']);
+    }
+    // Optional: Add a third-party email validation service call here if needed.
+
+    // 2. Handle File Uploads
+    if (!function_exists('wp_handle_upload')) {
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+    }
+
+    $uploaded_files = [];
+    $upload_overrides = ['test_form' => false];
+
+    $required_files = ['verificationDoc', 'intentLetter'];
+    foreach ($required_files as $file_key) {
+        if (isset($_FILES[$file_key])) {
+            $moved_file = wp_handle_upload($_FILES[$file_key], $upload_overrides);
+            if ($moved_file && !isset($moved_file['error'])) {
+                $uploaded_files[$file_key] = $moved_file['url'];
+            } else {
+                wp_send_json_error(['message' => 'שגיאה בהעלאת קובץ: ' . $moved_file['error']]);
+            }
+        } else {
+            wp_send_json_error(['message' => 'יש לצרף את כל המסמכים הנדרשים.']);
+        }
+    }
+
+    // 3. Create User
+    $userdata = [
+        'user_login' => sanitize_user($_POST['username']),
+        'user_email' => $email,
+        'user_pass'  => $_POST['password'],
+        'first_name' => sanitize_text_field($_POST['firstName']),
+        'last_name'  => sanitize_text_field($_POST['lastName']),
+        'role'       => 'subscriber', // Set role to subscriber
+    ];
+
+    $user_id = wp_insert_user($userdata);
+
+    if (is_wp_error($user_id)) {
+        wp_send_json_error(['message' => 'שגיאה ביצירת המשתמש: ' . $user_id->get_error_message()]);
+    }
+
+    // 4. Update User Meta with custom fields
+    update_user_meta($user_id, 'wpcf-id-number', sanitize_text_field($_POST['idNumber']));
+    update_user_meta($user_id, 'wpcf-phone', sanitize_text_field($_POST['phone']));
+    update_user_meta($user_id, 'wpcf-gender', sanitize_text_field($_POST['gender']));
+    update_user_meta($user_id, 'wpcf-academic-title', sanitize_text_field($_POST['title']));
+    update_user_meta($user_id, 'wpcf-institution', sanitize_text_field($_POST['institution']));
+    update_user_meta($user_id, 'wpcf-faculty', sanitize_text_field($_POST['faculty']));
+    update_user_meta($user_id, 'wpcf-specialization', sanitize_text_field($_POST['mainSpecialization']));
+    // Assuming subSpecializations is an array
+    if (isset($_POST['subSpecializations']) && is_array($_POST['subSpecializations'])) {
+        foreach ($_POST['subSpecializations'] as $sub_spec) {
+            add_user_meta($user_id, 'wpcf-sub-specializations', sanitize_text_field($sub_spec));
+        }
+    }
+    update_user_meta($user_id, 'wpcf-student-year', sanitize_text_field($_POST['studentYear']));
+    update_user_meta($user_id, 'wpcf-newsletter', sanitize_text_field($_POST['newsletter']));
+    
+    // Save file URLs to user meta
+    update_user_meta($user_id, 'wpcf-verification-doc-url', esc_url_raw($uploaded_files['verificationDoc']));
+    update_user_meta($user_id, 'wpcf-intent-letter-url', esc_url_raw($uploaded_files['intentLetter']));
+
+    // 5. Send Admin Notification Email
+    $admin_email = get_option('admin_email');
+    $subject = 'בקשת הצטרפות חדשה לאתר הפורום';
+    $message = "שלום מנהל,\n\n";
+    $message .= "התקבלה בקשת הצטרפות חדשה מאת: " . sanitize_text_field($_POST['firstName']) . " " . sanitize_text_field($_POST['lastName']) . "\n";
+    $message .= "אימייל: " . $email . "\n\n";
+    $message .= "ניתן לצפות בפרטי המשתמש ובמסמכים המצורפים בפרופיל המשתמש שלו בלוח הבקרה:\n";
+    $message .= admin_url("user-edit.php?user_id=$user_id") . "\n\n";
+    $message .= "קישור למסמך אימות: " . esc_url_raw($uploaded_files['verificationDoc']) . "\n";
+    $message .= "קישור למכתב כוונות: " . esc_url_raw($uploaded_files['intentLetter']) . "\n";
+
+    wp_mail($admin_email, $subject, $message);
+
+    // 6. Send Success Response
+    iprf_send_response(['message' => 'ההרשמה בוצעה בהצלחה. פרטיך נשלחו לבדיקה ואישור.']);
+}

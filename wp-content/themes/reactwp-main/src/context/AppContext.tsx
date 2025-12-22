@@ -111,6 +111,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     fetchCurrentUser,
     subscribeToNewsletter,
     sendContactForm7,
+    submitJoinForm,
   } = useAPI();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
@@ -198,43 +199,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   }, [tagsData, isTagsLoading, fetchTags]);
 
   const onJoin: OnJoin = useCallback(
-    (data, callback) => {
-      const titleStr =
-        data.title && settings?.titleMap && settings.titleMap[data.title]
-          ? settings.titleMap[data.title]
-          : "";
-
-      const newResearcher: Researcher = {
-        id: Date.now().toString(),
-        firstName: data.firstName,
-        lastName: data.lastName,
-        title: titleStr,
-        email: data.email,
-        institution: data.institution,
-        specialization: data.specialization,
-        bio: "",
-        status: UserStatus.PENDING,
-        imageUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-          `${data.firstName} ${data.lastName}`,
-        )}&background=random`,
-        username: data.username,
-        phone: data.phone,
-        gender: data.gender,
-        idNumber: data.idNumber,
-        faculty: data.faculty,
-        subSpecializations: data.subSpecializations,
-        studentYear: data.studentYear,
-        newsletter: data.newsletter,
-      };
-
-      queryClient.setQueryData(["researchers"], (old: Researcher[] = []) => [
-        ...old,
-        newResearcher,
-      ]);
-      setCurrentUser(newResearcher);
-      callback();
+    async (data, callback) => {
+      try {
+        await submitJoinForm(data);
+        callback();
+      } catch (error) {
+        console.error("Join failed:", error);
+        alert("אירעה שגיאה בהרשמה. אנא נסה שנית.");
+      }
     },
-    [queryClient, settings],
+    [submitJoinForm],
   );
 
   const onUpdateUser = useCallback(

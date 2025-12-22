@@ -1,12 +1,12 @@
 import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { Check, Eye, EyeOff, FileText, Upload, Users, X } from "lucide-react";
-import { Researcher } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useToast } from "../context/ToastContext";
 import { t } from "../services/stringService";
 import { useTemplate } from "../hooks/useAppQueries";
 import { ContentNotFound } from "../components/ContentNotFound";
+import { Captcha } from "../components/Captcha";
 
 const BylawsModal: FC<{
   onClose: () => void;
@@ -55,6 +55,7 @@ export const JoinForm: FC = () => {
   const [showBylaws, setShowBylaws] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const [captchaToken, setCaptchaToken] = useState("");
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -131,6 +132,10 @@ export const JoinForm: FC = () => {
       alert(t("joinform_bylaws_not_agreed"));
       return;
     }
+    if (!captchaToken) {
+      alert("אנא אמת שאינך רובוט");
+      return;
+    }
 
     const finalInstitution =
       formData.institution === "other"
@@ -141,10 +146,11 @@ export const JoinForm: FC = () => {
         ? formData.mainSpecializationOther
         : formData.mainSpecialization;
 
-    const submissionData: Omit<Researcher, "id" | "bio" | "status"> = {
+    const submissionData = {
       ...formData,
       institution: finalInstitution,
       specialization: finalSpec,
+      "g-recaptcha-response": captchaToken,
     };
 
     onJoin(submissionData, () => {
@@ -153,8 +159,6 @@ export const JoinForm: FC = () => {
     });
   };
 
-  // If user is logged in, this component will redirect.
-  // We can return null or a loading indicator while the redirect happens.
   if (currentUser) {
     return null;
   }
@@ -599,6 +603,8 @@ export const JoinForm: FC = () => {
               </label>
             </div>
           </section>
+
+          <Captcha onVerify={setCaptchaToken} />
 
           <div className="pt-6">
             <button

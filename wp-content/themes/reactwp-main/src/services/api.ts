@@ -60,7 +60,13 @@ export const useAPI = () => {
 
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        formData.append(key, data[key]);
+        const value = data[key];
+        // Handle arrays (like subSpecializations)
+        if (Array.isArray(value)) {
+          value.forEach((item) => formData.append(`${key}[]`, item));
+        } else {
+          formData.append(key, value);
+        }
       }
     }
 
@@ -78,15 +84,38 @@ export const useAPI = () => {
       const responseData = JSON.parse(responseText);
       if (responseData.success === false) {
         throw new Error(
-          `WordPress AJAX error: ${responseData.data?.message || "Unknown error"}`,
+          responseData.data?.message || "Unknown error from server",
         );
       }
       return responseData.data;
     } catch (e) {
+      // If it's already an error object from the previous block, rethrow it
+      if (
+        e instanceof Error &&
+        e.message !== `Failed to parse JSON response: ${responseText}`
+      ) {
+        throw e;
+      }
       console.error("Failed to parse JSON response:", e);
       throw new Error(`Failed to parse JSON response: ${responseText}`);
     }
   }, []);
+
+  const submitJoinForm = useCallback(
+    async (data: any): Promise<{ message: string }> => {
+      try {
+        return await post("join_form_submit", data);
+      } catch (error) {
+        console.error("Join form submission failed:", error);
+        if (import.meta.env.DEV) {
+          await delay(1000);
+          return { message: "ההרשמה בוצעה בהצלחה (Mock)" };
+        }
+        throw error;
+      }
+    },
+    [post],
+  );
 
   const sendContactForm7 = useCallback(
     async (formId: number, data: Record<string, string>) => {
@@ -413,6 +442,7 @@ export const useAPI = () => {
 
   return {
     post,
+    submitJoinForm,
     sendContactForm7,
     subscribeToNewsletter,
     fetchCurrentUser,
