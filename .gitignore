@@ -27,3 +27,5 @@ wp-content/index.php
 /wp-includes/**/*
 /wp-content/themes/reactwp-main/dist/**/*
 /wp-content/themes/reactwp-main/node_modules/**/*
+/wp-config.php
+!/wp-content/themes/reactwp-main/.env

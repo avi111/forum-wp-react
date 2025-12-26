@@ -13,6 +13,16 @@ function my_theme_enqueue_scripts()
 
 add_action('wp_enqueue_scripts', 'my_theme_enqueue_scripts');
 
+function filter_custom_post_type_by_author( $query ) {
+  // בדוק אם אנחנו ב-Admin Area, במסך עריכה של CPT, ושהמשתמש הוא Contributor
+  if ( is_admin() && $query->is_main_query() && ( 'research-paper' == $query->get('post_type') ) && current_user_can('contributor') ) {
+    // הגדר את השאילתה להציג רק פוסטים של המשתמש הנוכחי
+    $query->set( 'author', get_current_user_id() );
+  }
+}
+// חבר את הפונקציה ל-hook של pre_get_posts
+add_action( 'pre_get_posts', 'filter_custom_post_type_by_author' );
+
 // Enqueue styles for the Block Editor (Gutenberg)
 function my_theme_enqueue_editor_scripts() {
     // Load Tailwind CSS from CDN for the editor

@@ -3,6 +3,7 @@ import { NavItem, PageView, Researcher } from "../types";
 import { Brain, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { useNavigation } from "../hooks/useNavigation";
 
 interface NavbarProps {
   isLoggedIn: boolean;
@@ -20,36 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const location = useLocation();
   const { site } = useApp(); // Get site info from context
   const navigate = useNavigate();
-
-  const getPath = useCallback(
-    (view: PageView) => {
-      switch (view) {
-        case PageView.HOME:
-          return "/";
-        case PageView.RESEARCHERS:
-          return "/researchers";
-        case PageView.ARTICLES:
-          return "/articles";
-        case PageView.TRAINING:
-          return "/training";
-        case PageView.EVENTS:
-          return "/events";
-        case PageView.CONTACT:
-          return "/contact";
-        case PageView.JOIN:
-          return "/join";
-        case PageView.DASHBOARD:
-          return site.site_url + "/wp-admin/";
-        case PageView.MEETINGS:
-          return "/meetings";
-        case PageView.LOGIN:
-          return "/login";
-        default:
-          return "/";
-      }
-    },
-    [site],
-  );
+  const { getPath } = useNavigation();
 
   const handleNavClick = (view: PageView) => {
     const path = getPath(view);
@@ -74,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       if (path.startsWith("http")) return false;
       return location.pathname.startsWith(path);
     },
-    [location],
+    [location, getPath],
   );
 
   const splitTextByWords = useCallback(

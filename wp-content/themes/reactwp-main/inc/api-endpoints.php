@@ -214,6 +214,8 @@ add_action('wp_ajax_fetchResearchers', 'iprf_fetch_researchers');
 add_action('wp_ajax_nopriv_fetchResearchers', 'iprf_fetch_researchers');
 
 function iprf_fetch_researchers() {
+    remove_all_actions('pre_get_users');
+
     $args = [
         'role' => 'contributor',
         'number' => -1,
@@ -225,6 +227,33 @@ function iprf_fetch_researchers() {
 
     if (!empty($user_query->get_results())) {
         foreach ($user_query->get_results() as $user) {
+            $image_url = get_user_meta($user->ID, 'wpcf-profile-image', true);
+            if (!empty($image_url)) {
+                // If it's an attachment ID, get the thumbnail URL
+                if (is_numeric($image_url)) {
+                    $image_src = wp_get_attachment_image_src($image_url, 'thumbnail');
+                    $image_url = $image_src ? $image_src[0] : '';
+                } 
+                // If it's already a URL, we might need to process it to get a thumbnail size if possible, 
+                // but Toolset often stores the raw URL. If it stores ID, the above handles it.
+                // If it stores a full URL, getting a thumbnail version is harder without the ID.
+                // However, often Toolset stores the full URL. Let's try to find the ID from URL if needed, 
+                // or just assume if it's a URL we use it. 
+                // BUT, the user specifically asked for thumbnail size.
+                // If 'wpcf-profile-image' stores a URL, we can't easily get the thumbnail unless we find the attachment ID.
+                
+                // Let's try to see if we can get the attachment ID from the URL if it is a URL
+                else {
+                    $attachment_id = attachment_url_to_postid($image_url);
+                    if ($attachment_id) {
+                         $image_src = wp_get_attachment_image_src($attachment_id, 'thumbnail');
+                         $image_url = $image_src ? $image_src[0] : $image_url;
+                    }
+                }
+            } else {
+                $image_url = get_avatar_url($user->ID, ['size' => 400]);
+            }
+
             $researchers[] = [
                 'id' => (string)$user->ID,
                 'username' => $user->user_login,
@@ -235,7 +264,7 @@ function iprf_fetch_researchers() {
                 'specialization' => get_user_meta($user->ID, 'wpcf-specialization', true),
                 'bio' => get_user_meta($user->ID, 'wpcf-bio', true),
                 'status' => 'ACTIVE',
-                'imageUrl' => get_avatar_url($user->ID, ['size' => 400]),
+                'imageUrl' => $image_url,
                 'title' => get_user_meta($user->ID, 'wpcf-academic-title', true),
                 'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
                 'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
@@ -631,6 +660,22 @@ function iprf_fetch_current_user() {
 
     $user = wp_get_current_user();
 
+    $image_url = get_user_meta($user->ID, 'wpcf-profile-image', true);
+    if (!empty($image_url)) {
+        if (is_numeric($image_url)) {
+            $image_src = wp_get_attachment_image_src($image_url, 'thumbnail');
+            $image_url = $image_src ? $image_src[0] : '';
+        } else {
+            $attachment_id = attachment_url_to_postid($image_url);
+            if ($attachment_id) {
+                 $image_src = wp_get_attachment_image_src($attachment_id, 'thumbnail');
+                 $image_url = $image_src ? $image_src[0] : $image_url;
+            }
+        }
+    } else {
+        $image_url = get_avatar_url($user->ID, ['size' => 400]);
+    }
+
     $user_data = [
         'id' => (string)$user->ID,
         'username' => $user->user_login,
@@ -641,7 +686,7 @@ function iprf_fetch_current_user() {
         'specialization' => get_user_meta($user->ID, 'wpcf-specialization', true),
         'bio' => get_user_meta($user->ID, 'wpcf-bio', true),
         'status' => 'ACTIVE',
-        'imageUrl' => get_avatar_url($user->ID, ['size' => 400]),
+        'imageUrl' => $image_url,
         'title' => get_user_meta($user->ID, 'wpcf-academic-title', true),
         'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
         'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
@@ -711,6 +756,63 @@ function iprf_subscribe_newsletter() {
 add_action('wp_ajax_nopriv_join_form_submit', 'iprf_join_form_submit');
 
 function iprf_join_form_submit() {
+    // Validation
+    $required_fields = [
+        'username' => 'שם משתמש',
+        'email' => 'אימייל',
+        'password' => 'סיסמה',
+        'confirmPassword' => 'אימות סיסמה',
+        'firstName' => 'שם פרטי',
+        'lastName' => 'שם משפחה',
+        'idNumber' => 'תעודת זהות',
+        'phone' => 'טלפון',
+        'title' => 'תואר אקדמי',
+        'institution' => 'מוסד לימודים',
+        'faculty' => 'פקולטה'
+    ];
+
+    foreach ($required_fields as $field => $label) {
+        if (empty($_POST[$field])) {
+            wp_send_json_error(['message' => 'שדה חובה חסר: ' . $label]);
+        }
+    }
+
+    if ($_POST['password'] !== $_POST['confirmPassword']) {
+        wp_send_json_error(['message' => 'הסיסמאות אינן תואמות.']);
+    }
+
+    if (!isset($_POST['agreedToBylaws']) || $_POST['agreedToBylaws'] !== 'true') {
+        wp_send_json_error(['message' => 'יש לאשר את התקנון.']);
+    }
+
+    if (empty($_POST['g-recaptcha-response'])) {
+        wp_send_json_error(['message' => 'אנא אמת שאינך רובוט.']);
+    }
+
+    // Verify reCAPTCHA
+    $recaptcha_secret = defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '';
+    
+    if ($recaptcha_secret) {
+        $verify_response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
+            'body' => [
+                'secret' => $recaptcha_secret,
+                'response' => $_POST['g-recaptcha-response'],
+                'remoteip' => $_SERVER['REMOTE_ADDR']
+            ]
+        ]);
+
+        if (is_wp_error($verify_response)) {
+            wp_send_json_error(['message' => 'שגיאה באימות ה-reCAPTCHA.']);
+        }
+
+        $response_body = wp_remote_retrieve_body($verify_response);
+        $result = json_decode($response_body);
+
+        if (!$result->success) {
+            wp_send_json_error(['message' => 'אימות ה-reCAPTCHA נכשל. אנא נסה שנית.']);
+        }
+    }
+
     // 1. Sanitize and Validate Email
     $email = sanitize_email($_POST['email']);
     if (!is_email($email)) {
@@ -731,14 +833,7 @@ function iprf_join_form_submit() {
 
     $required_files = ['verificationDoc', 'intentLetter'];
     foreach ($required_files as $file_key) {
-        if (isset($_FILES[$file_key])) {
-            $moved_file = wp_handle_upload($_FILES[$file_key], $upload_overrides);
-            if ($moved_file && !isset($moved_file['error'])) {
-                $uploaded_files[$file_key] = $moved_file['url'];
-            } else {
-                wp_send_json_error(['message' => 'שגיאה בהעלאת קובץ: ' . $moved_file['error']]);
-            }
-        } else {
+        if (!isset($_FILES[$file_key])) {
             wp_send_json_error(['message' => 'יש לצרף את כל המסמכים הנדרשים.']);
         }
     }
@@ -775,7 +870,19 @@ function iprf_join_form_submit() {
     }
     update_user_meta($user_id, 'wpcf-student-year', sanitize_text_field($_POST['studentYear']));
     update_user_meta($user_id, 'wpcf-newsletter', sanitize_text_field($_POST['newsletter']));
-    
+
+
+    foreach ($required_files as $file_key) {
+        if (isset($_FILES[$file_key])) {
+            $moved_file = wp_handle_upload($_FILES[$file_key], $upload_overrides);
+            if ($moved_file && !isset($moved_file['error'])) {
+                $uploaded_files[$file_key] = $moved_file['url'];
+            } else {
+                wp_send_json_error(['message' => 'שגיאה בהעלאת קובץ: ' . $moved_file['error']]);
+            }
+        }
+    }
+
     // Save file URLs to user meta
     update_user_meta($user_id, 'wpcf-verification-doc-url', esc_url_raw($uploaded_files['verificationDoc']));
     update_user_meta($user_id, 'wpcf-intent-letter-url', esc_url_raw($uploaded_files['intentLetter']));

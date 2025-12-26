@@ -61,11 +61,13 @@ export const ArticlePage: React.FC = () => {
     <div className="bg-slate-50 min-h-screen pb-12">
       {/* Hero / Header */}
       <div className="relative h-[400px] w-full overflow-hidden">
-        <img
-          src={article.imageUrl}
-          alt={article.title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {article.imageUrl && (
+          <img
+            src={article.imageUrl}
+            alt={article.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
         <div className="absolute bottom-0 left-0 right-0 p-10 max-w-4xl mx-auto w-full z-10">
           <button
