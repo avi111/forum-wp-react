@@ -125,15 +125,15 @@ export const JoinForm: FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      alert(t("joinform_passwords_not_match"));
+      showToast(t("joinform_passwords_not_match"));
       return;
     }
     if (!formData.agreedToBylaws) {
-      alert(t("joinform_bylaws_not_agreed"));
+      showToast(t("joinform_bylaws_not_agreed"));
       return;
     }
     if (!captchaToken) {
-      alert("אנא אמת שאינך רובוט");
+      showToast("אנא אמת שאינך רובוט");
       return;
     }
 

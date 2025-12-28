@@ -32,6 +32,7 @@ import { Brain } from "lucide-react";
 import { initStrings } from "../services/stringService";
 import { useAPI } from "../services/api";
 import { NewsletterModal } from "../components/NewsletterModal";
+import { useToast } from "../context/ToastContext.tsx";
 
 type Fetcher<T> = () => Promise<QueryObserverResult<T, Error>>;
 type EventsFetcher = (
@@ -113,6 +114,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     sendContactForm7,
     submitJoinForm,
   } = useAPI();
+
+  const { showToast } = useToast();
 
   const { data: settings, isLoading: loadingSettings } = useSettings();
 
@@ -203,9 +206,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       try {
         await submitJoinForm(data);
         callback();
-      } catch (error) {
-        console.error("Join failed:", error);
-        alert("אירעה שגיאה בהרשמה. אנא נסה שנית.");
+      } catch (error: unknown) {
+        console.log(error);
+        showToast(
+          (error as { message: string })?.message ||
+            "אירעה שגיאה בהרשמה. אנא נסה שנית.",
+        );
       }
     },
     [submitJoinForm],

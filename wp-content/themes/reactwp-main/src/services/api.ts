@@ -106,7 +106,6 @@ export const useAPI = () => {
       try {
         return await post("join_form_submit", data);
       } catch (error) {
-        console.error("Join form submission failed:", error);
         if (import.meta.env.DEV) {
           await delay(1000);
           return { message: "ההרשמה בוצעה בהצלחה (Mock)" };
