@@ -113,3 +113,19 @@ function enq_react()
   wp_enqueue_script('app');
   wp_enqueue_style('my-style', get_stylesheet_directory_uri() . '/dist/index.css', false, '1.0', 'all');
 }
+
+// Add 'Research Papers' column to Users table
+function iprf_add_research_papers_column( $columns ) {
+    $columns['research_papers'] = 'מאמרי מחקר';
+    return $columns;
+}
+add_filter( 'manage_users_columns', 'iprf_add_research_papers_column' );
+
+function iprf_show_research_papers_column_content( $value, $column_name, $user_id ) {
+    if ( 'research_papers' == $column_name ) {
+        $count = count_user_posts( $user_id, 'research-paper' );
+        return $count;
+    }
+    return $value;
+}
+add_action( 'manage_users_custom_column', 'iprf_show_research_papers_column_content', 10, 3 );
