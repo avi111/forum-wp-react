@@ -29,3 +29,4 @@ wp-content/index.php
 /wp-content/themes/reactwp-main/node_modules/**/*
 /wp-config.php
 !/wp-content/themes/reactwp-main/.env
+/wp-content/themes/reactwp-main/yarn.lock

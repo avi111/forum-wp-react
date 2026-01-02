@@ -1,7 +1,8 @@
 import React, { MouseEvent, TouchEvent, useRef, useState } from "react";
-import { getResearcherName, Researcher } from "../types";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { Researcher } from "../types";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ResearcherCard } from "./ResearcherCard";
 
 interface ResearcherCarouselProps {
   researchers: Researcher[];
@@ -85,8 +86,8 @@ export const ResearcherCarousel: React.FC<ResearcherCarouselProps> = ({
   const onTouchMove = (e: TouchEvent) => handleDragMove(e.touches[0].clientX);
   const onTouchEnd = () => handleDragEnd();
 
-  const handleResearcherClick = (r: Researcher) => {
-    navigate(`/researchers/${r.id}`);
+  const handleResearcherClick = (id: string) => {
+    navigate(`/researchers/${id}`);
   };
 
   const getItemWidthClass = () => "w-full sm:w-1/2 lg:w-1/4";
@@ -140,37 +141,15 @@ export const ResearcherCarousel: React.FC<ResearcherCarouselProps> = ({
               <div
                 key={`${r.id}-${index}`}
                 className={`flex-shrink-0 px-3 cursor-pointer ${getItemWidthClass()}`}
-                style={{}}
+                onClick={(e) => {
+                  if (Math.abs(translateX) > 5) e.preventDefault();
+                }}
               >
-                <div
-                  dir="rtl"
-                  className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group-card"
-                  onClick={(e) => {
-                    if (Math.abs(translateX) > 5) e.preventDefault();
-                    else handleResearcherClick(r);
-                  }}
-                >
-                  <div className="h-48 overflow-hidden relative">
-                    <img
-                      src={r.imageUrl}
-                      alt={getResearcherName(r)}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      draggable={false}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  </div>
-                  <div className="p-4 text-center">
-                    <h3 className="font-bold text-slate-900 truncate">
-                      {getResearcherName(r)}
-                    </h3>
-                    <p className="text-xs text-teal-600 font-bold uppercase tracking-wider mb-2 truncate">
-                      {r.specialization}
-                    </p>
-                    <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
-                      צפה בפרופיל <ArrowRight className="w-3 h-3 mr-1" />
-                    </button>
-                  </div>
-                </div>
+                <ResearcherCard
+                  researcher={r}
+                  onClick={handleResearcherClick}
+                  variant="carousel"
+                />
               </div>
             ))}
           </div>

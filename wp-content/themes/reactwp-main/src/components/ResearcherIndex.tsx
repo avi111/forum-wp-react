@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { getResearcherName, Researcher, UserStatus } from "../types";
-import { ChevronLeft, ChevronRight, MapPin, Search, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ResearcherCard } from "./ResearcherCard";
 
 interface ResearcherIndexProps {
   researchers: Researcher[];
@@ -125,52 +126,12 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {currentResearchers.map((researcher) => (
-              <div
+              <ResearcherCard
                 key={researcher.id}
-                className="group bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                <div className="h-28 bg-gradient-to-l from-indigo-900 to-slate-800 relative">
-                  <div className="absolute inset-0 bg-pattern opacity-10"></div>
-                </div>
-                <div className="px-6 relative pb-6">
-                  <div className="relative -top-12 mb-[-30px]">
-                    <img
-                      src={researcher.imageUrl}
-                      alt={getResearcherName(researcher)}
-                      className="w-24 h-24 rounded-2xl border-4 border-white shadow-md object-cover bg-white"
-                    />
-                  </div>
-
-                  <div className="pt-2">
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                      {getResearcherName(researcher)}
-                    </h3>
-                    <p className="text-teal-600 font-medium text-sm mb-3 uppercase tracking-wide">
-                      {researcher.specialization}
-                    </p>
-
-                    <div className="flex items-center text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-flex">
-                      <MapPin className="w-4 h-4 ml-1" />
-                      {researcher.institution}
-                    </div>
-
-                    <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
-                      {researcher.bio}
-                    </p>
-                  </div>
-                  <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
-                    <span className="text-xs font-semibold text-indigo-900 bg-indigo-50 px-2 py-1 rounded">
-                      חבר פורום
-                    </span>
-                    <button
-                      onClick={() => handleResearcherClick(researcher.id)}
-                      className="text-indigo-600 text-sm font-medium hover:underline cursor-pointer"
-                    >
-                      צפה בפרופיל מלא
-                    </button>
-                  </div>
-                </div>
-              </div>
+                researcher={researcher}
+                onClick={handleResearcherClick}
+                variant="default"
+              />
             ))}
           </div>
 
