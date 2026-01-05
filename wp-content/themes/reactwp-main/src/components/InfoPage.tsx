@@ -1,7 +1,7 @@
 import React from "react";
 import { LucideIcon } from "lucide-react";
 
-interface InfoPageProps {
+export interface InfoPageProps {
   title: string;
   icon: LucideIcon;
   children?: React.ReactNode;

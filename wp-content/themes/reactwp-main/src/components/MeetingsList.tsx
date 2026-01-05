@@ -1,7 +1,7 @@
 import React from "react";
 import { Meeting } from "../types";
 
-interface MeetingsListProps {
+export interface MeetingsListProps {
   meetings: Meeting[];
 }
 

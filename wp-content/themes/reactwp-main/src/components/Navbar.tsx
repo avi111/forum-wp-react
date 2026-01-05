@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useNavigation } from "../hooks/useNavigation";
 
-interface NavbarProps {
+export interface NavbarProps {
   isLoggedIn: boolean;
   onLogout: () => void;
   navItems: NavItem[];

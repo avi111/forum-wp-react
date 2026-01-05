@@ -2,7 +2,7 @@ import React from "react";
 import { Researcher, getResearcherName } from "../types";
 import { ArrowRight, MapPin } from "lucide-react";
 
-interface ResearcherCardProps {
+export interface ResearcherCardProps {
   researcher: Researcher;
   onClick: (id: string) => void;
   variant?: "default" | "carousel";

@@ -1,0 +1,21 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/hero-badge",
+  "version": "0.1.0",
+  "title": "Hero Badge (Chip)",
+  "category": "common",
+  "icon": "tag",
+  "description": "A styled badge/chip with a pulsing dot for the hero section.",
+  "attributes": {
+    "text": {
+      "type": "string",
+      "default": "הפורום הרשמי למחקר אקדמי בישראל"
+    }
+  },
+  "supports": {
+    "html": false
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

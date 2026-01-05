@@ -3,7 +3,7 @@ import { NewsItem } from "../types";
 import { Bell, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-interface NewsTickerProps {
+export interface NewsTickerProps {
   news: NewsItem[];
 }
 

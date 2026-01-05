@@ -50,6 +50,12 @@ function iprf_register_blocks() {
     register_block_type( get_template_directory() . '/blocks/content-paragraph' );
     register_block_type( get_template_directory() . '/blocks/decorative-box' );
     register_block_type( get_template_directory() . '/blocks/grid-container' );
+    
+    // New Hero Blocks
+    register_block_type( get_template_directory() . '/blocks/hero-container' );
+    register_block_type( get_template_directory() . '/blocks/hero-subtitle' );
+    register_block_type( get_template_directory() . '/blocks/styled-heading' );
+    register_block_type( get_template_directory() . '/blocks/hero-badge' );
 }
 
 function get_data_map()

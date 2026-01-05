@@ -2,7 +2,7 @@ import React from "react";
 import { Training } from "../types";
 import { TrainingCard } from "./TrainingCard";
 
-interface TrainingListProps {
+export interface TrainingListProps {
   trainings: Training[];
 }
 

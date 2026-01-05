@@ -1,0 +1,29 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/hero-container",
+  "version": "1.0.0",
+  "title": "IPRF Hero Container",
+  "category": "layout",
+  "icon": "cover-image",
+  "description": "A hero section with background image and inner content.",
+  "attributes": {
+    "backgroundUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "imageUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "imageId": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "supports": {
+    "align": ["full", "wide"]
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

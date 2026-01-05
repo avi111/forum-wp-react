@@ -3,7 +3,7 @@ import { CalendarEvent } from "../types";
 import { Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-interface HomeEventsProps {
+export interface HomeEventsProps {
   events: CalendarEvent[];
 }
 

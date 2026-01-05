@@ -102,9 +102,12 @@ export const useAPI = () => {
   }, []);
 
   const submitJoinForm = useCallback(
-    async (data: any): Promise<{ message: string }> => {
+    async (data: Record<string, unknown>): Promise<{ message: string }> => {
       try {
-        return await post("join_form_submit", data);
+        // Cast data to Record<string, string | Blob> for post function
+        // This assumes the data passed is compatible with what post expects
+        // In a real app, you might want stronger validation here
+        return await post("join_form_submit", data as Record<string, string | Blob>);
       } catch (error) {
         if (import.meta.env.DEV) {
           await delay(1000);

@@ -4,7 +4,7 @@ import { HomeEditorial } from "./HomeEditorial";
 import { HomeResearch } from "./HomeResearch";
 import { HomeEvents } from "./HomeEvents";
 
-interface HomeLatestUpdatesProps {
+export interface HomeLatestUpdatesProps {
   editorialArticles: Article[];
   researcherArticles: Article[];
   events: CalendarEvent[];

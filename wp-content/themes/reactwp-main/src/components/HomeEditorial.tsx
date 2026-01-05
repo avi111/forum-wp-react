@@ -3,7 +3,7 @@ import { Article } from "../types";
 import { FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-interface HomeEditorialProps {
+export interface HomeEditorialProps {
   articles: Article[];
   limit: number;
 }

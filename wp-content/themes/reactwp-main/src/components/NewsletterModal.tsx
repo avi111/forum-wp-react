@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { X, Mail } from "lucide-react";
 import { useAPI } from "../services/api.ts";
 
-interface NewsletterModalProps {
+export interface NewsletterModalProps {
   isOpen: boolean;
   onClose: () => void;
 }

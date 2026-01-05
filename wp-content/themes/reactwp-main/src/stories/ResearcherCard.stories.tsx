@@ -38,6 +38,7 @@ export const Default: Story = {
   args: {
     researcher: mockResearcher,
     variant: 'default',
+    onClick: (id: string) => console.log('Clicked researcher:', id),
   },
 };
 
@@ -45,6 +46,7 @@ export const CarouselVariant: Story = {
   args: {
     researcher: mockResearcher,
     variant: 'carousel',
+    onClick: (id: string) => console.log('Clicked researcher:', id),
   },
   decorators: [
     (Story) => (
@@ -66,6 +68,7 @@ export const LongBio: Story = {
            'עוד קצת טקסט כדי להיות בטוחים שזה מספיק ארוך.',
     },
     variant: 'default',
+    onClick: (id: string) => console.log('Clicked researcher:', id),
   },
 };
 
@@ -77,5 +80,6 @@ export const LongName: Story = {
       lastName: 'אלכסנדר מוחמד אבן סינא',
     },
     variant: 'default',
+    onClick: (id: string) => console.log('Clicked researcher:', id),
   },
 };

@@ -3,7 +3,7 @@ import { Researcher, UserStatus } from "../types";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext.tsx";
 
-interface FooterProps {
+export interface FooterProps {
   currentUser: Researcher | null;
   onSimulateApproval?: () => void;
 }

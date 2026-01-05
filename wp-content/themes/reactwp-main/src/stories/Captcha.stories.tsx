@@ -20,4 +20,8 @@ type Story = StoryObj<typeof meta>;
 // In a Storybook environment without the proper env vars or domain whitelisting,
 // it might show an error or not render fully.
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    onVerify: (token: string) => console.log('Captcha verified with token:', token),
+  },
+};

@@ -1,0 +1,21 @@
+{
+  "apiVersion": 2,
+  "name": "iprf/styled-heading",
+  "version": "1.0.0",
+  "title": "IPRF Styled Heading",
+  "category": "text",
+  "icon": "editor-textcolor",
+  "description": "A heading with styled words and line breaks.",
+  "attributes": {
+    "items": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "textdomain": "iprf",
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

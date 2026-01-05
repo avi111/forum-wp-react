@@ -65,6 +65,7 @@ export const Default: Story = {
     totalPages: 3,
     currentPage: 1,
     isLoading: false,
+    onPageChange: (page: number) => console.log('Page changed to:', page),
   },
 };
 
@@ -74,6 +75,7 @@ export const Loading: Story = {
     totalPages: 1,
     currentPage: 1,
     isLoading: true,
+    onPageChange: (page: number) => console.log('Page changed to:', page),
   },
 };
 
@@ -83,6 +85,7 @@ export const LoadingWithData: Story = {
     totalPages: 3,
     currentPage: 1,
     isLoading: true,
+    onPageChange: (page: number) => console.log('Page changed to:', page),
   },
 };
 
@@ -92,5 +95,6 @@ export const Empty: Story = {
     totalPages: 1,
     currentPage: 1,
     isLoading: false,
+    onPageChange: (page: number) => console.log('Page changed to:', page),
   },
 };

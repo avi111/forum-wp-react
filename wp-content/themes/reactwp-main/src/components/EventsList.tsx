@@ -3,7 +3,7 @@ import { CalendarEvent } from "../types";
 import { Calendar, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-interface EventsListProps {
+export interface EventsListProps {
   events: CalendarEvent[];
   totalPages: number;
   currentPage: number;
@@ -74,15 +74,17 @@ export const EventsList: React.FC<EventsListProps> = ({
               </h3>
               <p className="text-slate-600 text-sm">{event.location}</p>
               {event.description && (
-                  <p className="text-slate-500 text-xs mt-2 line-clamp-2">{event.description}</p>
+                <p className="text-slate-500 text-xs mt-2 line-clamp-2">
+                  {event.description}
+                </p>
               )}
             </div>
-            <button 
-                onClick={(e) => {
-                    e.stopPropagation();
-                    handleEventClick(event.id);
-                }}
-                className="bg-slate-100 text-slate-700 px-6 py-2 rounded-lg text-sm font-bold hover:bg-slate-200 mr-auto whitespace-nowrap transition-colors"
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEventClick(event.id);
+              }}
+              className="bg-slate-100 text-slate-700 px-6 py-2 rounded-lg text-sm font-bold hover:bg-slate-200 mr-auto whitespace-nowrap transition-colors"
             >
               לפרטים והרשמה
             </button>

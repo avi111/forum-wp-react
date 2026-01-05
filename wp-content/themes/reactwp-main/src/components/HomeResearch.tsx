@@ -3,7 +3,7 @@ import { Article } from "../types";
 import { FlaskConical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-interface HomeResearchProps {
+export interface HomeResearchProps {
   articles: Article[];
   limit: number;
 }

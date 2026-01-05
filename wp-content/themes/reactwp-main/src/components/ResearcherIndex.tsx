@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ResearcherCard } from "./ResearcherCard";
 
-interface ResearcherIndexProps {
+export interface ResearcherIndexProps {
   researchers: Researcher[];
 }
 

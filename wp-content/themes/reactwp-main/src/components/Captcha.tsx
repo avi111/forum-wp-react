@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-interface CaptchaProps {
+export interface CaptchaProps {
   onVerify: (token: string) => void;
 }
 
