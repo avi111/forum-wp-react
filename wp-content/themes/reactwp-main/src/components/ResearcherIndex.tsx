@@ -1,57 +1,23 @@
-import React, { useState } from "react";
-import { getResearcherName, Researcher, UserStatus } from "../types";
-import { ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import React from "react";
+import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ResearcherCard } from "./ResearcherCard";
+import { useResearchersFilter } from "../hooks/useResearchersFilter";
 
-export interface ResearcherIndexProps {
-  researchers: Researcher[];
-}
+export const ResearcherIndex: React.FC = () => {
+  const {
+    filteredResearchers,
+    currentResearchers,
+    totalPages,
+    clearFilters,
+    setCurrentPage,
+    currentPage,
+  } = useResearchersFilter();
 
-const ITEMS_PER_PAGE = 10;
-
-export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
-  researchers,
-}) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
-
-  // Filter logic: Check name, institution, or specialization
-  const filteredResearchers = researchers.filter((r) => {
-    const term = searchTerm.toLowerCase();
-    const isActive = r.status === UserStatus.ACTIVE;
-    const fullName = getResearcherName(r).toLowerCase();
-
-    const matchesSearch =
-      fullName.includes(term) ||
-      r.institution.toLowerCase().includes(term) ||
-      r.specialization.toLowerCase().includes(term);
-
-    return isActive && matchesSearch;
-  });
-
-  // Pagination Logic
-  const totalPages = Math.ceil(filteredResearchers.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const currentResearchers = filteredResearchers.slice(
-    startIndex,
-    startIndex + ITEMS_PER_PAGE,
-  );
 
   const handleResearcherClick = (id: string) => {
     navigate(`/researchers/${id}`);
-  };
-
-  const handleSelectSuggestion = (name: string) => {
-    setSearchTerm(name);
-    setCurrentPage(1); // Reset to first page on selection
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on typing
   };
 
   const goToPage = (page: number) => {
@@ -59,137 +25,65 @@ export const ResearcherIndex: React.FC<ResearcherIndexProps> = ({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  return (
-    <div className="max-w-7xl mx-auto py-16 px-4 min-h-screen">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-slate-900 mb-4">
-          אינדקס חוקרים
-        </h2>
-        <div className="w-24 h-1.5 bg-teal-500 mx-auto rounded-full"></div>
-        <p className="mt-4 text-xl text-slate-500">
-          הכירו את המובילים בתחום המחקר הפסיכדלי בישראל
-        </p>
-      </div>
-
-      {/* Search Section with Autocomplete */}
-      <div className="mb-12 flex justify-center relative z-20">
-        <div className="relative w-full max-w-lg">
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-            placeholder="חיפוש חוקר לפי שם, מוסד או התמחות..."
-            className="w-full p-4 pr-12 pl-10 border border-slate-200 rounded-full shadow-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none text-lg transition-all"
+  return filteredResearchers.length > 0 ? (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {currentResearchers.map((researcher) => (
+          <ResearcherCard
+            key={researcher.id}
+            researcher={researcher}
+            onClick={handleResearcherClick}
           />
-          <Search className="absolute top-4 right-4 text-slate-400 w-6 h-6" />
-
-          {searchTerm && (
-            <button
-              onClick={() => {
-                setSearchTerm("");
-                setCurrentPage(1);
-              }}
-              className="absolute top-4 left-4 text-slate-300 hover:text-slate-500"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          )}
-
-          {/* Autocomplete Dropdown */}
-          {isFocused && searchTerm && filteredResearchers.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden animate-fade-in z-30">
-              <div className="max-h-60 overflow-y-auto">
-                {filteredResearchers.slice(0, 6).map((r) => (
-                  <button
-                    key={`suggestion-${r.id}`}
-                    onClick={() => handleSelectSuggestion(getResearcherName(r))}
-                    className="w-full text-right px-4 py-3 hover:bg-slate-50 border-b border-slate-50 last:border-0 transition-colors flex justify-between items-center group"
-                  >
-                    <span className="font-medium text-slate-700 group-hover:text-teal-600">
-                      {getResearcherName(r)}
-                    </span>
-                    <span className="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-full">
-                      {r.specialization}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        ))}
       </div>
 
-      {/* Results Grid */}
-      {filteredResearchers.length > 0 ? (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {currentResearchers.map((researcher) => (
-              <ResearcherCard
-                key={researcher.id}
-                researcher={researcher}
-                onClick={handleResearcherClick}
-                variant="default"
-              />
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 mt-8">
+          <button
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            <ChevronRight className="w-5 h-5 text-slate-600" />
+          </button>
+
+          <div className="flex items-center gap-1">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => goToPage(page)}
+                className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
+                  currentPage === page
+                    ? "bg-teal-600 text-white shadow-md"
+                    : "text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                {page}
+              </button>
             ))}
           </div>
 
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex justify-center items-center gap-2 mt-8">
-              <button
-                onClick={() => goToPage(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronRight className="w-5 h-5 text-slate-600" />
-              </button>
-
-              <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => goToPage(page)}
-                      className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
-                        currentPage === page
-                          ? "bg-teal-600 text-white shadow-md"
-                          : "text-slate-600 hover:bg-slate-100"
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  ),
-                )}
-              </div>
-
-              <button
-                onClick={() => goToPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <ChevronLeft className="w-5 h-5 text-slate-600" />
-              </button>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
-          <Search className="w-16 h-16 mx-auto text-slate-300 mb-4" />
-          <h3 className="text-xl font-bold text-slate-700">לא נמצאו חוקרים</h3>
-          <p className="text-slate-500">נסה לחפש מונח אחר או בדוק את האיות</p>
           <button
-            onClick={() => {
-              setSearchTerm("");
-              setCurrentPage(1);
-            }}
-            className="mt-4 text-teal-600 font-bold hover:underline"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            נקה חיפוש
+            <ChevronLeft className="w-5 h-5 text-slate-600" />
           </button>
         </div>
       )}
+    </>
+  ) : (
+    <div className="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+      <Search className="w-16 h-16 mx-auto text-slate-300 mb-4" />
+      <h3 className="text-xl font-bold text-slate-700">לא נמצאו חוקרים</h3>
+      <p className="text-slate-500">נסה לחפש מונח אחר או בדוק את האיות</p>
+      <button
+        onClick={clearFilters}
+        className="mt-4 text-teal-600 font-bold hover:underline"
+      >
+        נקה חיפוש וסינון
+      </button>
     </div>
   );
 };

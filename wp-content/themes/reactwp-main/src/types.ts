@@ -150,7 +150,9 @@ export interface NavItem {
 }
 
 export const getResearcherName = (r: Researcher): string => {
-  return r.firstName + " " + r.lastName;
+  const first = r.firstName || "";
+  const last = r.lastName || "";
+  return `${first} ${last}`.trim();
 };
 
 export type OnJoin = (
