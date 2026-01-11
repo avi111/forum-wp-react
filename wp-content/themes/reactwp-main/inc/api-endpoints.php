@@ -7,14 +7,16 @@ if (!defined('ABSPATH')) {
 /**
  * Helper function to format response
  */
-function iprf_send_response($data) {
+function iprf_send_response($data)
+{
     wp_send_json_success($data);
 }
 
 /**
  * Helper to get Toolset field value (raw)
  */
-function iprf_get_field($post_id, $field_slug, $single = true) {
+function iprf_get_field($post_id, $field_slug, $single = true)
+{
     // Toolset usually prefixes fields with 'wpcf-'
     return get_post_meta($post_id, 'wpcf-' . $field_slug, $single);
 }
@@ -23,7 +25,8 @@ function iprf_get_field($post_id, $field_slug, $single = true) {
  * Helper function to get options from a Custom Post Type.
  * Returns array of { value: slug, label: title }
  */
-function iprf_get_options_from_cpt($post_type) {
+function iprf_get_options_from_cpt($post_type)
+{
     $options = [];
     $query = new WP_Query([
         'post_type' => $post_type,
@@ -72,7 +75,8 @@ function iprf_get_options_list_from_cpt($post_type)
  * Helper function to get strings map from a Custom Post Type.
  * Returns associative array { slug: title }
  */
-function iprf_get_strings_map($post_type) {
+function iprf_get_strings_map($post_type)
+{
     $strings = [];
     $query = new WP_Query([
         'post_type' => $post_type,
@@ -94,7 +98,8 @@ function iprf_get_strings_map($post_type) {
 /**
  * Helper function to convert WP List block to Tailwind Steps
  */
-function iprf_convert_list_to_tailwind_steps($html) {
+function iprf_convert_list_to_tailwind_steps($html)
+{
     if (empty($html)) return '';
 
     $dom = new DOMDocument();
@@ -105,7 +110,7 @@ function iprf_convert_list_to_tailwind_steps($html) {
     libxml_clear_errors();
 
     $list_items = $dom->getElementsByTagName('li');
-    
+
     if ($list_items->length === 0) {
         return $html; // Return original if no list items found
     }
@@ -128,7 +133,7 @@ function iprf_convert_list_to_tailwind_steps($html) {
         $output .= '<span class="font-bold text-indigo-600">' . $counter . '.</span>';
         $output .= '<p>' . $inner_html . '</p>';
         $output .= '</div>';
-        
+
         $counter++;
     }
 
@@ -143,7 +148,8 @@ function iprf_convert_list_to_tailwind_steps($html) {
 add_action('wp_ajax_fetchSettings', 'iprf_fetch_settings');
 add_action('wp_ajax_nopriv_fetchSettings', 'iprf_fetch_settings');
 
-function iprf_fetch_settings() {
+function iprf_fetch_settings()
+{
     $settings = [
         // Fetch options from CPTs
         'genders' => iprf_get_options_from_cpt('gender'),
@@ -175,7 +181,8 @@ function iprf_fetch_settings() {
 add_action('wp_ajax_fetchTemplate', 'iprf_fetch_template');
 add_action('wp_ajax_nopriv_fetchTemplate', 'iprf_fetch_template');
 
-function iprf_fetch_template() {
+function iprf_fetch_template()
+{
     $template_name = isset($_POST['name']) ? sanitize_text_field($_POST['name']) : '';
     $html = '';
 
@@ -186,13 +193,13 @@ function iprf_fetch_template() {
             'post_status' => 'publish',
             'numberposts' => 1
         ];
-        
+
         $query = new WP_Query($args);
-        
+
         if ($query->have_posts()) {
             $query->the_post();
             $content = get_the_content();
-            
+
             $html = apply_filters('the_content', $content);
 
             if ($template_name === 'bylaws-modal') {
@@ -213,7 +220,8 @@ function iprf_fetch_template() {
 add_action('wp_ajax_fetchResearchers', 'iprf_fetch_researchers');
 add_action('wp_ajax_nopriv_fetchResearchers', 'iprf_fetch_researchers');
 
-function iprf_fetch_researchers() {
+function iprf_fetch_researchers()
+{
     remove_all_actions('pre_get_users');
 
     $args = [
@@ -233,7 +241,7 @@ function iprf_fetch_researchers() {
                 if (is_numeric($image_url)) {
                     $image_src = wp_get_attachment_image_src($image_url, 'thumbnail');
                     $image_url = $image_src ? $image_src[0] : '';
-                } 
+                }
                 // If it's already a URL, we might need to process it to get a thumbnail size if possible, 
                 // but Toolset often stores the raw URL. If it stores ID, the above handles it.
                 // If it stores a full URL, getting a thumbnail version is harder without the ID.
@@ -241,13 +249,13 @@ function iprf_fetch_researchers() {
                 // or just assume if it's a URL we use it. 
                 // BUT, the user specifically asked for thumbnail size.
                 // If 'wpcf-profile-image' stores a URL, we can't easily get the thumbnail unless we find the attachment ID.
-                
+
                 // Let's try to see if we can get the attachment ID from the URL if it is a URL
                 else {
                     $attachment_id = attachment_url_to_postid($image_url);
                     if ($attachment_id) {
-                         $image_src = wp_get_attachment_image_src($attachment_id, 'thumbnail');
-                         $image_url = $image_src ? $image_src[0] : $image_url;
+                        $image_src = wp_get_attachment_image_src($attachment_id, 'thumbnail');
+                        $image_url = $image_src ? $image_src[0] : $image_url;
                     }
                 }
             } else {
@@ -260,9 +268,10 @@ function iprf_fetch_researchers() {
                 'firstName' => $user->first_name,
                 'lastName' => $user->last_name,
                 'email' => $user->user_email,
-                'institution' => get_user_meta($user->ID, 'wpcf-institution', true),
-                'specialization' => get_user_meta($user->ID, 'wpcf-specialization', true),
-                'bio' => get_user_meta($user->ID, 'wpcf-bio', true),
+                'institution' => !empty(get_user_meta($user->ID, 'wpcf-institution', true)) ? get_user_meta($user->ID, 'wpcf-institution', true) : 'N/A',
+                'specialization' => !empty(get_user_meta($user->ID, 'wpcf-main-specialization', true)) ? get_user_meta($user->ID, 'wpcf-main-specialization', true) : 'N/A',
+                'sub-specialization' => get_user_meta($user->ID, 'wpcf-sub-specialization', true),
+                'bio' => $user->description,
                 'status' => 'ACTIVE',
                 'imageUrl' => $image_url,
                 'title' => get_user_meta($user->ID, 'wpcf-academic-title', true),
@@ -281,7 +290,8 @@ function iprf_fetch_researchers() {
 add_action('wp_ajax_fetchArticles', 'iprf_fetch_articles');
 add_action('wp_ajax_nopriv_fetchArticles', 'iprf_fetch_articles');
 
-function iprf_fetch_articles() {
+function iprf_fetch_articles()
+{
     $args = [
         'post_type' => ['post', 'research-paper'],
         'posts_per_page' => 20,
@@ -294,7 +304,7 @@ function iprf_fetch_articles() {
     while ($query->have_posts()) {
         $query->the_post();
         $is_editorial = get_post_type() === 'post';
-        
+
         $articles[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
@@ -306,7 +316,7 @@ function iprf_fetch_articles() {
             'isEditorial' => $is_editorial,
             'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
             'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
-            'attachments' => [] 
+            'attachments' => []
         ];
     }
     wp_reset_postdata();
@@ -325,11 +335,12 @@ function iprf_fetch_articles() {
 add_action('wp_ajax_fetchArticlesPaged', 'iprf_fetch_articles_paged');
 add_action('wp_ajax_nopriv_fetchArticlesPaged', 'iprf_fetch_articles_paged');
 
-function iprf_fetch_articles_paged() {
+function iprf_fetch_articles_paged()
+{
     $page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
     $limit = isset($_POST['limit']) ? max(1, intval($_POST['limit'])) : 10;
     $type = isset($_POST['type']) ? sanitize_text_field($_POST['type']) : '';
-    $tag  = isset($_POST['tag']) ? sanitize_text_field($_POST['tag']) : '';
+    $tag = isset($_POST['tag']) ? sanitize_text_field($_POST['tag']) : '';
 
     $post_types = ['post', 'research-paper'];
     if ($type === 'editorial') {
@@ -357,8 +368,8 @@ function iprf_fetch_articles_paged() {
         $args['tax_query'] = [
             [
                 'taxonomy' => 'post_tag',
-                'field'    => 'slug',
-                'terms'    => [$slug],
+                'field' => 'slug',
+                'terms' => [$slug],
             ]
         ];
     }
@@ -396,7 +407,8 @@ function iprf_fetch_articles_paged() {
 add_action('wp_ajax_fetchTags', 'iprf_fetch_tags');
 add_action('wp_ajax_nopriv_fetchTags', 'iprf_fetch_tags');
 
-function iprf_fetch_tags() {
+function iprf_fetch_tags()
+{
     // Get WordPress terms for post_tag taxonomy
     $terms = get_terms([
         'taxonomy' => 'post_tag',
@@ -425,7 +437,8 @@ function iprf_fetch_tags() {
 add_action('wp_ajax_fetchNews', 'iprf_fetch_news');
 add_action('wp_ajax_nopriv_fetchNews', 'iprf_fetch_news');
 
-function iprf_fetch_news() {
+function iprf_fetch_news()
+{
     $args = [
         'post_type' => 'news',
         'posts_per_page' => 10,
@@ -464,7 +477,8 @@ function iprf_fetch_news() {
 add_action('wp_ajax_fetchEvents', 'iprf_fetch_events');
 add_action('wp_ajax_nopriv_fetchEvents', 'iprf_fetch_events');
 
-function iprf_fetch_events() {
+function iprf_fetch_events()
+{
     $page = isset($_POST['page']) ? intval($_POST['page']) : 1;
     $limit = isset($_POST['limit']) ? intval($_POST['limit']) : 10;
     $time_filter = isset($_POST['timeFilter']) ? sanitize_text_field($_POST['timeFilter']) : 'all';
@@ -496,10 +510,10 @@ function iprf_fetch_events() {
 
     while ($query->have_posts()) {
         $query->the_post();
-        
+
         $raw_date = iprf_get_field(get_the_ID(), 'event-date');
         $date_ts = intval($raw_date);
-        
+
         $events[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
@@ -522,7 +536,7 @@ function iprf_fetch_events() {
         'data' => $events,
         'total' => $query->found_posts
     ];
-    
+
     wp_reset_postdata();
     iprf_send_response($response);
 }
@@ -533,9 +547,10 @@ function iprf_fetch_events() {
 add_action('wp_ajax_fetchMeetings', 'iprf_fetch_meetings');
 add_action('wp_ajax_nopriv_fetchMeetings', 'iprf_fetch_meetings');
 
-function iprf_fetch_meetings() {
+function iprf_fetch_meetings()
+{
     $today = current_time('timestamp');
-    
+
     $args = [
         'post_type' => 'meeting',
         'posts_per_page' => -1,
@@ -575,7 +590,8 @@ function iprf_fetch_meetings() {
 add_action('wp_ajax_fetchTrainings', 'iprf_fetch_trainings');
 add_action('wp_ajax_nopriv_fetchTrainings', 'iprf_fetch_trainings');
 
-function iprf_fetch_trainings() {
+function iprf_fetch_trainings()
+{
     $args = [
         'post_type' => 'training',
         'posts_per_page' => -1,
@@ -586,7 +602,7 @@ function iprf_fetch_trainings() {
 
     while ($query->have_posts()) {
         $query->the_post();
-        
+
         $syllabus = [];
         // This is a placeholder. For a real Toolset RFG, you'd need a more complex query.
         $syllabus_content = iprf_get_field(get_the_ID(), 'syllabus-content');
@@ -621,7 +637,8 @@ function iprf_fetch_trainings() {
 add_action('wp_ajax_sendContactMessage', 'iprf_send_contact_message');
 add_action('wp_ajax_nopriv_sendContactMessage', 'iprf_send_contact_message');
 
-function iprf_send_contact_message() {
+function iprf_send_contact_message()
+{
     $full_name = sanitize_text_field($_POST['fullName']);
     $email = sanitize_email($_POST['email']);
     $message = sanitize_textarea_field($_POST['message']);
@@ -652,7 +669,8 @@ function iprf_send_contact_message() {
 add_action('wp_ajax_fetchCurrentUser', 'iprf_fetch_current_user');
 add_action('wp_ajax_nopriv_fetchCurrentUser', 'iprf_fetch_current_user');
 
-function iprf_fetch_current_user() {
+function iprf_fetch_current_user()
+{
     if (!is_user_logged_in()) {
         iprf_send_response(null);
         return;
@@ -668,8 +686,8 @@ function iprf_fetch_current_user() {
         } else {
             $attachment_id = attachment_url_to_postid($image_url);
             if ($attachment_id) {
-                 $image_src = wp_get_attachment_image_src($attachment_id, 'thumbnail');
-                 $image_url = $image_src ? $image_src[0] : $image_url;
+                $image_src = wp_get_attachment_image_src($attachment_id, 'thumbnail');
+                $image_url = $image_src ? $image_src[0] : $image_url;
             }
         }
     } else {
@@ -701,7 +719,8 @@ function iprf_fetch_current_user() {
 add_action('wp_ajax_subscribe_newsletter', 'iprf_subscribe_newsletter');
 add_action('wp_ajax_nopriv_subscribe_newsletter', 'iprf_subscribe_newsletter');
 
-function iprf_subscribe_newsletter() {
+function iprf_subscribe_newsletter()
+{
     $email = sanitize_email($_POST['email']);
 
     if (!is_email($email)) {
@@ -712,11 +731,11 @@ function iprf_subscribe_newsletter() {
     if (class_exists(\MailPoet\API\API::class)) {
         try {
             $mailpoet_api = \MailPoet\API\API::MP('v1');
-            
+
             // Get the default list (usually ID 1, or find by name)
             // You can also create a specific list for this form
             $list_id = 3;
-            
+
             // Check if subscriber exists
             try {
                 $subscriber = $mailpoet_api->getSubscriber($email);
@@ -755,7 +774,8 @@ function iprf_subscribe_newsletter() {
  */
 add_action('wp_ajax_nopriv_join_form_submit', 'iprf_join_form_submit');
 
-function iprf_join_form_submit() {
+function iprf_join_form_submit()
+{
     // Validation
     $required_fields = [
         'username' => 'שם משתמש',
@@ -791,7 +811,7 @@ function iprf_join_form_submit() {
 
     // Verify reCAPTCHA
     $recaptcha_secret = defined('RECAPTCHA_SECRET_KEY') ? RECAPTCHA_SECRET_KEY : '';
-    
+
     if ($recaptcha_secret) {
         $verify_response = wp_remote_post('https://www.google.com/recaptcha/api/siteverify', [
             'body' => [
@@ -842,10 +862,10 @@ function iprf_join_form_submit() {
     $userdata = [
         'user_login' => sanitize_user($_POST['username']),
         'user_email' => $email,
-        'user_pass'  => $_POST['password'],
+        'user_pass' => $_POST['password'],
         'first_name' => sanitize_text_field($_POST['firstName']),
-        'last_name'  => sanitize_text_field($_POST['lastName']),
-        'role'       => 'subscriber', // Set role to subscriber
+        'last_name' => sanitize_text_field($_POST['lastName']),
+        'role' => 'subscriber', // Set role to subscriber
     ];
 
     $user_id = wp_insert_user($userdata);
