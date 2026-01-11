@@ -143,6 +143,44 @@ function iprf_convert_list_to_tailwind_steps($html)
 }
 
 /**
+ * Helper function to get attachments from 'wpcf-pdf' meta field
+ */
+function iprf_get_post_attachments($post_id)
+{
+    $attachments_data = [];
+    $pdf_urls = get_post_meta($post_id, 'wpcf-pdf', false);
+
+    if (!empty($pdf_urls)) {
+        foreach ($pdf_urls as $url) {
+            if (empty($url)) continue;
+
+            $name = basename($url);
+            // Decode URL to handle Hebrew filenames correctly in display
+            $name = urldecode($name);
+            
+            $type = pathinfo($url, PATHINFO_EXTENSION);
+            $size = '';
+
+            $attachment_id = attachment_url_to_postid($url);
+            if ($attachment_id) {
+                $file_path = get_attached_file($attachment_id);
+                if ($file_path && file_exists($file_path)) {
+                    $size = size_format(filesize($file_path), 1);
+                }
+            }
+
+            $attachments_data[] = [
+                'name' => $name,
+                'url' => $url,
+                'type' => $type,
+                'size' => $size,
+            ];
+        }
+    }
+    return $attachments_data;
+}
+
+/**
  * 1. Fetch Settings
  */
 add_action('wp_ajax_fetchSettings', 'iprf_fetch_settings');
@@ -316,7 +354,7 @@ function iprf_fetch_articles()
             'isEditorial' => $is_editorial,
             'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
             'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
-            'attachments' => []
+            'attachments' => iprf_get_post_attachments(get_the_ID())
         ];
     }
     wp_reset_postdata();
@@ -392,7 +430,7 @@ function iprf_fetch_articles_paged()
             'isEditorial' => $is_editorial,
             'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
             'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
-            'attachments' => []
+            'attachments' => iprf_get_post_attachments(get_the_ID())
         ];
     }
     wp_reset_postdata();

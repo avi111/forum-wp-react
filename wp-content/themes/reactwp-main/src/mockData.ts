@@ -649,6 +649,7 @@ export const INITIAL_ARTICLES: Article[] = [
     tags: ["רגולציה", "פסילוסיבין", "בריאות הנפש"],
     imageUrl:
       "https://images.unsplash.com/photo-1555679427-1f6dfcce943b?auto=format&fit=crop&q=80&w=800",
+    attachments: [],
   },
   {
     id: "2",
@@ -671,6 +672,7 @@ export const INITIAL_ARTICLES: Article[] = [
     tags: ["MDMA", "PTSD", "מחקר קליני"],
     imageUrl:
       "https://images.unsplash.com/photo-1584362917165-526a968579e8?auto=format&fit=crop&q=80&w=800",
+    attachments: [],
   },
   {
     id: "3",
@@ -693,6 +695,7 @@ export const INITIAL_ARTICLES: Article[] = [
     tags: ["LSD", "מדעי המוח", "fMRI"],
     imageUrl:
       "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800",
+    attachments: [],
   },
   {
     id: "4",
@@ -714,6 +717,7 @@ export const INITIAL_ARTICLES: Article[] = [
     tags: ["כנס", "סקירה", 'חו"ל'],
     imageUrl:
       "https://images.unsplash.com/photo-1544531586-fde5298cdd40?auto=format&fit=crop&q=80&w=800",
+    attachments: [],
   },
   {
     id: "5",
@@ -736,6 +740,7 @@ export const INITIAL_ARTICLES: Article[] = [
     tags: ["מיקרודוזינג", "יצירתיות", "פסיכולוגיה"],
     imageUrl:
       "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?auto=format&fit=crop&q=80&w=800",
+    attachments: [],
   },
   {
     id: "6",
@@ -764,6 +769,7 @@ export const INITIAL_ARTICLES: Article[] = [
     tags: ["ראיון", "מדיניות", "בריאות הנפש"],
     imageUrl:
       "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
+    attachments: [],
   },
   {
     id: "7",
