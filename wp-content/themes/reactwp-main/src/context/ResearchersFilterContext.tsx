@@ -54,6 +54,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     const institutionParam = searchParams.get("institution");
     const specializationParam = searchParams.get("specialization");
+    const subSpecializationParam = searchParams.get("subSpecialization");
     
     if (institutionParam) {
       setSelectedInstitution(institutionParam);
@@ -61,6 +62,10 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
     
     if (specializationParam) {
       setSelectedSpecialization(specializationParam);
+    }
+
+    if (subSpecializationParam) {
+      setSelectedSubSpecialization(subSpecializationParam);
     }
   }, [searchParams]);
 

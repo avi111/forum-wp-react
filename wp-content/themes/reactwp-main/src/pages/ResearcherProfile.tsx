@@ -75,6 +75,10 @@ export const ResearcherProfile: React.FC = () => {
     navigate(`/researchers?specialization=${encodeURIComponent(researcher.specialization)}`);
   };
 
+  const handleSubSpecializationClick = (sub: string) => {
+    navigate(`/researchers?subSpecialization=${encodeURIComponent(sub)}`);
+  };
+
   return (
     <div className="bg-slate-50 min-h-screen pb-12">
       {/* Profile Header */}
@@ -198,7 +202,8 @@ export const ResearcherProfile: React.FC = () => {
                         {researcher.subSpecializations.map((sub) => (
                           <span
                             key={sub}
-                            className="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded"
+                            className="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded cursor-pointer hover:bg-teal-100 hover:text-teal-700 transition-colors"
+                            onClick={() => handleSubSpecializationClick(sub)}
                           >
                             {sub}
                           </span>
