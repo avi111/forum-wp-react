@@ -5,14 +5,23 @@ import { ArrowRight, MapPin } from "lucide-react";
 export interface ResearcherCardProps {
   researcher: Researcher;
   onClick: (id: string) => void;
+  onSpecializationClick?: (specialization: string) => void;
   variant?: "default" | "carousel";
 }
 
 export const ResearcherCard: React.FC<ResearcherCardProps> = ({
   researcher,
   onClick,
+  onSpecializationClick,
   variant = "default",
 }) => {
+  const handleSpecializationClick = (e: React.MouseEvent) => {
+    if (onSpecializationClick) {
+      e.stopPropagation();
+      onSpecializationClick(researcher.specialization);
+    }
+  };
+
   if (variant === "carousel") {
     return (
       <div
@@ -33,7 +42,10 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
           <h3 className="font-bold text-slate-900 truncate">
             {getResearcherName(researcher)}
           </h3>
-          <p className="text-xs text-teal-600 font-bold uppercase tracking-wider mb-2 truncate">
+          <p 
+            className={`text-xs text-teal-600 font-bold uppercase tracking-wider mb-2 truncate ${onSpecializationClick ? "cursor-pointer hover:underline" : ""}`}
+            onClick={handleSpecializationClick}
+          >
             {researcher.specialization}
           </p>
           <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
@@ -65,7 +77,10 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
           >
             {getResearcherName(researcher)}
           </h3>
-          <p className="text-teal-600 font-medium text-sm mb-3 uppercase tracking-wide">
+          <p 
+            className={`text-teal-600 font-medium text-sm mb-3 uppercase tracking-wide inline-block ${onSpecializationClick ? "cursor-pointer hover:underline" : ""}`}
+            onClick={handleSpecializationClick}
+          >
             {researcher.specialization}
           </p>
 
