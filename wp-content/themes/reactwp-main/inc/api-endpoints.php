@@ -300,6 +300,11 @@ function iprf_fetch_researchers()
                 $image_url = get_avatar_url($user->ID, ['size' => 400]);
             }
 
+            // Get websites (can be multiple)
+            $websites = get_user_meta($user->ID, 'wpcf-website', false);
+            // Filter out empty values
+            $websites = array_filter($websites);
+
             $researchers[] = [
                 'id' => (string)$user->ID,
                 'username' => $user->user_login,
@@ -315,6 +320,7 @@ function iprf_fetch_researchers()
                 'title' => get_user_meta($user->ID, 'wpcf-academic-title', true),
                 'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
                 'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
+                'websites' => $websites,
             ];
         }
     }
@@ -732,6 +738,11 @@ function iprf_fetch_current_user()
         $image_url = get_avatar_url($user->ID, ['size' => 400]);
     }
 
+    // Get websites (can be multiple)
+    $websites = get_user_meta($user->ID, 'wpcf-website', false);
+    // Filter out empty values
+    $websites = array_filter($websites);
+
     $user_data = [
         'id' => (string)$user->ID,
         'username' => $user->user_login,
@@ -746,6 +757,7 @@ function iprf_fetch_current_user()
         'title' => get_user_meta($user->ID, 'wpcf-academic-title', true),
         'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
         'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
+        'websites' => $websites,
     ];
 
     iprf_send_response($user_data);
