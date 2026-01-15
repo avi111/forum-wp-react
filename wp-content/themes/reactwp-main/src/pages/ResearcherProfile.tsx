@@ -71,6 +71,10 @@ export const ResearcherProfile: React.FC = () => {
     navigate(`/researchers?institution=${encodeURIComponent(researcher.institution)}`);
   };
 
+  const handleSpecializationClick = () => {
+    navigate(`/researchers?specialization=${encodeURIComponent(researcher.specialization)}`);
+  };
+
   return (
     <div className="bg-slate-50 min-h-screen pb-12">
       {/* Profile Header */}
@@ -103,7 +107,10 @@ export const ResearcherProfile: React.FC = () => {
               <h1 className="text-3xl md:text-4xl font-bold font-heebo mb-2">
                 {fullName}
               </h1>
-              <p className="text-teal-400 text-lg font-medium mb-1">
+              <p 
+                className="text-teal-400 text-lg font-medium mb-1 cursor-pointer hover:text-teal-300 hover:underline transition-all inline-block"
+                onClick={handleSpecializationClick}
+              >
                 {researcher.specialization}
               </p>
               <div 

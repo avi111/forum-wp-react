@@ -53,10 +53,14 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   // Initialize filters from URL params
   useEffect(() => {
     const institutionParam = searchParams.get("institution");
+    const specializationParam = searchParams.get("specialization");
+    
     if (institutionParam) {
       setSelectedInstitution(institutionParam);
-      // Clear the param from URL after reading it so it doesn't persist if user navigates away and back
-      // or keep it if you want shareable URLs (better UX usually to keep it but for this specific request flow it might be cleaner to just set state)
+    }
+    
+    if (specializationParam) {
+      setSelectedSpecialization(specializationParam);
     }
   }, [searchParams]);
 
