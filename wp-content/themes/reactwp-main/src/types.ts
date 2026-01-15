@@ -23,6 +23,7 @@ export interface Researcher {
   subSpecializations?: string[];
   studentYear?: string;
   newsletter?: boolean;
+  websites?: string[];
 }
 
 export interface ArticleAttachment {

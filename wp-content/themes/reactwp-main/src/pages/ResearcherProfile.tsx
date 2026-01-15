@@ -12,6 +12,7 @@ import {
   MapPin,
   Phone,
   User,
+  Globe,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
@@ -163,6 +164,25 @@ export const ResearcherProfile: React.FC = () => {
                   <MapPin className="w-4 h-4 ml-3 text-teal-500 shrink-0" />
                   <span>{researcher.institution}</span>
                 </div>
+                
+                {researcher.websites && researcher.websites.length > 0 && (
+                  <div className="flex items-start text-slate-600 text-sm">
+                    <Globe className="w-4 h-4 ml-3 text-teal-500 shrink-0 mt-1" />
+                    <div className="flex flex-col gap-1">
+                      {researcher.websites.map((site, index) => (
+                        <a
+                          key={index}
+                          href={site}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-teal-600 truncate max-w-[200px]"
+                        >
+                          {site.replace(/^https?:\/\//, '').replace(/^www\./, '')}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
