@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useApp } from "./AppContext.tsx";
 import { getResearcherName, UserStatus, Researcher } from "../types.ts";
+import { useSearchParams } from "react-router-dom";
 
 export interface ResearchersFilterContextType {
   currentResearchers: Researcher[];
@@ -38,6 +39,8 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const { researchers, settings, getResearchersFromServer } = useApp();
+  const [searchParams, setSearchParams] = useSearchParams();
+  
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,6 +49,16 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   const [selectedSpecialization, setSelectedSpecialization] = useState("");
   const [selectedSubSpecialization, setSelectedSubSpecialization] = useState("");
   const [selectedInstitution, setSelectedInstitution] = useState("");
+
+  // Initialize filters from URL params
+  useEffect(() => {
+    const institutionParam = searchParams.get("institution");
+    if (institutionParam) {
+      setSelectedInstitution(institutionParam);
+      // Clear the param from URL after reading it so it doesn't persist if user navigates away and back
+      // or keep it if you want shareable URLs (better UX usually to keep it but for this specific request flow it might be cleaner to just set state)
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     // Fetch data only if it hasn't been fetched yet.
@@ -139,6 +152,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
     setSelectedSubSpecialization("");
     setSelectedInstitution("");
     setCurrentPage(1);
+    setSearchParams({}); // Clear URL params
   };
 
   const value = {

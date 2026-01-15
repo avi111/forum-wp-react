@@ -67,6 +67,10 @@ export const ResearcherProfile: React.FC = () => {
     (a) => a.authorId === researcher.id,
   );
 
+  const handleInstitutionClick = () => {
+    navigate(`/researchers?institution=${encodeURIComponent(researcher.institution)}`);
+  };
+
   return (
     <div className="bg-slate-50 min-h-screen pb-12">
       {/* Profile Header */}
@@ -102,7 +106,10 @@ export const ResearcherProfile: React.FC = () => {
               <p className="text-teal-400 text-lg font-medium mb-1">
                 {researcher.specialization}
               </p>
-              <div className="flex items-center justify-center md:justify-start text-slate-300 text-sm">
+              <div 
+                className="flex items-center justify-center md:justify-start text-slate-300 text-sm cursor-pointer hover:text-white hover:underline transition-all"
+                onClick={handleInstitutionClick}
+              >
                 <Building2 className="w-4 h-4 ml-1.5" />
                 {researcher.institution}
               </div>
@@ -138,7 +145,10 @@ export const ResearcherProfile: React.FC = () => {
                     </span>
                   </div>
                 )}
-                <div className="flex items-center text-slate-600 text-sm">
+                <div 
+                  className="flex items-center text-slate-600 text-sm cursor-pointer hover:text-teal-600 hover:underline transition-colors"
+                  onClick={handleInstitutionClick}
+                >
                   <MapPin className="w-4 h-4 ml-3 text-teal-500 shrink-0" />
                   <span>{researcher.institution}</span>
                 </div>
