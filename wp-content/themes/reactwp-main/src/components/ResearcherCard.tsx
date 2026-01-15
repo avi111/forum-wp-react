@@ -6,6 +6,7 @@ export interface ResearcherCardProps {
   researcher: Researcher;
   onClick: (id: string) => void;
   onSpecializationClick?: (specialization: string) => void;
+  onInstitutionClick?: (institution: string) => void;
   variant?: "default" | "carousel";
 }
 
@@ -13,12 +14,20 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
   researcher,
   onClick,
   onSpecializationClick,
+  onInstitutionClick,
   variant = "default",
 }) => {
   const handleSpecializationClick = (e: React.MouseEvent) => {
     if (onSpecializationClick) {
       e.stopPropagation();
       onSpecializationClick(researcher.specialization);
+    }
+  };
+
+  const handleInstitutionClick = (e: React.MouseEvent) => {
+    if (onInstitutionClick) {
+      e.stopPropagation();
+      onInstitutionClick(researcher.institution);
     }
   };
 
@@ -84,9 +93,14 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
             {researcher.specialization}
           </p>
 
-          <div className="flex items-center text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-flex">
+          <div 
+            className={`flex items-center text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-flex ${onInstitutionClick ? "cursor-pointer hover:bg-slate-100 transition-colors" : ""}`}
+            onClick={handleInstitutionClick}
+          >
             <MapPin className="w-4 h-4 ml-1" />
-            {researcher.institution}
+            <span className={onInstitutionClick ? "hover:underline" : ""}>
+              {researcher.institution}
+            </span>
           </div>
 
           <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
