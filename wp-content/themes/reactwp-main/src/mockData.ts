@@ -193,6 +193,17 @@ const SUB_SPECIALIZATIONS_POOL = [
   "אתיקה ורגולציה",
 ];
 
+const WEBSITES_POOL = [
+  "https://www.tau.ac.il",
+  "https://www.weizmann.ac.il",
+  "https://www.huji.ac.il",
+  "https://www.sheba.co.il",
+  "https://www.bgu.ac.il",
+  "https://www.runi.ac.il",
+  "https://www.researchgate.net",
+  "https://scholar.google.com",
+];
+
 // Generate 12+ researchers
 export const INITIAL_RESEARCHERS: Researcher[] = NAMES.map((name, index) => {
   const nameParts = name.split(" ");
@@ -203,6 +214,15 @@ export const INITIAL_RESEARCHERS: Researcher[] = NAMES.map((name, index) => {
   // A simple way to guess gender for mock data
   const femaleNames = ["יעל", "שרה", "נעה", "רבקה", "ענת", "מיכל"];
   const gender = femaleNames.includes(firstName) ? "נקבה" : "זכר";
+
+  // Add websites to some researchers
+  const websites = [];
+  if (index % 3 === 0) {
+    websites.push(WEBSITES_POOL[index % WEBSITES_POOL.length]);
+  }
+  if (index % 5 === 0) {
+    websites.push(WEBSITES_POOL[(index + 1) % WEBSITES_POOL.length]);
+  }
 
   return {
     id: `res${index + 1}`,
@@ -227,6 +247,7 @@ export const INITIAL_RESEARCHERS: Researcher[] = NAMES.map((name, index) => {
     idNumber: `${Math.floor(100000000 + Math.random() * 900000000)}`,
     faculty: FACULTIES[index % FACULTIES.length],
     newsletter: index % 2 === 0,
+    websites: websites.length > 0 ? websites : undefined,
     // studentYear is omitted as they are researchers
   };
 });
