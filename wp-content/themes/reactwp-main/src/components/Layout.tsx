@@ -14,6 +14,7 @@ export function Layout() {
     getNewsFromServer,
     simulateAdminApproval,
     site,
+    isModalOpen,
   } = useApp();
 
   const { pathname } = useLocation();
@@ -49,7 +50,10 @@ export function Layout() {
         navItems={NAV_ITEMS}
         currentUser={currentUser}
       />
-      <main className="flex-grow">
+      <main
+        inert={!!isModalOpen}
+        className={`flex-grow ${isModalOpen ? "pointer-events-none" : ""}`}
+      >
         <Outlet />
       </main>
       <Footer

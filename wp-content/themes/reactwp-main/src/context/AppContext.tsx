@@ -91,6 +91,8 @@ interface AppContextType {
   getNewsFromServer: Fetcher<NewsItem[]>;
   site: SiteOptions;
   openNewsletterModal: () => void;
+  isModalOpen: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
   subscribeToNewsletter: (
     email: string,
   ) => Promise<{ success: boolean; message: string }>;
@@ -128,11 +130,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
   const [tagsData, setTagsData] = useState<
     { tag: string; count: number }[] | null
   >(null);
   const [isTagsLoading, setIsTagsLoading] = useState(false);
+
+  useEffect(() => {
+    setIsModalOpen(isNewsletterOpen);
+  }, [isNewsletterOpen]);
 
   useEffect(() => {
     if (settings?.strings) {
@@ -286,6 +293,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     getNewsFromServer,
     site: window.object.site,
     openNewsletterModal: () => setIsNewsletterOpen(true),
+    isModalOpen,
+    setIsModalOpen,
     subscribeToNewsletter,
     sendContactForm7,
   };

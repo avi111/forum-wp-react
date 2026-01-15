@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NewsItem } from "../types";
 import { Bell, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "../context/AppContext.tsx";
 
 export interface NewsTickerProps {
   news: NewsItem[];
@@ -10,7 +11,11 @@ export interface NewsTickerProps {
 export const NewsTicker: React.FC<NewsTickerProps> = ({ news }) => {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
   const navigate = useNavigate();
+  const { setIsModalOpen } = useApp();
 
+  useEffect(() => {
+    setIsModalOpen(!!selectedNews);
+  }, [selectedNews]);
   const handleNewsClick = (item: NewsItem) => {
     setSelectedNews(item);
   };
@@ -79,7 +84,11 @@ export const NewsTicker: React.FC<NewsTickerProps> = ({ news }) => {
               </button>
             </div>
             <div className="p-8 leading-relaxed text-slate-600 space-y-4">
-              <p>{selectedNews.content || "ללא תוכן נוסף."}</p>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: selectedNews.content || "ללא תוכן נוסף.",
+                }}
+              />
               <div className="flex justify-end pt-4">
                 <button
                   onClick={handleReadMore}
