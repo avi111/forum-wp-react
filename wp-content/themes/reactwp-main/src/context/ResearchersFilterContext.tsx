@@ -11,6 +11,7 @@ import { getResearcherName, UserStatus, Researcher } from "../types.ts";
 export interface ResearchersFilterContextType {
   currentResearchers: Researcher[];
   specializations: string[];
+  subSpecializations: string[];
   institutions: string[];
   totalPages: number;
   currentPage: number;
@@ -22,9 +23,11 @@ export interface ResearchersFilterContextType {
   setSearchTerm: (term: string) => void;
   searchTerm: string;
   selectedSpecialization: string;
+  selectedSubSpecialization: string;
   selectedInstitution: string;
   setSelectedInstitution: (inst: string) => void;
   setSelectedSpecialization: (spec: string) => void;
+  setSelectedSubSpecialization: (subSpec: string) => void;
 }
 
 export const ResearchersFilterContext = createContext<
@@ -41,6 +44,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
 
   // Filters
   const [selectedSpecialization, setSelectedSpecialization] = useState("");
+  const [selectedSubSpecialization, setSelectedSubSpecialization] = useState("");
   const [selectedInstitution, setSelectedInstitution] = useState("");
 
   useEffect(() => {
@@ -62,6 +66,16 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
       if (r.specialization) specs.add(r.specialization);
     });
     return Array.from(specs).sort();
+  }, [researchers]);
+
+  const subSpecializations = useMemo(() => {
+    const subSpecs = new Set<string>();
+    researchers.forEach((r) => {
+      if (r.subSpecializations && Array.isArray(r.subSpecializations)) {
+        r.subSpecializations.forEach((s) => subSpecs.add(s));
+      }
+    });
+    return Array.from(subSpecs).sort();
   }, [researchers]);
 
   const institutions = useMemo(() => {
@@ -93,6 +107,11 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
         const matchesSpecialization = selectedSpecialization
           ? r.specialization === selectedSpecialization
           : true;
+        
+        const matchesSubSpecialization = selectedSubSpecialization
+          ? r.subSpecializations?.includes(selectedSubSpecialization)
+          : true;
+
         const matchesInstitution = selectedInstitution
           ? r.institution === selectedInstitution
           : true;
@@ -101,10 +120,11 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
           isActive &&
           matchesSearch &&
           matchesSpecialization &&
+          matchesSubSpecialization &&
           matchesInstitution
         );
       });
-  }, [searchTerm, selectedSpecialization, selectedInstitution, researchers]);
+  }, [searchTerm, selectedSpecialization, selectedSubSpecialization, selectedInstitution, researchers]);
 
   const totalPages = Math.ceil(filteredResearchers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -116,6 +136,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedSpecialization("");
+    setSelectedSubSpecialization("");
     setSelectedInstitution("");
     setCurrentPage(1);
   };
@@ -123,6 +144,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   const value = {
     currentResearchers,
     specializations,
+    subSpecializations,
     institutions,
     totalPages,
     currentPage,
@@ -134,9 +156,11 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
     setSearchTerm,
     searchTerm,
     selectedSpecialization,
+    selectedSubSpecialization,
     selectedInstitution,
     setSelectedInstitution,
     setSelectedSpecialization,
+    setSelectedSubSpecialization,
   };
 
   return (
