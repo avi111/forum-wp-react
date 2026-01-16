@@ -313,7 +313,7 @@ function iprf_fetch_researchers()
                 'email' => $user->user_email,
                 'institution' => !empty(get_user_meta($user->ID, 'wpcf-institution', true)) ? get_user_meta($user->ID, 'wpcf-institution', true) : 'N/A',
                 'specialization' => !empty(get_user_meta($user->ID, 'wpcf-main-specialization', true)) ? get_user_meta($user->ID, 'wpcf-main-specialization', true) : 'N/A',
-                'sub-specialization' => get_user_meta($user->ID, 'wpcf-sub-specialization', true),
+                'subSpecializations' => get_user_meta($user->ID, 'wpcf-sub-specializations', false),
                 'bio' => $user->description,
                 'status' => 'ACTIVE',
                 'imageUrl' => $image_url,
@@ -321,6 +321,8 @@ function iprf_fetch_researchers()
                 'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
                 'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
                 'websites' => $websites,
+                'faculty' => get_user_meta($user->ID, 'wpcf-faculcy', true),
+                'studentYear' => get_user_meta($user->ID, 'wpcf-student-year', true),
             ];
         }
     }
@@ -751,6 +753,7 @@ function iprf_fetch_current_user()
         'email' => $user->user_email,
         'institution' => get_user_meta($user->ID, 'wpcf-institution', true),
         'specialization' => get_user_meta($user->ID, 'wpcf-specialization', true),
+        'subSpecializations' => get_user_meta($user->ID, 'wpcf-sub-specializations', false),
         'bio' => get_user_meta($user->ID, 'wpcf-bio', true),
         'status' => 'ACTIVE',
         'imageUrl' => $image_url,
@@ -758,6 +761,8 @@ function iprf_fetch_current_user()
         'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
         'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
         'websites' => $websites,
+        'faculty' => get_user_meta($user->ID, 'wpcf-faculcy', true),
+        'studentYear' => get_user_meta($user->ID, 'wpcf-student-year', true),
     ];
 
     iprf_send_response($user_data);
