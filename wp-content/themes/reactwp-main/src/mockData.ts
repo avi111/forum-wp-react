@@ -910,6 +910,8 @@ export const MOCK_TEMPLATES: Record<string, string> = {
       </div>
     </div>
   `,
+  join: `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerMUNZSv6aJ9L_c6PIY0WN8T_GQAxW3-3IubSvjLhuohbITQ/viewform?embedded=true&hl=iw" width="100%" height="3861" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>`,
+  contact: `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdIw-P4hbbZ0oaWNl2BVEvBk_IUcI_TPG4HfK18BacEWRKtEg/viewform?embedded=true&hl=iw" width="100%" height="850" frameborder="0" marginheight="0" marginwidth="0">בטעינה…</iframe>`,
   about: `
     <!-- Header Section -->
     <div class="bg-slate-900 text-white relative py-20 overflow-hidden">
@@ -979,7 +981,7 @@ export const MOCK_TEMPLATES: Record<string, string> = {
       </div>
     </div>
   `,
-  "hero": `
+  hero: `
     <div class="relative bg-slate-900 text-white overflow-hidden min-h-[500px] flex items-center">
       <div class="absolute inset-0">
         <img
