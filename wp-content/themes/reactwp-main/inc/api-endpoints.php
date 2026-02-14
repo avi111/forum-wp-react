@@ -189,15 +189,6 @@ add_action('wp_ajax_nopriv_fetchSettings', 'iprf_fetch_settings');
 function iprf_fetch_settings()
 {
     $settings = [
-        // Fetch options from CPTs
-        'genders' => iprf_get_options_from_cpt('gender'),
-        'titles' => iprf_get_options_from_cpt('title'),
-        'studentYears' => iprf_get_options_from_cpt('student-year'),
-
-        'institutions' => iprf_get_options_list_from_cpt('institution'),
-        'mainSpecializations' => iprf_get_options_list_from_cpt('specialization'),
-        'subSpecializations' => iprf_get_options_list_from_cpt('sub-specialization'),
-
         // Fetch strings from 'string' CPT
         'strings' => iprf_get_strings_map('string'),
 
@@ -829,6 +820,99 @@ function iprf_subscribe_newsletter()
  */
 add_action('wp_ajax_nopriv_join_form_submit', 'iprf_join_form_submit');
 
+function create_user_from_data($data)
+{
+    // 2. Handle File Uploads (Setup)
+    if (!function_exists('wp_handle_upload')) {
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+    }
+
+    $uploaded_files = [];
+    $upload_overrides = ['test_form' => false];
+    $required_files = ['verificationDoc', 'intentLetter'];
+
+    // 3. Create User
+    $userdata = [
+        'user_login' => $data['username'],
+        'user_email' => $data['email'],
+        'user_pass' => $data['password'],
+        'first_name' => $data['firstName'],
+        'last_name' => $data['lastName'],
+        'role' => 'subscriber', // Set role to subscriber
+    ];
+
+    $user_id = wp_insert_user($userdata);
+
+    if (is_wp_error($user_id)) {
+        return $user_id;
+    }
+
+    // 4. Update User Meta with custom fields
+    update_user_meta($user_id, 'wpcf-id-number', $data['idNumber']);
+    update_user_meta($user_id, 'wpcf-phone', $data['phone']);
+    update_user_meta($user_id, 'wpcf-gender', $data['gender']);
+    update_user_meta($user_id, 'wpcf-academic-title', $data['title']);
+    update_user_meta($user_id, 'wpcf-institution', $data['institution']);
+    update_user_meta($user_id, 'wpcf-faculty', $data['faculty']);
+    update_user_meta($user_id, 'wpcf-specialization', $data['mainSpecialization']);
+    
+    // Assuming subSpecializations is an array
+    if (isset($data['subSpecializations']) && is_array($data['subSpecializations'])) {
+        foreach ($data['subSpecializations'] as $sub_spec) {
+            add_user_meta($user_id, 'wpcf-sub-specializations', sanitize_text_field($sub_spec));
+        }
+    }
+    update_user_meta($user_id, 'wpcf-student-year', $data['studentYear']);
+    update_user_meta($user_id, 'wpcf-newsletter', $data['newsletter']);
+
+
+    foreach ($required_files as $file_key) {
+        if (isset($_FILES[$file_key])) {
+            $moved_file = wp_handle_upload($_FILES[$file_key], $upload_overrides);
+            if ($moved_file && !isset($moved_file['error'])) {
+                $uploaded_files[$file_key] = $moved_file['url'];
+            } else {
+                return new WP_Error('upload_error', 'שגיאה בהעלאת קובץ: ' . $moved_file['error']);
+            }
+        }
+    }
+    
+    // Handle direct URLs if provided (e.g. from Google Sheets sync)
+    if (isset($data['verificationDocUrl']) && !empty($data['verificationDocUrl'])) {
+        $uploaded_files['verificationDoc'] = $data['verificationDocUrl'];
+    }
+    if (isset($data['intentLetterUrl']) && !empty($data['intentLetterUrl'])) {
+        $uploaded_files['intentLetter'] = $data['intentLetterUrl'];
+    }
+
+    // Save file URLs to user meta
+    if (isset($uploaded_files['verificationDoc'])) {
+        update_user_meta($user_id, 'wpcf-verification-doc-url', esc_url_raw($uploaded_files['verificationDoc']));
+    }
+    if (isset($uploaded_files['intentLetter'])) {
+        update_user_meta($user_id, 'wpcf-intent-letter-url', esc_url_raw($uploaded_files['intentLetter']));
+    }
+
+    // 5. Send Admin Notification Email
+    $admin_email = get_option('admin_email');
+    $subject = 'בקשת הצטרפות חדשה לאתר הפורום';
+    $message = "שלום מנהל,\n\n";
+    $message .= "התקבלה בקשת הצטרפות חדשה מאת: " . $data['firstName'] . " " . $data['lastName'] . "\n";
+    $message .= "אימייל: " . $data['email'] . "\n\n";
+    $message .= "ניתן לצפות בפרטי המשתמש ובמסמכים המצורפים בפרופיל המשתמש שלו בלוח הבקרה:\n";
+    $message .= admin_url("user-edit.php?user_id=$user_id") . "\n\n";
+    if (isset($uploaded_files['verificationDoc'])) {
+        $message .= "קישור למסמך אימות: " . esc_url_raw($uploaded_files['verificationDoc']) . "\n";
+    }
+    if (isset($uploaded_files['intentLetter'])) {
+        $message .= "קישור למכתב כוונות: " . esc_url_raw($uploaded_files['intentLetter']) . "\n";
+    }
+
+    wp_mail($admin_email, $subject, $message);
+    
+    return $user_id;
+}
+
 function iprf_join_form_submit()
 {
     // Validation
@@ -898,14 +982,7 @@ function iprf_join_form_submit()
     }
     // Optional: Add a third-party email validation service call here if needed.
 
-    // 2. Handle File Uploads
-    if (!function_exists('wp_handle_upload')) {
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-    }
-
-    $uploaded_files = [];
-    $upload_overrides = ['test_form' => false];
-
+    // 2. Handle File Uploads (Validation)
     $required_files = ['verificationDoc', 'intentLetter'];
     foreach ($required_files as $file_key) {
         if (!isset($_FILES[$file_key])) {
@@ -913,67 +990,29 @@ function iprf_join_form_submit()
         }
     }
 
-    // 3. Create User
-    $userdata = [
-        'user_login' => sanitize_user($_POST['username']),
-        'user_email' => $email,
-        'user_pass' => $_POST['password'],
-        'first_name' => sanitize_text_field($_POST['firstName']),
-        'last_name' => sanitize_text_field($_POST['lastName']),
-        'role' => 'subscriber', // Set role to subscriber
+    $data = [
+        'username' => sanitize_user($_POST['username']),
+        'email' => $email,
+        'password' => $_POST['password'],
+        'firstName' => sanitize_text_field($_POST['firstName']),
+        'lastName' => sanitize_text_field($_POST['lastName']),
+        'idNumber' => sanitize_text_field($_POST['idNumber']),
+        'phone' => sanitize_text_field($_POST['phone']),
+        'gender' => sanitize_text_field($_POST['gender']),
+        'title' => sanitize_text_field($_POST['title']),
+        'institution' => sanitize_text_field($_POST['institution']),
+        'faculty' => sanitize_text_field($_POST['faculty']),
+        'mainSpecialization' => sanitize_text_field($_POST['mainSpecialization']),
+        'subSpecializations' => isset($_POST['subSpecializations']) ? $_POST['subSpecializations'] : [],
+        'studentYear' => sanitize_text_field($_POST['studentYear']),
+        'newsletter' => sanitize_text_field($_POST['newsletter']),
     ];
 
-    $user_id = wp_insert_user($userdata);
+    $result = create_user_from_data($data);
 
-    if (is_wp_error($user_id)) {
-        wp_send_json_error(['message' => 'שגיאה ביצירת המשתמש: ' . $user_id->get_error_message()]);
+    if (is_wp_error($result)) {
+        wp_send_json_error(['message' => $result->get_error_message()]);
     }
-
-    // 4. Update User Meta with custom fields
-    update_user_meta($user_id, 'wpcf-id-number', sanitize_text_field($_POST['idNumber']));
-    update_user_meta($user_id, 'wpcf-phone', sanitize_text_field($_POST['phone']));
-    update_user_meta($user_id, 'wpcf-gender', sanitize_text_field($_POST['gender']));
-    update_user_meta($user_id, 'wpcf-academic-title', sanitize_text_field($_POST['title']));
-    update_user_meta($user_id, 'wpcf-institution', sanitize_text_field($_POST['institution']));
-    update_user_meta($user_id, 'wpcf-faculty', sanitize_text_field($_POST['faculty']));
-    update_user_meta($user_id, 'wpcf-specialization', sanitize_text_field($_POST['mainSpecialization']));
-    // Assuming subSpecializations is an array
-    if (isset($_POST['subSpecializations']) && is_array($_POST['subSpecializations'])) {
-        foreach ($_POST['subSpecializations'] as $sub_spec) {
-            add_user_meta($user_id, 'wpcf-sub-specializations', sanitize_text_field($sub_spec));
-        }
-    }
-    update_user_meta($user_id, 'wpcf-student-year', sanitize_text_field($_POST['studentYear']));
-    update_user_meta($user_id, 'wpcf-newsletter', sanitize_text_field($_POST['newsletter']));
-
-
-    foreach ($required_files as $file_key) {
-        if (isset($_FILES[$file_key])) {
-            $moved_file = wp_handle_upload($_FILES[$file_key], $upload_overrides);
-            if ($moved_file && !isset($moved_file['error'])) {
-                $uploaded_files[$file_key] = $moved_file['url'];
-            } else {
-                wp_send_json_error(['message' => 'שגיאה בהעלאת קובץ: ' . $moved_file['error']]);
-            }
-        }
-    }
-
-    // Save file URLs to user meta
-    update_user_meta($user_id, 'wpcf-verification-doc-url', esc_url_raw($uploaded_files['verificationDoc']));
-    update_user_meta($user_id, 'wpcf-intent-letter-url', esc_url_raw($uploaded_files['intentLetter']));
-
-    // 5. Send Admin Notification Email
-    $admin_email = get_option('admin_email');
-    $subject = 'בקשת הצטרפות חדשה לאתר הפורום';
-    $message = "שלום מנהל,\n\n";
-    $message .= "התקבלה בקשת הצטרפות חדשה מאת: " . sanitize_text_field($_POST['firstName']) . " " . sanitize_text_field($_POST['lastName']) . "\n";
-    $message .= "אימייל: " . $email . "\n\n";
-    $message .= "ניתן לצפות בפרטי המשתמש ובמסמכים המצורפים בפרופיל המשתמש שלו בלוח הבקרה:\n";
-    $message .= admin_url("user-edit.php?user_id=$user_id") . "\n\n";
-    $message .= "קישור למסמך אימות: " . esc_url_raw($uploaded_files['verificationDoc']) . "\n";
-    $message .= "קישור למכתב כוונות: " . esc_url_raw($uploaded_files['intentLetter']) . "\n";
-
-    wp_mail($admin_email, $subject, $message);
 
     // 6. Send Success Response
     iprf_send_response(['message' => 'ההרשמה בוצעה בהצלחה. פרטיך נשלחו לבדיקה ואישור.']);

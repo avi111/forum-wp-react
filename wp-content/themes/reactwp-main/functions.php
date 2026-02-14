@@ -2,9 +2,18 @@
 add_theme_support('menus');
 add_theme_support('title-tag');
 
+
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+  require_once __DIR__ . '/vendor/autoload.php';
+}
+
+use Google\Client;
+use Google\Service\Sheets;
+
 // Include API endpoints and Toolset setup
 require_once get_template_directory() . '/inc/api-endpoints.php';
 require_once get_template_directory() . '/inc/toolset-setup.php';
+require_once get_template_directory() . '/inc/cron.php';
 
 function my_theme_enqueue_scripts()
 {

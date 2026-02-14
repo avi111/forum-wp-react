@@ -30,3 +30,5 @@ wp-content/index.php
 /wp-config.php
 !/wp-content/themes/reactwp-main/.env
 /wp-content/themes/reactwp-main/yarn.lock
+/composer.phar
+!/wp-content/themes/reactwp-main/vendor/

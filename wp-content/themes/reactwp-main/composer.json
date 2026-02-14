@@ -1,0 +1,14 @@
+{
+  "name": "avi111/reactwp-main",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Avi Levkovich",
+      "email": "avi111@gmail.com"
+    }
+  ],
+  "require": {
+    "google/apiclient": "^2.19"
+  }
+}
