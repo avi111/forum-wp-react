@@ -26,8 +26,8 @@ function gus_get_sheet_rows() {
     $client->setAuthConfig(__DIR__ . '/credentials.json'); // קובץ service account
     $service = new Sheets($client);
 
-    $spreadsheetId = 'SPREADSHEET_ID_HERE';
-    $range = 'Sheet1!A2:F'; // להתאים לשמות העמודות שלך
+    $spreadsheetId = '1iY9VHvMYo3m4rguvX-7D6GfnUauR42-JQl1wKDJFimI';
+    $range = 'Sheet1!A:O'; // להתאים לשמות העמודות שלך
     $response = $service->spreadsheets_values->get($spreadsheetId, $range);
     $values = $response->getValues();
 
@@ -118,10 +118,36 @@ function gus_create_user_from_row( $row ) {
         'subSpecializations' => [ sanitize_text_field( $row[10] ?? '' ) ],
         'newsletter'         => $newsletter,
         'verificationDocUrl' => esc_url_raw( $row[11] ?? '' ),
+        'idNumber'           => '', // לא קיים במיפוי
+        'studentYear'        => '', // לא קיים במיפוי
+        'mainSpecialization' => '', // לא קיים במיפוי
+        'intentLetterUrl'    => '', // לא קיים במיפוי
     ];
 
     // קריאה לפונקציה (הנמצאת ב-inc/api-endpoints.php)
     if ( function_exists( 'create_user_from_data' ) ) {
-        create_user_from_data( $data );
+        $result = create_user_from_data( $data );
+        
+        $admin_email = get_option('admin_email');
+        $subject = '';
+        $message = '';
+        
+        if ( is_wp_error( $result ) ) {
+            $subject = 'שגיאה בסנכרון משתמש מ-Google Sheets';
+            $message = "אירעה שגיאה בעת ניסיון ליצור משתמש חדש מהסנכרון האוטומטי.\n\n";
+            $message .= "שגיאה: " . $result->get_error_message() . "\n\n";
+            $message .= "פרטי המשתמש שניסו להוסיף:\n";
+            $message .= print_r( $data, true );
+        } else {
+            $subject = 'משתמש חדש נוצר בהצלחה מ-Google Sheets';
+            $message = "משתמש חדש נוצר בהצלחה מהסנכרון האוטומטי.\n\n";
+            $message .= "מזהה משתמש: " . $result . "\n";
+            $message .= "שם משתמש: " . $data['username'] . "\n";
+            $message .= "אימייל: " . $data['email'] . "\n\n";
+            $message .= "פרטי המשתמש המלאים:\n";
+            $message .= print_r( $data, true );
+        }
+        
+        wp_mail( $admin_email, $subject, $message );
     }
 }
