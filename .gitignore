@@ -32,3 +32,4 @@ wp-content/index.php
 /wp-content/themes/reactwp-main/yarn.lock
 /composer.phar
 !/wp-content/themes/reactwp-main/vendor/
+!/wp-content/themes/reactwp-main/inc/gen-lang-client-0886997357-178071e24f47.json

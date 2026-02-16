@@ -13,7 +13,6 @@ use Google\Service\Sheets;
 // Include API endpoints and Toolset setup
 require_once get_template_directory() . '/inc/api-endpoints.php';
 require_once get_template_directory() . '/inc/toolset-setup.php';
-require_once get_template_directory() . '/inc/cron.php';
 
 function my_theme_enqueue_scripts()
 {
