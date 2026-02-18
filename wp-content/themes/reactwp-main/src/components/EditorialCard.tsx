@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Article } from "../types";
 
-interface EditorialCardProps {
+export interface EditorialCardProps {
   article: Article;
   showImage?: boolean;
   mode?: "default" | "compact";

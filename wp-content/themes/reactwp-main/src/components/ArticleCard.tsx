@@ -4,7 +4,7 @@ import { UserCircle } from "lucide-react";
 import { Article } from "../types";
 import { t } from "../services/stringService";
 
-interface ArticleCardProps {
+export interface ArticleCardProps {
   article: Article;
   showImage?: boolean;
   mode?: "default" | "compact";

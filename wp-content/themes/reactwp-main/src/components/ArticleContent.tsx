@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, FileDown, Paperclip } from "lucide-react";
 import { Article } from "../types";
 
-interface ArticleContentProps {
+export interface ArticleContentProps {
   article: Article;
 }
 

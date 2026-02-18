@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { Article } from "../types";
 
-interface ArticleHeaderProps {
+export interface ArticleHeaderProps {
   article: Article;
   showImage?: boolean;
 }
