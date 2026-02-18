@@ -107,7 +107,10 @@ export const useAPI = () => {
         // Cast data to Record<string, string | Blob> for post function
         // This assumes the data passed is compatible with what post expects
         // In a real app, you might want stronger validation here
-        return await post("join_form_submit", data as Record<string, string | Blob>);
+        return await post(
+          "join_form_submit",
+          data as Record<string, string | Blob>,
+        );
       } catch (error) {
         if (import.meta.env.DEV) {
           await delay(1000);
@@ -244,6 +247,7 @@ export const useAPI = () => {
   }, [post]);
 
   const fetchArticles = useCallback(async (): Promise<Article[]> => {
+    console.log("wefgwe");
     try {
       return await post("fetchArticles");
     } catch (error) {

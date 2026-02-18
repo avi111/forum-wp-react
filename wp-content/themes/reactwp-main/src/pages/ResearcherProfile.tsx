@@ -69,11 +69,15 @@ export const ResearcherProfile: React.FC = () => {
   );
 
   const handleInstitutionClick = () => {
-    navigate(`/researchers?institution=${encodeURIComponent(researcher.institution)}`);
+    navigate(
+      `/researchers?institution=${encodeURIComponent(researcher.institution)}`,
+    );
   };
 
   const handleSpecializationClick = () => {
-    navigate(`/researchers?specialization=${encodeURIComponent(researcher.specialization)}`);
+    navigate(
+      `/researchers?specialization=${encodeURIComponent(researcher.specialization)}`,
+    );
   };
 
   const handleSubSpecializationClick = (sub: string) => {
@@ -112,13 +116,13 @@ export const ResearcherProfile: React.FC = () => {
               <h1 className="text-3xl md:text-4xl font-bold font-heebo mb-2">
                 {fullName}
               </h1>
-              <p 
+              <p
                 className="text-teal-400 text-lg font-medium mb-1 cursor-pointer hover:text-teal-300 hover:underline transition-all inline-block"
                 onClick={handleSpecializationClick}
               >
                 {researcher.specialization}
               </p>
-              <div 
+              <div
                 className="flex items-center justify-center md:justify-start text-slate-300 text-sm cursor-pointer hover:text-white hover:underline transition-all"
                 onClick={handleInstitutionClick}
               >
@@ -157,14 +161,14 @@ export const ResearcherProfile: React.FC = () => {
                     </span>
                   </div>
                 )}
-                <div 
+                <div
                   className="flex items-center text-slate-600 text-sm cursor-pointer hover:text-teal-600 hover:underline transition-colors"
                   onClick={handleInstitutionClick}
                 >
                   <MapPin className="w-4 h-4 ml-3 text-teal-500 shrink-0" />
                   <span>{researcher.institution}</span>
                 </div>
-                
+
                 {researcher.websites && researcher.websites.length > 0 && (
                   <div className="flex items-start text-slate-600 text-sm">
                     <Globe className="w-4 h-4 ml-3 text-teal-500 shrink-0 mt-1" />
@@ -177,7 +181,9 @@ export const ResearcherProfile: React.FC = () => {
                           rel="noopener noreferrer"
                           className="hover:text-teal-600 truncate max-w-[200px]"
                         >
-                          {site.replace(/^https?:\/\//, '').replace(/^www\./, '')}
+                          {site
+                            .replace(/^https?:\/\//, "")
+                            .replace(/^www\./, "")}
                         </a>
                       ))}
                     </div>
@@ -216,7 +222,7 @@ export const ResearcherProfile: React.FC = () => {
                   researcher.subSpecializations.length > 0 && (
                     <div>
                       <span className="text-xs text-slate-400 block mb-2">
-                        תחומי עניין נוספים
+                        התמחות
                       </span>
                       <div className="flex flex-wrap gap-2">
                         {researcher.subSpecializations.map((sub) => (

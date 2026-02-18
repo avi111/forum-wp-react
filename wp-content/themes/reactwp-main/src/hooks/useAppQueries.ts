@@ -33,19 +33,15 @@ export const useResearchers = () => {
 
 export const useArticles = () => {
   const { fetchArticles } = useAPI();
-
   return useQuery({
     queryKey: ["articles"],
     queryFn: fetchArticles,
-    enabled: false,
+    // enabled: false,
   });
 };
 
 // Paginated editorial articles
-export const useEditorialArticles = (
-  page: number,
-  limit: number,
-) => {
+export const useEditorialArticles = (page: number, limit: number) => {
   const { fetchArticlesPaged } = useAPI();
   return useQuery<PaginatedResponse<Article>>({
     queryKey: ["articles", "editorial", page, limit],
@@ -55,10 +51,7 @@ export const useEditorialArticles = (
 };
 
 // Paginated research articles
-export const useResearchArticles = (
-  page: number,
-  limit: number,
-) => {
+export const useResearchArticles = (page: number, limit: number) => {
   const { fetchArticlesPaged } = useAPI();
   return useQuery<PaginatedResponse<Article>>({
     queryKey: ["articles", "research", page, limit],
@@ -68,11 +61,7 @@ export const useResearchArticles = (
 };
 
 // Paginated articles by tag (both types)
-export const useArticlesByTag = (
-  page: number,
-  limit: number,
-  tag: string,
-) => {
+export const useArticlesByTag = (page: number, limit: number, tag: string) => {
   const { fetchArticlesPaged } = useAPI();
   return useQuery<PaginatedResponse<Article>>({
     queryKey: ["articles", "byTag", tag, page, limit],
