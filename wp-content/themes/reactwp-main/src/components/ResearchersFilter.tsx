@@ -1,4 +1,4 @@
-import { Filter, MapPin, Search, X, Layers } from "lucide-react";
+import { Layers, MapPin, Search, X } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { getResearcherName } from "../types";
 import { useResearchersFilter } from "../hooks/useResearchersFilter.ts";
@@ -11,12 +11,10 @@ export const ResearchersFilter = () => {
     searchTerm,
     clearFilters,
     institutions,
-    specializations,
     subSpecializations,
     selectedInstitution,
     selectedSpecialization,
     selectedSubSpecialization,
-    setSelectedSpecialization,
     setSelectedSubSpecialization,
     setSelectedInstitution,
   } = useResearchersFilter();
@@ -87,25 +85,6 @@ export const ResearchersFilter = () => {
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 flex-wrap">
         <div className="relative">
           <select
-            value={selectedSpecialization}
-            onChange={(e) => {
-              setSelectedSpecialization(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pr-8 pl-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent cursor-pointer min-w-[200px]"
-          >
-            <option value="">כל ההתמחויות</option>
-            {specializations.map((spec) => (
-              <option key={spec} value={spec}>
-                {spec}
-              </option>
-            ))}
-          </select>
-          <Filter className="absolute top-2.5 right-2.5 w-4 h-4 text-slate-400 pointer-events-none" />
-        </div>
-
-        <div className="relative">
-          <select
             value={selectedSubSpecialization}
             onChange={(e) => {
               setSelectedSubSpecialization(e.target.value);
@@ -113,7 +92,7 @@ export const ResearchersFilter = () => {
             }}
             className="appearance-none bg-white border border-slate-200 text-slate-700 py-2 pr-8 pl-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent cursor-pointer min-w-[200px]"
           >
-            <option value="">כל תתי ההתמחויות</option>
+            <option value="">כל ההתמחויות</option>
             {subSpecializations.map((subSpec) => (
               <option key={subSpec} value={subSpec}>
                 {subSpec}
@@ -142,7 +121,10 @@ export const ResearchersFilter = () => {
           <MapPin className="absolute top-2.5 right-2.5 w-4 h-4 text-slate-400 pointer-events-none" />
         </div>
 
-        {(selectedSpecialization || selectedSubSpecialization || selectedInstitution || searchTerm) && (
+        {(selectedSpecialization ||
+          selectedSubSpecialization ||
+          selectedInstitution ||
+          searchTerm) && (
           <button
             onClick={clearFilters}
             className="text-sm text-red-500 hover:text-red-700 font-medium underline"

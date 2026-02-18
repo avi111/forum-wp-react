@@ -254,7 +254,7 @@ function iprf_fetch_researchers()
     remove_all_actions('pre_get_users');
 
     $args = [
-        'role' => 'contributor',
+        'role__in' => ['contributor', 'administrator'],
         'number' => -1,
         'orderby' => 'display_name'
     ];
@@ -303,7 +303,6 @@ function iprf_fetch_researchers()
                 'lastName' => $user->last_name,
                 'email' => $user->user_email,
                 'institution' => !empty(get_user_meta($user->ID, 'wpcf-institution', true)) ? get_user_meta($user->ID, 'wpcf-institution', true) : 'N/A',
-                'specialization' => !empty(get_user_meta($user->ID, 'wpcf-main-specialization', true)) ? get_user_meta($user->ID, 'wpcf-main-specialization', true) : 'N/A',
                 'subSpecializations' => get_user_meta($user->ID, 'wpcf-sub-specializations', false),
                 'bio' => $user->description,
                 'status' => 'ACTIVE',
@@ -312,7 +311,7 @@ function iprf_fetch_researchers()
                 'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
                 'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
                 'websites' => $websites,
-                'faculty' => get_user_meta($user->ID, 'wpcf-faculcy', true),
+                'faculty' => get_user_meta($user->ID, 'wpcf-faculty', true),
                 'studentYear' => get_user_meta($user->ID, 'wpcf-student-year', true),
             ];
         }
@@ -752,7 +751,7 @@ function iprf_fetch_current_user()
         'phone' => get_user_meta($user->ID, 'wpcf-phone', true),
         'gender' => get_user_meta($user->ID, 'wpcf-gender', true),
         'websites' => $websites,
-        'faculty' => get_user_meta($user->ID, 'wpcf-faculcy', true),
+        'faculty' => get_user_meta($user->ID, 'wpcf-faculty', true),
         'studentYear' => get_user_meta($user->ID, 'wpcf-student-year', true),
     ];
 
