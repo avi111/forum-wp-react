@@ -43,6 +43,13 @@ export const Default: Story = {
   },
 };
 
+export const NoImage: Story = {
+  args: {
+    article: mockArticle,
+    showImage: false,
+  },
+};
+
 export const LongTitle: Story = {
   args: {
     article: {

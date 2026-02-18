@@ -92,7 +92,11 @@ export const ArticleList: React.FC = () => {
         ) : (
           <div className="grid md:grid-cols-2 gap-8">
             {currentEditorialArticles.map((article) => (
-              <EditorialCard key={article.id} article={article} />
+              <EditorialCard
+                key={article.id}
+                article={article}
+                showImage={false}
+              />
             ))}
           </div>
         )}
@@ -117,7 +121,11 @@ export const ArticleList: React.FC = () => {
         ) : (
           <div className="grid md:grid-cols-3 gap-8">
             {currentResearcherArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
+              <ArticleCard
+                key={article.id}
+                article={article}
+                showImage={false}
+              />
             ))}
           </div>
         )}

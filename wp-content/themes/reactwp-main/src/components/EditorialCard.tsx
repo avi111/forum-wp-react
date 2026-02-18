@@ -4,25 +4,33 @@ import { Article } from "../types";
 
 interface EditorialCardProps {
   article: Article;
+  showImage?: boolean;
 }
 
-export const EditorialCard: React.FC<EditorialCardProps> = ({ article }) => {
+export const EditorialCard: React.FC<EditorialCardProps> = ({
+  article,
+  showImage = true,
+}) => {
   const navigate = useNavigate();
 
   const handleArticleClick = (id: string) => {
     navigate(`/article/${id}`);
   };
 
+  const shouldShowImage = showImage && article.imageUrl;
+
   return (
     <div
       onClick={() => handleArticleClick(article.id)}
-      className="group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg h-[400px] flex flex-col justify-end cursor-pointer"
+      className={`group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg h-[400px] flex flex-col justify-end cursor-pointer ${!shouldShowImage ? "bg-gradient-to-br from-slate-900 to-slate-800" : ""}`}
     >
-      <img
-        src={article.imageUrl}
-        alt={article.title}
-        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500"
-      />
+      {shouldShowImage && (
+        <img
+          src={article.imageUrl}
+          alt={article.title}
+          className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500"
+        />
+      )}
       <div className="relative z-10 p-8 bg-gradient-to-t from-slate-900 via-slate-900/80 to-transparent">
         <div className="flex gap-2 mb-3">
           {article.tags.map((tag) => (
