@@ -1,9 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { ArrowRight, Tag, UserCircle, Calendar, FileText, Loader2 } from "lucide-react";
+import { ArrowRight, Tag, FileText, Loader2 } from "lucide-react";
 import { PaginationControls } from "../components/PaginationControls";
 import { useArticlesByTag } from "../hooks/useAppQueries";
+import { ArticleCard } from "../components/ArticleCard";
 
 export const TagPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
@@ -20,11 +21,10 @@ export const TagPage: React.FC = () => {
   const query = useArticlesByTag(page, limit, decodedTag);
   const articles = query.data?.data || [];
   const total = query.data?.total || 0;
-  const totalPages = useMemo(() => (total > 0 ? Math.ceil(total / limit) : 0), [total, limit]);
-
-  const handleArticleClick = (id: string) => {
-    navigate(`/article/${id}`);
-  };
+  const totalPages = useMemo(
+    () => (total > 0 ? Math.ceil(total / limit) : 0),
+    [total, limit],
+  );
 
   if (query.isLoading && articles.length === 0) {
     return (
@@ -67,60 +67,11 @@ export const TagPage: React.FC = () => {
         {articles.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article) => (
-              <div
+              <ArticleCard
                 key={article.id}
-                onClick={() => handleArticleClick(article.id)}
-                className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col cursor-pointer group"
-              >
-                <div className="h-48 overflow-hidden relative">
-                  <img
-                    src={article.imageUrl}
-                    alt={article.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    {article.isEditorial && (
-                      <span className="bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-                        מערכת
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex items-center gap-2 mb-3 text-sm text-slate-500">
-                    <UserCircle className="w-4 h-4" />
-                    <span>{article.authorName}</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
-                    {article.title}
-                  </h3>
-                  <p className="text-slate-600 text-sm line-clamp-3 mb-4 flex-1">
-                    {article.excerpt}
-                  </p>
-
-                  {/* Tags within card */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {article.tags.slice(0, 3).map((t) => (
-                      <span
-                        key={t}
-                        className={`text-xs px-2 py-1 rounded bg-slate-100 text-slate-600 ${t === decodedTag ? "ring-1 ring-teal-500 bg-teal-50 text-teal-700" : ""}`}
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
-                    <div className="flex items-center">
-                      <Calendar className="w-3 h-3 ml-1" />
-                      <span>{article.date}</span>
-                    </div>
-                    <span className="text-indigo-600 font-medium group-hover:underline">
-                      קרא עוד
-                    </span>
-                  </div>
-                </div>
-              </div>
+                article={article}
+                showImage={false}
+              />
             ))}
           </div>
         ) : (

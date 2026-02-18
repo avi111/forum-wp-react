@@ -22,7 +22,11 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
   return (
     <div
       onClick={() => handleArticleClick(article.id)}
-      className={`group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg h-[400px] flex flex-col justify-end cursor-pointer ${!shouldShowImage ? "bg-gradient-to-br from-slate-900 to-slate-800" : ""}`}
+      className={`group relative bg-slate-900 rounded-2xl overflow-hidden shadow-lg flex flex-col justify-end cursor-pointer ${
+        shouldShowImage
+          ? "h-[400px]"
+          : "h-auto bg-gradient-to-br from-slate-900 to-slate-800"
+      }`}
     >
       {shouldShowImage && (
         <img
@@ -47,9 +51,7 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
         <h3 className="text-2xl font-bold text-white mb-2 leading-tight group-hover:text-teal-400 transition-colors">
           {article.title}
         </h3>
-        <p className="text-slate-300 line-clamp-2">
-          {article.excerpt}
-        </p>
+        <p className="text-slate-300 line-clamp-2">{article.excerpt}</p>
         <div className="mt-4 flex items-center text-slate-400 text-sm">
           <span>{article.date}</span>
           <span className="mx-2">•</span>
