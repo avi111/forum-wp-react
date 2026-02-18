@@ -5,11 +5,13 @@ import { Article } from "../types";
 interface EditorialCardProps {
   article: Article;
   showImage?: boolean;
+  mode?: "default" | "compact";
 }
 
 export const EditorialCard: React.FC<EditorialCardProps> = ({
   article,
   showImage = true,
+  mode = "default",
 }) => {
   const navigate = useNavigate();
 
@@ -18,6 +20,36 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
   };
 
   const shouldShowImage = showImage && article.imageUrl;
+
+  if (mode === "compact") {
+    return (
+      <div
+        onClick={() => handleArticleClick(article.id)}
+        className="group cursor-pointer flex gap-4 items-start py-3 border-b border-slate-50 last:border-0"
+      >
+        {shouldShowImage && (
+          <img
+            src={article.imageUrl}
+            alt={article.title}
+            className="w-20 h-20 rounded-lg object-cover shrink-0"
+          />
+        )}
+        <div className="flex-1 min-w-0">
+          {article.tags.length > 0 && (
+            <span className="text-xs text-indigo-500 font-bold mb-1 block truncate">
+              {article.tags[0]}
+            </span>
+          )}
+          <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
+            {article.title}
+          </h4>
+          <span className="text-xs text-slate-400 mt-2 block">
+            {article.date}
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

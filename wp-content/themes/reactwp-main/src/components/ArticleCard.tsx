@@ -7,11 +7,13 @@ import { t } from "../services/stringService";
 interface ArticleCardProps {
   article: Article;
   showImage?: boolean;
+  mode?: "default" | "compact";
 }
 
 export const ArticleCard: React.FC<ArticleCardProps> = ({
   article,
   showImage = true,
+  mode = "default",
 }) => {
   const navigate = useNavigate();
 
@@ -20,6 +22,28 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   };
 
   const shouldShowImage = showImage && article.imageUrl;
+
+  if (mode === "compact") {
+    return (
+      <div
+        onClick={() => handleArticleClick(article.id)}
+        className="block hover:bg-slate-50 p-3 rounded-lg -mx-2 transition-colors border-b border-slate-50 last:border-0 cursor-pointer group"
+      >
+        <h4 className="font-bold text-slate-800 text-sm mb-1 line-clamp-1 group-hover:text-teal-600 transition-colors">
+          {article.title}
+        </h4>
+        <p className="text-xs text-slate-500 mb-2 line-clamp-2">
+          {article.excerpt}
+        </p>
+        <div className="flex justify-between items-center text-xs">
+          <span className="text-teal-600 font-medium">
+            {article.authorName}
+          </span>
+          <span className="text-slate-400">{article.date}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

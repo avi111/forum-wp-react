@@ -2,6 +2,7 @@ import React from "react";
 import { Article } from "../types";
 import { FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { EditorialCard } from "./EditorialCard";
 
 export interface HomeEditorialProps {
   articles: Article[];
@@ -33,30 +34,12 @@ export const HomeEditorial: React.FC<HomeEditorialProps> = ({
 
       <div className="space-y-6 flex-1">
         {articles.slice(0, limit).map((article) => (
-          <div
+          <EditorialCard
             key={article.id}
-            className="group cursor-pointer"
-            onClick={() => navigate(`/article/${article.id}`)}
-          >
-            <div className="flex gap-4">
-              <img
-                src={article.imageUrl}
-                alt=""
-                className="w-20 h-20 rounded-lg object-cover shrink-0"
-              />
-              <div>
-                <span className="text-xs text-indigo-500 font-bold mb-1 block">
-                  {article.tags[0]}
-                </span>
-                <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
-                  {article.title}
-                </h4>
-                <span className="text-xs text-slate-400 mt-2 block">
-                  {article.date}
-                </span>
-              </div>
-            </div>
-          </div>
+            article={article}
+            mode="compact"
+            showImage={true}
+          />
         ))}
       </div>
     </div>

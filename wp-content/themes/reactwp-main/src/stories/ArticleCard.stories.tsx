@@ -50,6 +50,13 @@ export const NoImage: Story = {
   },
 };
 
+export const CompactMode: Story = {
+  args: {
+    article: mockArticle,
+    mode: 'compact',
+  },
+};
+
 export const LongTitle: Story = {
   args: {
     article: {

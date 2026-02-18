@@ -2,6 +2,7 @@ import React from "react";
 import { Article } from "../types";
 import { FlaskConical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ArticleCard } from "./ArticleCard";
 
 export interface HomeResearchProps {
   articles: Article[];
@@ -33,24 +34,12 @@ export const HomeResearch: React.FC<HomeResearchProps> = ({
 
       <div className="space-y-4 flex-1">
         {articles.slice(0, limit).map((article) => (
-          <div
+          <ArticleCard
             key={article.id}
-            onClick={() => navigate(`/article/${article.id}`)}
-            className="block hover:bg-slate-50 p-3 rounded-lg -mx-2 transition-colors border-b border-slate-50 last:border-0 cursor-pointer"
-          >
-            <h4 className="font-bold text-slate-800 text-sm mb-1 line-clamp-1">
-              {article.title}
-            </h4>
-            <p className="text-xs text-slate-500 mb-2 line-clamp-2">
-              {article.excerpt}
-            </p>
-            <div className="flex justify-between items-center text-xs">
-              <span className="text-teal-600 font-medium">
-                {article.authorName}
-              </span>
-              <span className="text-slate-400">{article.date}</span>
-            </div>
-          </div>
+            article={article}
+            mode="compact"
+            showImage={false}
+          />
         ))}
       </div>
     </div>
