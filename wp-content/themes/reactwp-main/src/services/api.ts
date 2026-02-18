@@ -22,8 +22,13 @@ import {
 } from "../types";
 import { useCallback } from "react";
 
+// Helper to check if we are in Storybook environment
+const isStorybook =
+  import.meta.env.STORYBOOK === "true" ||
+  window.location.href.includes("storybook");
+
 export const getAdminAjaxUrl = () => {
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || isStorybook) {
     window.object = object;
   }
   const { site } = window.object || {};
@@ -32,7 +37,7 @@ export const getAdminAjaxUrl = () => {
 };
 
 export const getRestUrl = () => {
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || isStorybook) {
     window.object = object;
   }
   const { site } = window.object || {};
@@ -112,7 +117,7 @@ export const useAPI = () => {
           data as Record<string, string | Blob>,
         );
       } catch (error) {
-        if (import.meta.env.DEV) {
+        if (import.meta.env.DEV || isStorybook) {
           await delay(1000);
           return { message: "ההרשמה בוצעה בהצלחה (Mock)" };
         }
@@ -127,7 +132,7 @@ export const useAPI = () => {
       const restUrl = getRestUrl();
       if (!restUrl) {
         console.warn("REST URL not found, falling back to mock.");
-        if (import.meta.env.DEV) {
+        if (import.meta.env.DEV || isStorybook) {
           await delay(1000);
           return { status: "mail_sent", message: "ההודעה נשלחה בהצלחה (Mock)" };
         }
@@ -188,7 +193,7 @@ export const useAPI = () => {
         "Failed to fetch current user from server, assuming logged out.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         return null;
       }
       throw error;
@@ -204,7 +209,7 @@ export const useAPI = () => {
           `Failed to fetch template '${templateName}' from server, falling back to mock.`,
           error,
         );
-        if (import.meta.env.DEV) {
+        if (import.meta.env.DEV || isStorybook) {
           await delay(200);
           return MOCK_TEMPLATES[templateName] || null;
         }
@@ -222,7 +227,7 @@ export const useAPI = () => {
         "Failed to fetch settings from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(500);
         return { ...MOCK_SETTINGS };
       }
@@ -238,7 +243,7 @@ export const useAPI = () => {
         "Failed to fetch researchers from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(SIMULATED_DELAY_MS);
         return [...INITIAL_RESEARCHERS];
       }
@@ -255,7 +260,7 @@ export const useAPI = () => {
         "Failed to fetch articles from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(SIMULATED_DELAY_MS);
         return [...INITIAL_ARTICLES];
       }
@@ -285,7 +290,7 @@ export const useAPI = () => {
           "Failed to fetch paged articles from server, falling back to mock. If you're on DEV this is expected.",
           error,
         );
-        if (import.meta.env.DEV) {
+        if (import.meta.env.DEV || isStorybook) {
           await delay(300);
           let filtered = [...INITIAL_ARTICLES];
           if (type === "editorial") {
@@ -319,7 +324,7 @@ export const useAPI = () => {
         "Failed to fetch tags from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(300);
         const counts: Record<string, number> = {};
         INITIAL_ARTICLES.forEach((a) => {
@@ -344,7 +349,7 @@ export const useAPI = () => {
         "Failed to fetch news from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(SIMULATED_DELAY_MS);
         return [...MOCK_NEWS];
       }
@@ -369,7 +374,7 @@ export const useAPI = () => {
           "Failed to fetch events from server, falling back to mock.",
           error,
         );
-        if (import.meta.env.DEV) {
+        if (import.meta.env.DEV || isStorybook) {
           await delay(SIMULATED_DELAY_MS);
           const now = new Date();
           now.setHours(0, 0, 0, 0);
@@ -411,7 +416,7 @@ export const useAPI = () => {
         "Failed to fetch meetings from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(SIMULATED_DELAY_MS);
         return [...MOCK_MEETINGS];
       }
@@ -427,7 +432,7 @@ export const useAPI = () => {
         "Failed to fetch trainings from server, falling back to mock.",
         error,
       );
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV || isStorybook) {
         await delay(SIMULATED_DELAY_MS);
         return [...MOCK_TRAININGS];
       }
