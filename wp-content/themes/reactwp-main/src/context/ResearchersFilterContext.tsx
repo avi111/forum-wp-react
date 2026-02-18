@@ -1,17 +1,16 @@
 import React, {
   createContext,
+  ReactNode,
   useEffect,
   useMemo,
   useState,
-  ReactNode,
 } from "react";
 import { useApp } from "./AppContext.tsx";
-import { getResearcherName, UserStatus, Researcher } from "../types.ts";
+import { getResearcherName, Researcher, UserStatus } from "../types.ts";
 import { useSearchParams } from "react-router-dom";
 
 export interface ResearchersFilterContextType {
   currentResearchers: Researcher[];
-  specializations: string[];
   subSpecializations: string[];
   institutions: string[];
   totalPages: number;
@@ -40,14 +39,15 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const { researchers, settings, getResearchersFromServer } = useApp();
   const [searchParams, setSearchParams] = useSearchParams();
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
   // Filters
   const [selectedSpecialization, setSelectedSpecialization] = useState("");
-  const [selectedSubSpecialization, setSelectedSubSpecialization] = useState("");
+  const [selectedSubSpecialization, setSelectedSubSpecialization] =
+    useState("");
   const [selectedInstitution, setSelectedInstitution] = useState("");
 
   // Initialize filters from URL params
@@ -55,11 +55,11 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
     const institutionParam = searchParams.get("institution");
     const specializationParam = searchParams.get("specialization");
     const subSpecializationParam = searchParams.get("subSpecialization");
-    
+
     if (institutionParam) {
       setSelectedInstitution(institutionParam);
     }
-    
+
     if (specializationParam) {
       setSelectedSpecialization(specializationParam);
     }
@@ -80,15 +80,6 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   }, [getResearchersFromServer, researchers.length]);
 
   const itemsPerPage = settings.researcherIndexItemsPerPage || 12;
-
-  // Extract unique specializations and institutions for filters
-  const specializations = useMemo(() => {
-    const specs = new Set<string>();
-    researchers.forEach((r) => {
-      if (r.specialization) specs.add(r.specialization);
-    });
-    return Array.from(specs).sort();
-  }, [researchers]);
 
   const subSpecializations = useMemo(() => {
     const subSpecs = new Set<string>();
@@ -111,9 +102,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   const filteredResearchers = useMemo(() => {
     return researchers
       .filter((r) => {
-        const hasSpecialization = !!r.specialization;
-        const hasInstitution = !!r.institution;
-        return hasSpecialization && hasInstitution;
+        return !!r.institution;
       })
       .filter((r) => {
         const term = searchTerm.trim().toLowerCase();
@@ -123,13 +112,8 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
         const matchesSearch =
           term === "" ||
           fullName.includes(term) ||
-          (r.institution?.toLowerCase() || "").includes(term) ||
-          (r.specialization?.toLowerCase() || "").includes(term);
+          (r.institution?.toLowerCase() || "").includes(term);
 
-        const matchesSpecialization = selectedSpecialization
-          ? r.specialization === selectedSpecialization
-          : true;
-        
         const matchesSubSpecialization = selectedSubSpecialization
           ? r.subSpecializations?.includes(selectedSubSpecialization)
           : true;
@@ -141,12 +125,17 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
         return (
           isActive &&
           matchesSearch &&
-          matchesSpecialization &&
           matchesSubSpecialization &&
           matchesInstitution
         );
       });
-  }, [searchTerm, selectedSpecialization, selectedSubSpecialization, selectedInstitution, researchers]);
+  }, [
+    searchTerm,
+    selectedSpecialization,
+    selectedSubSpecialization,
+    selectedInstitution,
+    researchers,
+  ]);
 
   const totalPages = Math.ceil(filteredResearchers.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -166,7 +155,6 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
 
   const value = {
     currentResearchers,
-    specializations,
     subSpecializations,
     institutions,
     totalPages,

@@ -252,7 +252,6 @@ export const useAPI = () => {
   }, [post]);
 
   const fetchArticles = useCallback(async (): Promise<Article[]> => {
-    console.log("wefgwe");
     try {
       return await post("fetchArticles");
     } catch (error) {

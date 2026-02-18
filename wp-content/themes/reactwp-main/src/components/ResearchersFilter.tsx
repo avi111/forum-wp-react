@@ -70,9 +70,6 @@ export const ResearchersFilter = () => {
                     <span className="font-medium text-slate-700 group-hover:text-teal-600">
                       {getResearcherName(r)}
                     </span>
-                    <span className="text-xs text-slate-400 bg-slate-100 px-2 py-1 rounded-full">
-                      {r.specialization}
-                    </span>
                   </button>
                 ))}
               </div>

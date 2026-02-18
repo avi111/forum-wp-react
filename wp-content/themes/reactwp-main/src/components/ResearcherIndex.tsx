@@ -12,7 +12,6 @@ export const ResearcherIndex: React.FC = () => {
     clearFilters,
     setCurrentPage,
     currentPage,
-    setSelectedSpecialization,
     setSelectedInstitution,
   } = useResearchersFilter();
 
@@ -20,12 +19,6 @@ export const ResearcherIndex: React.FC = () => {
 
   const handleResearcherClick = (id: string) => {
     navigate(`/researchers/${id}`);
-  };
-
-  const handleSpecializationClick = (specialization: string) => {
-    setSelectedSpecialization(specialization);
-    setCurrentPage(1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleInstitutionClick = (institution: string) => {
@@ -47,7 +40,6 @@ export const ResearcherIndex: React.FC = () => {
             key={researcher.id}
             researcher={researcher}
             onClick={handleResearcherClick}
-            onSpecializationClick={handleSpecializationClick}
             onInstitutionClick={handleInstitutionClick}
           />
         ))}

@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Footer } from '../components/Footer';
-import { UserStatus } from '../types';
-import { MemoryRouter } from 'react-router-dom';
-import { AppProvider } from '../context/AppContext';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Footer } from "../components/Footer";
+import { UserStatus } from "../types";
+import { MemoryRouter } from "react-router-dom";
+import { AppProvider } from "../context/AppContext";
 
 const meta = {
-  title: 'Components/Footer',
+  title: "Components/Footer",
   component: Footer,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
   decorators: [
     (Story) => (
@@ -19,7 +19,7 @@ const meta = {
       </AppProvider>
     ),
   ],
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof Footer>;
 
 export default meta;
@@ -34,15 +34,14 @@ export const Default: Story = {
 export const WithPendingUser: Story = {
   args: {
     currentUser: {
-      id: '1',
-      firstName: 'ישראל',
-      lastName: 'ישראלי',
-      email: 'israel@example.com',
-      institution: 'אוניברסיטת תל אביב',
-      specialization: 'פסיכיאטריה',
-      bio: '',
+      id: "1",
+      firstName: "ישראל",
+      lastName: "ישראלי",
+      email: "israel@example.com",
+      institution: "אוניברסיטת תל אביב",
+      bio: "",
       status: UserStatus.PENDING,
     },
-    onSimulateApproval: () => alert('Simulated Approval Clicked'),
+    onSimulateApproval: () => alert("Simulated Approval Clicked"),
   },
 };

@@ -74,12 +74,6 @@ export const ResearcherProfile: React.FC = () => {
     );
   };
 
-  const handleSpecializationClick = () => {
-    navigate(
-      `/researchers?specialization=${encodeURIComponent(researcher.specialization)}`,
-    );
-  };
-
   const handleSubSpecializationClick = (sub: string) => {
     navigate(`/researchers?subSpecialization=${encodeURIComponent(sub)}`);
   };
@@ -116,12 +110,6 @@ export const ResearcherProfile: React.FC = () => {
               <h1 className="text-3xl md:text-4xl font-bold font-heebo mb-2">
                 {fullName}
               </h1>
-              <p
-                className="text-teal-400 text-lg font-medium mb-1 cursor-pointer hover:text-teal-300 hover:underline transition-all inline-block"
-                onClick={handleSpecializationClick}
-              >
-                {researcher.specialization}
-              </p>
               <div
                 className="flex items-center justify-center md:justify-start text-slate-300 text-sm cursor-pointer hover:text-white hover:underline transition-all"
                 onClick={handleInstitutionClick}
@@ -207,17 +195,6 @@ export const ResearcherProfile: React.FC = () => {
                     </span>
                   </div>
                 )}
-                {researcher.studentYear &&
-                  researcher.studentYear !== "advanced" && (
-                    <div>
-                      <span className="text-xs text-slate-400 block mb-1">
-                        שנת לימודים
-                      </span>
-                      <span className="text-slate-800 font-medium">
-                        שנה {researcher.studentYear}
-                      </span>
-                    </div>
-                  )}
                 {researcher.subSpecializations &&
                   researcher.subSpecializations.length > 0 && (
                     <div>

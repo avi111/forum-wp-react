@@ -8,7 +8,6 @@ export interface Researcher {
   id: string;
   email: string;
   institution: string;
-  specialization: string;
   bio: string;
   status: UserStatus;
   imageUrl?: string;
@@ -21,7 +20,6 @@ export interface Researcher {
   idNumber?: string;
   faculty?: string;
   subSpecializations?: string[];
-  studentYear?: string;
   newsletter?: boolean;
   websites?: string[];
 }

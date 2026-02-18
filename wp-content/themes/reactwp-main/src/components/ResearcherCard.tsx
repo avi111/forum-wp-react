@@ -5,7 +5,6 @@ import { ArrowRight, MapPin } from "lucide-react";
 export interface ResearcherCardProps {
   researcher: Researcher;
   onClick: (id: string) => void;
-  onSpecializationClick?: (specialization: string) => void;
   onInstitutionClick?: (institution: string) => void;
   variant?: "default" | "carousel";
 }
@@ -13,17 +12,9 @@ export interface ResearcherCardProps {
 export const ResearcherCard: React.FC<ResearcherCardProps> = ({
   researcher,
   onClick,
-  onSpecializationClick,
   onInstitutionClick,
   variant = "default",
 }) => {
-  const handleSpecializationClick = (e: React.MouseEvent) => {
-    if (onSpecializationClick) {
-      e.stopPropagation();
-      onSpecializationClick(researcher.specialization);
-    }
-  };
-
   const handleInstitutionClick = (e: React.MouseEvent) => {
     if (onInstitutionClick) {
       e.stopPropagation();
@@ -51,12 +42,6 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
           <h3 className="font-bold text-slate-900 truncate">
             {getResearcherName(researcher)}
           </h3>
-          <p 
-            className={`text-xs text-teal-600 font-bold uppercase tracking-wider mb-2 truncate ${onSpecializationClick ? "cursor-pointer hover:underline" : ""}`}
-            onClick={handleSpecializationClick}
-          >
-            {researcher.specialization}
-          </p>
           <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
             צפה בפרופיל <ArrowRight className="w-3 h-3 mr-1" />
           </button>
@@ -86,14 +71,8 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
           >
             {getResearcherName(researcher)}
           </h3>
-          <p 
-            className={`text-teal-600 font-medium text-sm mb-3 uppercase tracking-wide inline-block ${onSpecializationClick ? "cursor-pointer hover:underline" : ""}`}
-            onClick={handleSpecializationClick}
-          >
-            {researcher.specialization}
-          </p>
 
-          <div 
+          <div
             className={`flex items-center text-slate-500 text-sm mb-4 bg-slate-50 p-2 rounded-lg inline-flex ${onInstitutionClick ? "cursor-pointer hover:bg-slate-100 transition-colors" : ""}`}
             onClick={handleInstitutionClick}
           >

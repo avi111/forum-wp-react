@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Navbar } from '../components/Navbar';
-import { PageView, UserStatus } from '../types';
-import { MemoryRouter } from 'react-router-dom';
-import { AppProvider } from '../context/AppContext';
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Navbar } from "../components/Navbar";
+import { PageView, UserStatus } from "../types";
+import { MemoryRouter } from "react-router-dom";
+import { AppProvider } from "../context/AppContext";
 
 const meta = {
-  title: 'Components/Navbar',
+  title: "Components/Navbar",
   component: Navbar,
   parameters: {
-    layout: 'fullscreen',
+    layout: "fullscreen",
   },
   decorators: [
     (Story) => (
@@ -19,19 +19,19 @@ const meta = {
       </AppProvider>
     ),
   ],
-  tags: ['autodocs'],
+  tags: ["autodocs"],
 } satisfies Meta<typeof Navbar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const navItems = [
-  { label: 'ראשי', view: PageView.HOME },
-  { label: 'חוקרים', view: PageView.RESEARCHERS },
-  { label: 'הכשרות', view: PageView.TRAINING },
-  { label: 'אירועים', view: PageView.EVENTS },
-  { label: 'מאמרים', view: PageView.ARTICLES },
-  { label: 'צור קשר', view: PageView.CONTACT },
+  { label: "ראשי", view: PageView.HOME },
+  { label: "חוקרים", view: PageView.RESEARCHERS },
+  { label: "הכשרות", view: PageView.TRAINING },
+  { label: "אירועים", view: PageView.EVENTS },
+  { label: "מאמרים", view: PageView.ARTICLES },
+  { label: "צור קשר", view: PageView.CONTACT },
 ];
 
 export const LoggedOut: Story = {
@@ -45,16 +45,15 @@ export const LoggedOut: Story = {
 export const LoggedIn: Story = {
   args: {
     isLoggedIn: true,
-    onLogout: () => console.log('Logout clicked'),
+    onLogout: () => console.log("Logout clicked"),
     navItems: navItems,
     currentUser: {
-      id: '1',
-      firstName: 'ישראל',
-      lastName: 'ישראלי',
-      email: 'israel@example.com',
-      institution: 'אוניברסיטת תל אביב',
-      specialization: 'פסיכיאטריה',
-      bio: '',
+      id: "1",
+      firstName: "ישראל",
+      lastName: "ישראלי",
+      email: "israel@example.com",
+      institution: "אוניברסיטת תל אביב",
+      bio: "",
       status: UserStatus.ACTIVE,
     },
   },

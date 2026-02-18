@@ -27,7 +27,7 @@ export const useResearchers = () => {
   return useQuery({
     queryKey: ["researchers"],
     queryFn: fetchResearchers,
-    enabled: false,
+    // enabled: false,
   });
 };
 
@@ -78,7 +78,7 @@ export const useNews = () => {
     // Added a version number to the key to invalidate the cache
     queryKey: ["news", "v2"],
     queryFn: fetchNews,
-    enabled: false,
+    // enabled: false,
   });
 };
 
@@ -125,7 +125,7 @@ export const useMeetings = () => {
   return useQuery({
     queryKey: ["meetings"],
     queryFn: fetchMeetings,
-    enabled: false,
+    // enabled: false,
   });
 };
 
@@ -135,6 +135,6 @@ export const useTrainings = () => {
   return useQuery({
     queryKey: ["trainings"],
     queryFn: fetchTrainings,
-    enabled: false,
+    // enabled: false,
   });
 };
