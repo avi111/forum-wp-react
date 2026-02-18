@@ -16,6 +16,7 @@ import { PageNotFound } from "./pages/PageNotFound";
 import { TagPage } from "./pages/TagPage";
 import { EventPage } from "./pages/EventPage";
 import { NewsPage } from "./pages/NewsPage";
+import { Bylaws } from "./pages/Bylaws";
 
 export const routeConfig = [
   {
@@ -25,6 +26,10 @@ export const routeConfig = [
   {
     path: "/about",
     element: <About />,
+  },
+  {
+    path: "/bylaws",
+    element: <Bylaws />,
   },
   {
     path: "/news",
