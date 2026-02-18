@@ -4,6 +4,7 @@ import { Brain, LogOut, Menu, UserCircle, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
 import { useNavigation } from "../hooks/useNavigation";
+import { useEvents, useMeetings, useTrainings } from "../hooks/useAppQueries";
 
 export interface NavbarProps {
   isLoggedIn: boolean;
@@ -22,6 +23,35 @@ export const Navbar: React.FC<NavbarProps> = ({
   const { site, isModalOpen } = useApp(); // Get site info from context
   const navigate = useNavigate();
   const { getPath } = useNavigation();
+
+  const { data: eventsData } = useEvents({
+    limit: 1,
+    timeFilter: "future",
+  });
+
+  const { data: meetingsData } = useMeetings();
+  const { data: trainingsData } = useTrainings();
+
+  const hasEvents = useMemo(() => {
+    return eventsData?.total ? eventsData.total > 0 : false;
+  }, [eventsData]);
+
+  const hasMeetings = useMemo(() => {
+    return meetingsData && meetingsData.length > 0;
+  }, [meetingsData]);
+
+  const hasTrainings = useMemo(() => {
+    return trainingsData && trainingsData.length > 0;
+  }, [trainingsData]);
+
+  const filteredNavItems = useMemo(() => {
+    return navItems.filter((item) => {
+      if (item.view === PageView.EVENTS && !hasEvents) return false;
+      if (item.view === PageView.MEETINGS && !hasMeetings) return false;
+      if (item.view === PageView.TRAINING && !hasTrainings) return false;
+      return true;
+    });
+  }, [navItems, hasEvents, hasMeetings, hasTrainings]);
 
   const handleNavClick = (view: PageView) => {
     const path = getPath(view);
@@ -112,7 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Desktop Navigation */}
           <div className="hidden lg:block">
             <div className="flex items-baseline space-x-1 space-x-reverse">
-              {navItems.map((item) => (
+              {filteredNavItems.map((item) => (
                 <button
                   key={item.view}
                   onClick={() => handleNavClick(item.view)}
@@ -181,7 +211,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       {isOpen && (
         <div className="lg:hidden bg-slate-800 border-t border-slate-700 animate-fade-in">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <button
                 key={item.view}
                 onClick={() => handleNavClick(item.view)}
