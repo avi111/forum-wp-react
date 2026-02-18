@@ -87,29 +87,6 @@ export const JoinForm: FC = () => {
             {t("joinform_title")}
           </h2>
           <p className="mt-2 text-lg">{t("joinform_subtitle")}</p>
-
-          <div className="mt-8 max-w-2xl mx-auto text-right">
-            <h3 className="text-xl font-bold text-slate-800 mb-2">הצעה</h3>
-            <p className="text-slate-600">
-              אם נתקלתם בקשיים כלשהם במילוי הטופס, אם נרשמתם והאימות האוטומטי של
-              הטופס פסל אתכם, או אם אתם מתעצלים למלא את הטופס ונח לכם יותר לעשות
-              את זה במייל, אנו מציעים לכם גם לשלוח בקשה בכתב למייל{" "}
-              <a
-                href="mailto:avi111@gmail.com"
-                className="text-indigo-600 hover:underline font-medium"
-              >
-                avi111@gmail.com
-              </a>
-              . אנחנו נעשה לכם את "העבודה המלוכלכת".
-            </p>
-
-            <h3 className="text-xl font-bold text-slate-800 mb-2 mt-6">חשוב</h3>
-            <p className="text-slate-600">
-              לאחר מילוי הטופס תקבלו מייל, עם לינק, עליו תצטרכו ללחוץ על מנת
-              לאשר את חברותכם. עליכם ללחוץ על הלינק בתוך שעתיים מרגע קבלתו, לפני
-              שהמשתמש שנפתח לכם יימחק אוטומטית (משיקולי אבטחה)
-            </p>
-          </div>
         </div>
         <div className="bg-slate-50 min-h-screen w-full">
           <div dangerouslySetInnerHTML={{ __html: content }} />
