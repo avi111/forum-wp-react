@@ -1,32 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { PaginationControls } from "../components/PaginationControls";
+import React, { useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import { t } from "../services/stringService";
 import { TagCloud } from "../components/TagCloud";
-import {
-  useEditorialArticles,
-  useResearchArticles,
-} from "../hooks/useAppQueries";
-import { ArticleCard } from "../components/ArticleCard";
-import { EditorialCard } from "../components/EditorialCard";
+import { EditorialArticlesList } from "../components/EditorialArticlesList";
+import { ResearchArticlesList } from "../components/ResearchArticlesList";
 
 export const ArticleList: React.FC = () => {
-  const { settings, tagsData, isTagsLoading, getTagsFromServer } = useApp();
-
-  // State for separate pagination
-  const [editorialPage, setEditorialPage] = useState(1);
-  const [researcherPage, setResearcherPage] = useState(1);
-
-  // Fetch paginated lists (lazy load per page)
-  const editorialQuery = useEditorialArticles(
-    editorialPage,
-    settings.editorialItemsPerPage,
-  );
-  const researcherQuery = useResearchArticles(
-    researcherPage,
-    settings.researcherItemsPerPage,
-  );
+  const { tagsData, isTagsLoading, getTagsFromServer } = useApp();
 
   // Load tags data for TagCloud only when this page is mounted
   useEffect(() => {
@@ -34,25 +14,6 @@ export const ArticleList: React.FC = () => {
       getTagsFromServer();
     }
   }, [tagsData, isTagsLoading, getTagsFromServer]);
-
-  // Data + totals from server
-  const currentEditorialArticles = editorialQuery.data?.data || [];
-  const totalEditorialPages = editorialQuery.data
-    ? Math.ceil(editorialQuery.data.total / settings.editorialItemsPerPage)
-    : 0;
-
-  const currentResearcherArticles = researcherQuery.data?.data || [];
-  const totalResearcherPages = researcherQuery.data
-    ? Math.ceil(researcherQuery.data.total / settings.researcherItemsPerPage)
-    : 0;
-
-  const handleEditorialPageChange = (page: number) => {
-    setEditorialPage(page);
-  };
-
-  const handleResearcherPageChange = (page: number) => {
-    setResearcherPage(page);
-  };
 
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">
@@ -79,63 +40,11 @@ export const ArticleList: React.FC = () => {
       )}
       <TagCloud tagsData={tagsData || []} />
 
-      {/* Editorial / Featured Section */}
-      <div className="mb-16">
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center">
-          <span className="w-2 h-8 bg-indigo-600 rounded ml-3"></span>
-          {t("articlelist_editorial_section_title")}
-        </h3>
-        {editorialQuery.isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 gap-8">
-            {currentEditorialArticles.map((article) => (
-              <EditorialCard
-                key={article.id}
-                article={article}
-                showImage={false}
-              />
-            ))}
-          </div>
-        )}
-
-        <PaginationControls
-          currentPage={editorialPage}
-          totalPages={totalEditorialPages}
-          onPageChange={handleEditorialPageChange}
-        />
-      </div>
-
       {/* Researcher Articles Section */}
-      <div>
-        <h3 className="text-2xl font-bold text-slate-800 mb-6 flex items-center">
-          <span className="w-2 h-8 bg-teal-500 rounded ml-3"></span>
-          {t("articlelist_researcher_section_title")}
-        </h3>
-        {researcherQuery.isLoading ? (
-          <div className="flex items-center justify-center py-16">
-            <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-3 gap-8">
-            {currentResearcherArticles.map((article) => (
-              <ArticleCard
-                key={article.id}
-                article={article}
-                showImage={false}
-              />
-            ))}
-          </div>
-        )}
+      <ResearchArticlesList />
 
-        <PaginationControls
-          currentPage={researcherPage}
-          totalPages={totalResearcherPages}
-          onPageChange={handleResearcherPageChange}
-        />
-      </div>
+      {/* Editorial / Featured Section */}
+      <EditorialArticlesList />
     </div>
   );
 };
