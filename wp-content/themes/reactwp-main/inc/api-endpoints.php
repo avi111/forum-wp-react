@@ -344,7 +344,7 @@ function iprf_fetch_articles()
         $articles[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
-            'excerpt' => get_the_excerpt(),
+            'excerpt' => has_excerpt() ? get_the_excerpt() : '',
             'content' => apply_filters('the_content', get_the_content()),
             'authorId' => (string)get_the_author_meta('ID'),
             'authorName' => get_the_author(),
@@ -420,7 +420,7 @@ function iprf_fetch_articles_paged()
         $articles[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
-            'excerpt' => get_the_excerpt(),
+            'excerpt' => has_excerpt() ? get_the_excerpt() : '',
             'content' => apply_filters('the_content', get_the_content()),
             'authorId' => (string)get_the_author_meta('ID'),
             'authorName' => get_the_author(),

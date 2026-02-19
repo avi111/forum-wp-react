@@ -15,9 +15,11 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
   return (
     <div className="max-w-4xl mx-auto px-4 -mt-8 relative z-20">
       <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-8 md:p-12">
-        <div className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium">
-          {article.excerpt}
-        </div>
+        {article.excerpt && (
+          <div className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium">
+            {article.excerpt}
+          </div>
+        )}
         <div
           className="prose prose-slate prose-lg max-w-none text-slate-800 leading-loose"
           dangerouslySetInnerHTML={{ __html: article.content }}
@@ -49,7 +51,9 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
                       {file.name}
                     </h4>
                     {file.size && (
-                      <span className="text-xs text-slate-500">{file.size}</span>
+                      <span className="text-xs text-slate-500">
+                        {file.size}
+                      </span>
                     )}
                   </div>
                   <a
