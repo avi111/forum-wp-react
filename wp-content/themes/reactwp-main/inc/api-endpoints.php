@@ -1125,3 +1125,52 @@ function iprf_process_user_verification()
     echo '</div></body></html>';
     exit;
 }
+
+/**
+ * 15. Cleanup Unverified Subscribers
+ */
+add_action('wp_ajax_cleanupUnverifiedSubscribers', 'iprf_cleanup_unverified_subscribers');
+add_action('wp_ajax_nopriv_cleanupUnverifiedSubscribers', 'iprf_cleanup_unverified_subscribers');
+
+function iprf_cleanup_unverified_subscribers()
+{
+    $args = [
+        'role' => 'subscriber',
+        'number' => -1,
+        'fields' => 'all',
+    ];
+
+    $users = get_users($args);
+    $deleted_count = 0;
+    $now_ts = time(); // UTC
+
+    foreach ($users as $user) {
+        // user_registered is in UTC
+        $registered_ts = strtotime($user->user_registered . ' UTC');
+        $diff = $now_ts - $registered_ts;
+        $three_hours = 3 * 60 * 60;
+
+        if ($diff > $three_hours) {
+            $user_email = $user->user_email;
+            $subject = 'הודעה על מחיקת משתמש - אימות לא הושלם';
+            $message = "שלום,\n\n";
+            $message .= "המשתמש שלך נמחק כיוון שלא אימתת אותו בחלון הזמן של 3 שעות שניתן לכך.\n";
+            $message .= "אם ברצונך להירשם שוב, אתה מוזמן לשלוח מייל אל מנהלי האתר או לנסות להירשם שוב.\n\n";
+            $message .= "בברכה,\nצוות האתר";
+            $headers = ['Content-Type: text/plain; charset=UTF-8'];
+
+            // Send email
+            wp_mail($user_email, $subject, $message, $headers);
+
+            // Delete user
+            if (!function_exists('wp_delete_user')) {
+                require_once(ABSPATH . 'wp-admin/includes/user.php');
+            }
+            wp_delete_user($user->ID);
+            
+            $deleted_count++;
+        }
+    }
+
+    iprf_send_response(['message' => "תהליך ניקוי הסתיים. נמחקו $deleted_count משתמשים."]);
+}
