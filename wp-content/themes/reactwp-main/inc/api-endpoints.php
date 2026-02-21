@@ -1016,3 +1016,112 @@ function iprf_join_form_submit()
     // 6. Send Success Response
     iprf_send_response(['message' => 'ההרשמה בוצעה בהצלחה. פרטיך נשלחו לבדיקה ואישור.']);
 }
+
+/**
+ * 13. Check User Verification (Display Form)
+ */
+add_action('wp_ajax_checkUserVerification', 'iprf_check_user_verification');
+add_action('wp_ajax_nopriv_checkUserVerification', 'iprf_check_user_verification');
+
+function iprf_check_user_verification()
+{
+    $user_id = isset($_GET['id']) ? intval($_GET['id']) : (isset($_GET['user_id']) ? intval($_GET['user_id']) : 0);
+    $user = get_user_by('id', $user_id);
+
+    // Basic styling for the HTML output
+    $style = '<style>
+        body { font-family: sans-serif; direction: rtl; text-align: center; padding: 50px; background: #f9f9f9; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+        h1 { color: #333; }
+        p { color: #666; }
+        input[type="text"] { padding: 10px; width: 80%; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background: #0073aa; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #005177; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>';
+
+    echo '<!DOCTYPE html><html lang="he"><head><meta charset="UTF-8"><title>אימות משתמש</title>' . $style . '</head><body><div class="container">';
+
+    if (!$user) {
+        echo '<h1>שגיאה</h1>';
+        echo '<p>המשתמש לא קיים במערכת.</p>';
+        echo '</div></body></html>';
+        exit;
+    }
+
+    // Check 3 hours window
+    $registered_ts = strtotime($user->user_registered . ' UTC');
+    $now_ts = time();
+    $three_hours = 3 * 60 * 60;
+
+    if (($now_ts - $registered_ts) > $three_hours) {
+        echo '<h1>הזמן עבר</h1>';
+        echo '<p>חלון 3 השעות חלף. ביכולתך לפנות אלינו במייל ולבקש ש״נפשיר״ את המשתמש שלך.</p>';
+        echo '</div></body></html>';
+        exit;
+    }
+
+    // Show Form
+    $action_url = admin_url('admin-ajax.php');
+    echo '<h1>אימות משתמש</h1>';
+    echo '<p>מה השם הפרטי איתו נרשם המשתמש באתר?</p>';
+    echo '<form action="' . esc_url($action_url) . '" method="POST">';
+    echo '<input type="hidden" name="action" value="processUserVerification">';
+    echo '<input type="hidden" name="user_id" value="' . esc_attr($user_id) . '">';
+    echo '<input type="text" name="answer" placeholder="הכנס את השם הפרטי" required>';
+    echo '<br>';
+    echo '<button type="submit">שלח</button>';
+    echo '</form>';
+
+    echo '</div></body></html>';
+    exit;
+}
+
+/**
+ * 14. Process User Verification (Handle Form POST)
+ */
+add_action('wp_ajax_processUserVerification', 'iprf_process_user_verification');
+add_action('wp_ajax_nopriv_processUserVerification', 'iprf_process_user_verification');
+
+function iprf_process_user_verification()
+{
+    $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
+    $answer = isset($_POST['answer']) ? sanitize_text_field($_POST['answer']) : '';
+    
+    $user = get_user_by('id', $user_id);
+
+    // Basic styling
+    $style = '<style>
+        body { font-family: sans-serif; direction: rtl; text-align: center; padding: 50px; background: #f9f9f9; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; }
+        h1 { color: #333; }
+        p { color: #666; }
+        .error { color: #d63638; }
+        .success { color: #00a32a; }
+        a { color: #0073aa; text-decoration: none; }
+    </style>';
+
+    echo '<!DOCTYPE html><html lang="he"><head><meta charset="UTF-8"><title>תוצאת אימות</title>' . $style . '</head><body><div class="container">';
+
+    if (!$user) {
+        echo '<h1 class="error">שגיאה</h1><p>משתמש לא נמצא.</p>';
+    } else {
+        // Verify Name
+        if (mb_strtolower(trim($answer), 'UTF-8') === mb_strtolower($user->first_name, 'UTF-8')) {
+            // Update Role
+            $u = new WP_User($user_id);
+            $u->set_role('contributor');
+            echo '<h1 class="success">אימות הצליח!</h1>';
+            echo '<p>המשתמש שלך אושר כעת כ-Contributor.</p>';
+            echo '<p><a href="' . home_url() . '">חזור לדף הבית</a></p>';
+        } else {
+            echo '<h1 class="error">אימות נכשל</h1>';
+            echo '<p>השם שהזנת אינו תואם את השם במערכת.</p>';
+            echo '<p><a href="javascript:history.back()">נסה שוב</a></p>';
+        }
+    }
+
+    echo '</div></body></html>';
+    exit;
+}
