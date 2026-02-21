@@ -20,12 +20,11 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
             {article.excerpt}
           </div>
         )}
-        <div
+        <article
           className="prose prose-slate prose-lg max-w-none text-slate-800 leading-loose"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
-
-        {/* Attachments Section */}
+        s{/* Attachments Section */}
         {article.attachments && article.attachments.length > 0 && (
           <div className="mt-12 pt-8 border-t border-slate-100">
             <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center">
@@ -69,7 +68,6 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
             </div>
           </div>
         )}
-
         {/* PDF Preview Section */}
         {pdfAttachments.length > 0 && (
           <div className="mt-8">
@@ -96,7 +94,6 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
             </div>
           </div>
         )}
-
         {/* Article Footer */}
         <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="text-sm text-slate-500">

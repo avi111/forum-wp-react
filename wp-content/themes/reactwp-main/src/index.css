@@ -77,3 +77,9 @@ label:has(+ div > input[required])::after {
     color: #ef4444; /* Tailwind red-500 */
     margin-right: 0.25rem;
 }
+
+article {
+    p {
+        margin-bottom: 20px;
+    }
+}

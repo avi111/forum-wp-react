@@ -330,7 +330,7 @@ function iprf_fetch_articles()
 {
     $args = [
         'post_type' => ['post', 'research-paper'],
-        'posts_per_page' => 20,
+        'posts_per_page' => -1,
         'post_status' => 'publish'
     ];
 
