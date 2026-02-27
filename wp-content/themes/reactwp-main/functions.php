@@ -179,7 +179,7 @@ add_action( 'send_headers', function() {
 }, 10 );
 
 define('ZEROBOUNCE_API_KEY', '77acd04b7abb4d66929b669635ebdd5d');
-define('ZERUH','2dbb19d80ce73fd5bf443736f81e93527860c0e8c3c97c3c0abc50fb570a4f11')
+define('ZERUH','2dbb19d80ce73fd5bf443736f81e93527860c0e8c3c97c3c0abc50fb570a4f11');
 define('ADMIN_EMAIL', 'psyresforum@gmail.com');
 define('SECRET', '23uhg26g4#4fqfqw44h');
 
