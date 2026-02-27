@@ -1,0 +1,43 @@
+/* עיצוב שדות רפטיטיביים js-wpt-repetitive */
+.js-wpt-field-items.js-wpt-repetitive {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+}
+
+.wpt-repetitive {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f9fafb;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid #f3f4f6;
+}
+
+/* כפתורי Toolset */
+.js-wpt-repadd {
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.js-wpt-repremove {
+    background-color: #fee2e2;
+    color: #ef4444;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #fecaca;
+    font-weight: bold;
+}
+
+/* התאמת צ'קבוקסים עם ירידת שורה */
+.flex-col.gap-2 label {
+    display: block;
+    margin-bottom: 8px;
+}

@@ -58,7 +58,7 @@ function iprf_register_blocks() {
     register_block_type( get_template_directory() . '/blocks/content-paragraph' );
     register_block_type( get_template_directory() . '/blocks/decorative-box' );
     register_block_type( get_template_directory() . '/blocks/grid-container' );
-    
+
     // New Hero Blocks
     register_block_type( get_template_directory() . '/blocks/hero-container' );
     register_block_type( get_template_directory() . '/blocks/hero-subtitle' );
@@ -143,3 +143,92 @@ function iprf_show_research_papers_column_content( $value, $column_name, $user_i
     return $value;
 }
 add_action( 'manage_users_custom_column', 'iprf_show_research_papers_column_content', 10, 3 );
+
+add_action('wp_enqueue_scripts', function() {
+
+  // קבלת נתיב התיקייה של ערכת הנושא
+  $theme_uri = get_stylesheet_directory_uri();
+
+  // 1. טעינת הסטייל עבור טאבים של ה-Editor (Visual/Text)
+  // אנחנו מוסיפים את 'editor-buttons' כתלות (Dependency) כדי לוודא סדר טעינה נכון
+  wp_enqueue_style(
+    'tailwind-wp-editor',
+    $theme_uri . '/wp-editor-tailwind.css',
+    array('editor-buttons', 'dashicons'),
+    '1.0.0'
+  );
+
+  // 2. טעינת הסטייל עבור שדות Toolset (Repetitive fields, buttons)
+  wp_enqueue_style(
+    'tailwind-toolset-forms',
+    $theme_uri . '/toolset-tailwind-custom.css',
+    array(),
+    '1.0.0'
+  );
+
+}, 20);
+
+remove_action( 'login_init', 'send_frame_options_header', 10 );
+remove_action( 'admin_init', 'send_frame_options_header', 10 );
+
+// הוספת Header שמאפשר הצגה (בדפדפנים מודרניים משתמשים ב-CSP)
+add_action( 'send_headers', function() {
+  header_remove('X-Frame-Options');
+
+  header("Content-Security-Policy: frame-ancestors 'self' https://psyforum.co.il");
+}, 10 );
+
+define('ZEROBOUNCE_API_KEY', '77acd04b7abb4d66929b669635ebdd5d');
+define('ADMIN_EMAIL', 'psyresforum@gmail.com');
+define('SECRET', '23uhg26g4#4fqfqw44h');
+
+add_filter('cred_form_validate', 'validate_user_with_ai', 10, 2);
+function validate_user_with_ai($error_fields, $form_data) {
+
+  echo '<pre>';
+  print_r($_POST);
+  echo '</pre>';
+  die();
+  $field_id = 6287; // ה-ID של הטופס שלך
+  if ($form_data['id'] == $field_id) {
+    if($_POST['pot']!=="") {
+      $error_fields['pot'] = 'מלכודת.';
+    }
+
+    if(!$_POST['אישור']) {
+      $error_fields['אישור'] = 'זהו שדה חובה.';
+    }
+
+
+
+    $email_to_validate = $_POST['user_email'];
+
+    $url = "https://api.zerobounce.net/v2/validate?api_key=" . ZEROBOUNCE_API_KEY . "&email=" . urlencode($email_to_validate);
+
+    $response = wp_remote_get($url, array('timeout' => 15));
+
+    if (is_wp_error($response)) {
+      $error_fields['user_email'] = 'שגיאה.';
+    } else {
+      $result = json_decode(wp_remote_retrieve_body($response), true);
+
+      $is_valid = (isset($result['status']) && $result['status'] === 'valid');
+
+      if (!$is_valid) {
+        $subject = "התראה: ניסיון הרשמה עם אימייל לא אותנטי";
+        $status = $result['status'] ?? 'unknown';
+
+        $body = "שלום,\n\nהתקבל ניסיון הרשמה עם כתובת אימייל שנמצאה כלא אותנטית.\n\n" .
+          "אימייל: {$email_to_validate}\n" .
+          "סטטוס: {$status}\n\n" .
+          "מערכת האתר.";
+
+        wp_mail(ADMIN_EMAIL, $subject, $body);
+
+        $error_fields['user_email'] = 'הפרטים נראים לא אותנטיים, אנא נסה שוב.';
+      }
+    }
+  }
+
+  return $error_fields;
+}

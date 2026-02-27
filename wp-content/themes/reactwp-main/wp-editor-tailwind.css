@@ -1,0 +1,29 @@
+/* עיצוב הטאבים בסטייל Tailwind */
+.wp-editor-tabs {
+    margin-bottom: -1px;
+    display: flex;
+    gap: 4px;
+}
+
+.wp-editor-tabs .wp-switch-editor {
+    background-color: #f3f4f6; /* gray-100 */
+    color: #4b5563; /* gray-600 */
+    border: 1px solid #e5e7eb;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    padding: 6px 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tmce-active .switch-tmce,
+.html-active .switch-html {
+    background-color: #2563eb; /* blue-600 */
+    color: white;
+    border-color: #2563eb;
+}
+
+.wp-editor-container {
+    border: 1px solid #e5e7eb;
+    border-radius: 0 8px 8px 8px; /* פינה עגולה חוץ מהחיבור לטאב */
+}

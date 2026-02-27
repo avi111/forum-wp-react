@@ -83,3 +83,12 @@ article {
         margin-bottom: 20px;
     }
 }
+
+.wp-editor-tabs .wp-switch-editor {
+    @apply bg-gray-200 text-gray-700 px-3 py-1 rounded-t-lg border-none mr-1 transition-all;
+}
+
+.wp-editor-tabs .html-active .switch-html,
+.wp-editor-tabs .tmce-active .switch-tmce {
+    @apply bg-blue-600 text-white shadow-inner;
+}
