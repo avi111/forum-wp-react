@@ -1174,3 +1174,75 @@ function iprf_cleanup_unverified_subscribers()
 
     iprf_send_response(['message' => "תהליך ניקוי הסתיים. נמחקו $deleted_count משתמשים."]);
 }
+
+/**
+ * 16. Fetch Questionnaires by Author
+ */
+add_action('wp_ajax_fetchQuestionnairesByAuthor', 'iprf_fetch_questionnaires_by_author');
+add_action('wp_ajax_nopriv_fetchQuestionnairesByAuthor', 'iprf_fetch_questionnaires_by_author');
+
+function iprf_fetch_questionnaires_by_author()
+{
+    $author_id = isset($_POST['authorId']) ? intval($_POST['authorId']) : 0;
+
+    if (!$author_id) {
+        wp_send_json_error(['message' => 'Missing author ID']);
+    }
+
+    $args = [
+        'post_type' => 'questionnaire',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'author' => $author_id,
+    ];
+
+    $query = new WP_Query($args);
+    $questionnaires = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+        $questionnaires[] = [
+            'id' => (string)get_the_ID(),
+            'title' => get_the_title(),
+            'excerpt' => get_the_excerpt(),
+            'date' => get_the_date('d/m/Y'),
+            'content' => apply_filters('the_content', get_the_content()),
+            'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
+        ];
+    }
+    wp_reset_postdata();
+
+    iprf_send_response($questionnaires);
+}
+
+/**
+ * 17. Fetch Single Questionnaire
+ */
+add_action('wp_ajax_fetchQuestionnaire', 'iprf_fetch_questionnaire');
+add_action('wp_ajax_nopriv_fetchQuestionnaire', 'iprf_fetch_questionnaire');
+
+function iprf_fetch_questionnaire()
+{
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+    if (!$id) {
+        wp_send_json_error(['message' => 'Missing ID']);
+    }
+
+    $post = get_post($id);
+
+    if (!$post || $post->post_type !== 'questionnaire' || $post->post_status !== 'publish') {
+        wp_send_json_error(['message' => 'Questionnaire not found']);
+    }
+
+    $questionnaire = [
+        'id' => (string)$post->ID,
+        'title' => $post->post_title,
+        'excerpt' => has_excerpt($post) ? $post->post_excerpt : '',
+        'date' => get_the_date('d/m/Y', $post),
+        'content' => apply_filters('the_content', $post->post_content),
+        'imageUrl' => get_the_post_thumbnail_url($post->ID, 'large'),
+    ];
+
+    iprf_send_response($questionnaire);
+}

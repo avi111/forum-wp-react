@@ -17,6 +17,7 @@ import {
   Meeting,
   NewsItem,
   PaginatedResponse,
+  Questionnaire,
   Researcher,
   Training,
 } from "../types";
@@ -450,6 +451,25 @@ export const useAPI = () => {
     [post],
   );
 
+  const fetchQuestionnairesByAuthor = useCallback(
+    async (authorId: string): Promise<Questionnaire[]> => {
+      try {
+        return await post("fetchQuestionnairesByAuthor", { authorId });
+      } catch (error) {
+        console.warn(
+          "Failed to fetch questionnaires from server, falling back to mock.",
+          error,
+        );
+        if (import.meta.env.DEV || isStorybook) {
+          await delay(SIMULATED_DELAY_MS);
+          return [];
+        }
+        throw error;
+      }
+    },
+    [post],
+  );
+
   return {
     post,
     submitJoinForm,
@@ -467,5 +487,6 @@ export const useAPI = () => {
     fetchMeetings,
     fetchTrainings,
     sendContactMessage,
+    fetchQuestionnairesByAuthor,
   };
 };

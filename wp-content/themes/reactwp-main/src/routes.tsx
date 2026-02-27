@@ -17,6 +17,7 @@ import { TagPage } from "./pages/TagPage";
 import { EventPage } from "./pages/EventPage";
 import { NewsPage } from "./pages/NewsPage";
 import { Bylaws } from "./pages/Bylaws";
+import { QuestionnairePage } from "./pages/QuestionnairePage";
 
 export const routeConfig = [
   {
@@ -90,6 +91,10 @@ export const routeConfig = [
   {
     path: "/dashboard",
     element: <ProtectedDashboard />,
+  },
+  {
+    path: "/questionnaire/:id",
+    element: <QuestionnairePage />,
   },
   {
     path: "*",

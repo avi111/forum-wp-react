@@ -103,6 +103,15 @@ export interface Training {
   colorTheme: "teal" | "indigo" | "purple";
 }
 
+export interface Questionnaire {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  content: string;
+  imageUrl?: string;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   total: number;

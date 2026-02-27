@@ -13,14 +13,19 @@ import {
   Phone,
   User,
   Globe,
+  ClipboardList,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { useQuestionnairesByAuthor } from "../hooks/useAppQueries";
 
 export const ResearcherProfile: React.FC = () => {
   const { researchers, articles, getResearchersFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  const { data: questionnaires, isLoading: isLoadingQuestionnaires } =
+    useQuestionnairesByAuthor(id || "");
 
   useEffect(() => {
     if (researchers.length === 0) {
@@ -240,6 +245,63 @@ export const ResearcherProfile: React.FC = () => {
                 )}
               </div>
             </div>
+
+            {/* Questionnaires Section */}
+            {(isLoadingQuestionnaires ||
+              (questionnaires && questionnaires.length > 0)) && (
+              <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2 bg-purple-50 rounded-lg">
+                    <ClipboardList className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-900">
+                    שאלוני מחקר
+                  </h2>
+                </div>
+
+                {isLoadingQuestionnaires ? (
+                  <div className="flex justify-center py-4">
+                    <Loader2 className="w-6 h-6 text-purple-500 animate-spin" />
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {questionnaires?.map((questionnaire) => (
+                      <div
+                        key={questionnaire.id}
+                        onClick={() =>
+                          navigate(`/questionnaire/${questionnaire.id}`)
+                        }
+                        className="cursor-pointer border border-slate-100 rounded-lg p-4 hover:border-purple-100 hover:shadow-md transition-all bg-slate-50/30"
+                      >
+                        <div className="flex flex-col sm:flex-row gap-4">
+                          <div className="flex-1">
+                            <h4 className="font-bold text-lg text-slate-800 mb-2 hover:text-purple-600 transition-colors">
+                              {questionnaire.title}
+                            </h4>
+                            <p className="text-sm text-slate-600 line-clamp-2 mb-3">
+                              {questionnaire.excerpt}
+                            </p>
+                            <div className="flex items-center text-xs text-slate-400">
+                              <Calendar className="w-3 h-3 ml-1" />
+                              {questionnaire.date}
+                            </div>
+                          </div>
+                          {questionnaire.imageUrl && (
+                            <div className="hidden sm:block shrink-0">
+                              <img
+                                src={questionnaire.imageUrl}
+                                alt={questionnaire.title}
+                                className="w-24 h-24 object-cover rounded-lg shadow-sm"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Researcher Articles */}
             <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-8">

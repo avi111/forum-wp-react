@@ -9,6 +9,7 @@ import {
   Researcher,
   Training,
   UserStatus,
+  Questionnaire,
 } from "./types";
 
 export const MOCK_SETTINGS: AppSettings = {
@@ -846,6 +847,24 @@ export const INITIAL_ARTICLES: Article[] = [
         size: "4.1 MB",
       },
     ],
+  },
+];
+
+export const MOCK_QUESTIONNAIRES: Questionnaire[] = [
+  {
+    id: "q1",
+    title: "שאלון עמדות כלפי טיפול פסיכדלי",
+    excerpt:
+      "מחקר זה בוחן את עמדות הציבור והמטפלים בישראל כלפי שילוב חומרים פסיכדליים בטיפול נפשי.",
+    date: "01/01/2024",
+    content: `
+      <h2>הסבר על המחקר</h2>
+      <p>אנו מזמינים אותך להשתתף במחקר הבוחן עמדות ותפיסות בנוגע לטיפול פסיכדלי. השאלון אנונימי לחלוטין ונועד לצרכי מחקר בלבד.</p>
+      <p>השאלון מיועד לבגירים מעל גיל 18.</p>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfD_example/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    `,
+    imageUrl:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800",
   },
 ];
 

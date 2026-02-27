@@ -138,3 +138,13 @@ export const useTrainings = () => {
     // enabled: false,
   });
 };
+
+export const useQuestionnairesByAuthor = (authorId: string) => {
+  const { fetchQuestionnairesByAuthor } = useAPI();
+
+  return useQuery({
+    queryKey: ["questionnaires", authorId],
+    queryFn: () => fetchQuestionnairesByAuthor(authorId),
+    enabled: !!authorId,
+  });
+};
