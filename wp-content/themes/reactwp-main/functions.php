@@ -179,6 +179,7 @@ add_action( 'send_headers', function() {
 }, 10 );
 
 define('ZEROBOUNCE_API_KEY', '77acd04b7abb4d66929b669635ebdd5d');
+define('ZERUH','2dbb19d80ce73fd5bf443736f81e93527860c0e8c3c97c3c0abc50fb570a4f11')
 define('ADMIN_EMAIL', 'psyresforum@gmail.com');
 define('SECRET', '23uhg26g4#4fqfqw44h');
 
@@ -203,7 +204,7 @@ function validate_user_with_ai($error_fields, $form_data) {
 
     $email_to_validate = $_POST['user_email'];
 
-    $url = "https://api.zerobounce.net/v2/validate?api_key=" . ZEROBOUNCE_API_KEY . "&email=" . urlencode($email_to_validate);
+    $url = "https://api.zeruh.com/v1/verify?api_key=" . ZERUH . "&email_address=" . urlencode($email_to_validate);
 
     $response = wp_remote_get($url, array('timeout' => 15));
 
