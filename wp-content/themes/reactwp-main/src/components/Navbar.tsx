@@ -182,12 +182,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               </>
             ) : (
-              <button
-                onClick={() => handleNavClick(PageView.JOIN)}
-                className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-teal-900/50 transition-all hover:scale-105 transform"
-              >
-                הצטרפות לחוקרים
-              </button>
+              <>
+                <button
+                  onClick={() => handleNavClick(PageView.LOGIN)}
+                  className="text-slate-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                >
+                  התחבר
+                </button>
+                <button
+                  onClick={() => handleNavClick(PageView.JOIN)}
+                  className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-400 hover:to-teal-500 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg shadow-teal-900/50 transition-all hover:scale-105 transform"
+                >
+                  הצטרפות לחוקרים
+                </button>
+              </>
             )}
           </div>
 

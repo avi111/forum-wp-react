@@ -863,9 +863,9 @@ export const object = {
   site: {
     site_name: "example",
     site_description: "tagline",
-    site_url: "http://localhost:8888/wordpress",
-    rest_url: "http://localhost:8888/wordpress/wp-json/",
-    home_url: "http://localhost:8888/wordpress",
+    site_url: "https://psyforum.co.il",
+    rest_url: "https://psyforum.co.il/wp-json/",
+    home_url: "https://psyforum.co.il",
     admin_email: "avi111@gmail.com",
     charset: "UTF-8",
     timezone: "",
@@ -873,7 +873,7 @@ export const object = {
     time_format: "g:i a",
     start_of_week: "1",
     language: "",
-    admin_ajax_url: "http://localhost:8888/wordpress/wp-admin/admin-ajax.php",
+    admin_ajax_url: "https://psyforum.co.il/wp-admin/admin-ajax.php",
   },
 };
 

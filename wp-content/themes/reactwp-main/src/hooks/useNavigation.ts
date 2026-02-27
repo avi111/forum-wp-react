@@ -27,7 +27,7 @@ export const useNavigation = () => {
         case PageView.MEETINGS:
           return "/meetings";
         case PageView.LOGIN:
-          return "/login";
+          return site.site_url + "/wp-admin/";
         default:
           return "/";
       }
