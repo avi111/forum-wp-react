@@ -1,17 +1,17 @@
 import {
-  Article,
   AppSettings,
+  Article,
   CalendarEvent,
   Meeting,
   NavItem,
   NewsItem,
   PageView,
+  Questionnaire,
   Researcher,
+  StudentJob,
+  StudentPaper,
   Training,
   UserStatus,
-  Questionnaire,
-  StudentPaper,
-  StudentJob,
 } from "./types";
 
 export const MOCK_SETTINGS: AppSettings = {
@@ -856,33 +856,37 @@ export const MOCK_STUDENT_PAPERS: StudentPaper[] = [
   {
     id: "1",
     title: "השפעת פסיכדלים על יצירתיות בקרב צעירים בישראל",
-    excerpt: "מחקר זה בוחן את הקשר בין שימוש במינונים נמוכים של פסיכדלים ליכולות קוגניטיביות ויצירתיות בקרב מבוגרים צעירים.",
+    excerpt:
+      "מחקר זה בוחן את הקשר בין שימוש במינונים נמוכים של פסיכדלים ליכולות קוגניטיביות ויצירתיות בקרב מבוגרים צעירים.",
     content: "<p>תוכן העבודה המלא...</p>",
     studentName: "ישראל ישראלי",
     institution: "אוניברסיטת תל אביב",
     degree: "תואר שני בפסיכולוגיה",
     year: "2023",
-    pdfUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    pdfUrl:
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     tags: ["יצירתיות", "מיקרודוזינג"],
   },
   {
     id: "2",
     title: "סקירת ספרות: MDMA וטיפול ב-PTSD",
-    excerpt: "סקירה מקיפה של הספרות המחקרית העדכנית בנושא יעילות הטיפול בטראומה בעזרת MDMA.",
+    excerpt:
+      "סקירה מקיפה של הספרות המחקרית העדכנית בנושא יעילות הטיפול בטראומה בעזרת MDMA.",
     content: "<p>תוכן העבודה המלא...</p>",
     studentName: "רונה לוי",
     institution: "האוניברסיטה העברית",
     degree: "תואר ראשון בפסיכוביולוגיה",
     year: "2024",
     tags: ["MDMA", "PTSD"],
-  }
+  },
 ];
 
 export const MOCK_STUDENT_JOBS: StudentJob[] = [
   {
     id: "j1",
     title: "דרוש/ה עוזר/ת מחקר למעבדת fMRI",
-    content: "<p>למעבדה החוקרת השפעות חומרים פסיכדליים דרוש/ה סטודנט/ית לתואר שני/שלישי בעל/ת ידע בניתוח נתוני דימות מוחי. העבודה כוללת ניתוח נתונים, עזרה בהרצת ניסויים, וכתיבת דוחות מחקר.</p>",
+    content:
+      "<p>למעבדה החוקרת השפעות חומרים פסיכדליים דרוש/ה סטודנט/ית לתואר שני/שלישי בעל/ת ידע בניתוח נתוני דימות מוחי. העבודה כוללת ניתוח נתונים, עזרה בהרצת ניסויים, וכתיבת דוחות מחקר.</p>",
     companyName: "המרכז הרפואי שיבא, תל השומר",
     jobType: "משרת סטודנט / חלקית",
     location: "רמת גן / היברידי",
@@ -891,12 +895,13 @@ export const MOCK_STUDENT_JOBS: StudentJob[] = [
   {
     id: "j2",
     title: "רכז/ת קהילה ומדיה לפורום המחקר",
-    content: "<p>לפורום הישראלי למחקר פסיכדלי דרוש/ה סטודנט/ית לניהול התוכן, תחזוקת רשתות חברתיות ועזרה בארגון כנסים וימי עיון.</p>",
+    content:
+      "<p>לפורום הישראלי למחקר פסיכדלי דרוש/ה סטודנט/ית לניהול התוכן, תחזוקת רשתות חברתיות ועזרה בארגון כנסים וימי עיון.</p>",
     companyName: "הפורום הישראלי למחקר פסיכדלי",
     jobType: "פרילנס",
     location: "עבודה מרחוק",
     applyLink: "#",
-  }
+  },
 ];
 
 export const MOCK_QUESTIONNAIRES: Questionnaire[] = [
@@ -924,7 +929,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "הכשרות", view: PageView.TRAINING },
   { label: "אירועים", view: PageView.EVENTS },
   { label: "מפגשים", view: PageView.MEETINGS },
-  { label: "עבודות ומשרות", view: PageView.STUDENTS },
+  { label: "איזור סטודנטים", view: PageView.STUDENTS },
   { label: "צור קשר", view: PageView.CONTACT },
 ];
 

@@ -37,7 +37,7 @@ describe("StudentsArea Component", () => {
       </QueryClientProvider>,
     );
 
-    expect(screen.getByText("אזור סטודנטים")).toBeInTheDocument();
+    expect(screen.getByText("איזור סטודנטים")).toBeInTheDocument();
     expect(screen.getByText("עבודות סטודנטים")).toBeInTheDocument();
     expect(screen.getByText("משרות והזדמנויות")).toBeInTheDocument();
   });
