@@ -45,6 +45,29 @@ export interface Article {
   attachments?: ArticleAttachment[];
 }
 
+export interface StudentPaper {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  studentName?: string;
+  institution?: string;
+  degree?: string;
+  year?: string;
+  pdfUrl?: string;
+  tags: string[];
+}
+
+export interface StudentJob {
+  id: string;
+  title: string;
+  content: string;
+  companyName?: string;
+  jobType?: string; // e.g., "Full-time", "Part-time", "Internship"
+  location?: string;
+  applyLink?: string;
+}
+
 export interface NewsItem {
   id: string;
   title: string;
@@ -150,6 +173,7 @@ export enum PageView {
   DASHBOARD = "DASHBOARD",
   LOGIN = "LOGIN",
   MEETINGS = "MEETINGS",
+  STUDENTS = "STUDENTS",
 }
 
 export interface NavItem {

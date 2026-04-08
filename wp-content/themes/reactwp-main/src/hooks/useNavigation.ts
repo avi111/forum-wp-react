@@ -28,6 +28,8 @@ export const useNavigation = () => {
           return "/meetings";
         case PageView.LOGIN:
           return site.site_url + "/wp-admin/";
+        case PageView.STUDENTS:
+          return "/students";
         default:
           return "/";
       }

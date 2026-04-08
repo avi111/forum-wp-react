@@ -1260,3 +1260,90 @@ function iprf_fetch_questionnaire()
 
     iprf_send_response($questionnaire);
 }
+
+/**
+ * 18. Fetch Student Papers
+ */
+add_action('wp_ajax_fetchStudentPapers', 'iprf_fetch_student_papers');
+add_action('wp_ajax_nopriv_fetchStudentPapers', 'iprf_fetch_student_papers');
+
+function iprf_fetch_student_papers()
+{
+    $page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
+    $limit = isset($_POST['limit']) ? max(1, intval($_POST['limit'])) : 10;
+
+    $args = [
+        'post_type' => 'student-paper',
+        'posts_per_page' => $limit,
+        'paged' => $page,
+        'post_status' => 'publish',
+    ];
+
+    $query = new WP_Query($args);
+    $papers = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+
+        $papers[] = [
+            'id' => (string)get_the_ID(),
+            'title' => get_the_title(),
+            'excerpt' => has_excerpt() ? get_the_excerpt() : '',
+            'content' => apply_filters('the_content', get_the_content()),
+            'studentName' => iprf_get_field(get_the_ID(), 'student-name'),
+            'institution' => iprf_get_field(get_the_ID(), 'institution'),
+            'degree' => iprf_get_field(get_the_ID(), 'degree'),
+            'year' => iprf_get_field(get_the_ID(), 'year'),
+            'pdfUrl' => iprf_get_field(get_the_ID(), 'pdf', true), // Assuming single PDF
+            'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
+        ];
+    }
+    wp_reset_postdata();
+
+    iprf_send_response([
+        'data' => $papers,
+        'total' => (int)$query->found_posts,
+    ]);
+}
+
+/**
+ * 19. Fetch Student Jobs
+ */
+add_action('wp_ajax_fetchStudentJobs', 'iprf_fetch_student_jobs');
+add_action('wp_ajax_nopriv_fetchStudentJobs', 'iprf_fetch_student_jobs');
+
+function iprf_fetch_student_jobs()
+{
+    $page = isset($_POST['page']) ? max(1, intval($_POST['page'])) : 1;
+    $limit = isset($_POST['limit']) ? max(1, intval($_POST['limit'])) : 10;
+
+    $args = [
+        'post_type' => 'student-job',
+        'posts_per_page' => $limit,
+        'paged' => $page,
+        'post_status' => 'publish',
+    ];
+
+    $query = new WP_Query($args);
+    $jobs = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+
+        $jobs[] = [
+            'id' => (string)get_the_ID(),
+            'title' => get_the_title(),
+            'content' => apply_filters('the_content', get_the_content()),
+            'companyName' => iprf_get_field(get_the_ID(), 'company-name'),
+            'jobType' => iprf_get_field(get_the_ID(), 'job-type'),
+            'location' => iprf_get_field(get_the_ID(), 'location'),
+            'applyLink' => iprf_get_field(get_the_ID(), 'apply-link'),
+        ];
+    }
+    wp_reset_postdata();
+
+    iprf_send_response([
+        'data' => $jobs,
+        'total' => (int)$query->found_posts,
+    ]);
+}

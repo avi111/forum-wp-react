@@ -22,3 +22,5 @@
 - **Prefixes:** כל הפונקציות ב-PHP חייבות להתחיל בקידומת `iprf_` כדי למנוע התנגשויות (למשל: `iprf_fetch_researchers`).
 - **Security:** בקשות מבוססות שינוי נתונים ב-PHP חייבות לכלול בדיקת Nonce (`wp_verify_nonce`). תהליכי הרשמה כוללים הגנת Honeypot ו-reCAPTCHA.
 - **Frontend Fetching:** לעולם אל תיגש ישירות ל-REST API של וורדפרס אלא השתמש בשירות `api.ts` וב-React Query Hooks הנמצאים ב-`useAppQueries.ts`.
+- **UI Components & Storybook:** כל רכיב חדש שנוסף ב-Frontend חייב להיות מלווה בסטורי ב-Storybook (`.stories.tsx`).
+- **Testing:** כל רכיב שמשתנה או מתווסף דורש כתיבת בדיקות. יש לוודא שהשינויים לא שוברים פונקציונליות קיימת. השתמש ב-Jest לבדיקות יחידה (Unit Tests) וב-Cypress לבדיקות קצה-לקצה (E2E Tests) במידת הצורך.

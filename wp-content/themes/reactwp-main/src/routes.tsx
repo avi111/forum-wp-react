@@ -18,6 +18,7 @@ import { EventPage } from "./pages/EventPage";
 import { NewsPage } from "./pages/NewsPage";
 import { Bylaws } from "./pages/Bylaws";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
+import { StudentsArea } from "./pages/StudentsArea";
 
 export const routeConfig = [
   {
@@ -95,6 +96,10 @@ export const routeConfig = [
   {
     path: "/questionnaire/:id",
     element: <QuestionnairePage />,
+  },
+  {
+    path: "/students",
+    element: <StudentsArea />,
   },
   {
     path: "*",

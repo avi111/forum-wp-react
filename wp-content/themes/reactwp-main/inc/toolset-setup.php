@@ -33,6 +33,8 @@ function iprf_register_post_types() {
         'meeting' => ['מפגשים', 'מפגש', 'dashicons-groups', 8, true, ['title', 'editor', 'excerpt', 'custom-fields']],
         'training' => ['הכשרות', 'הכשרה', 'dashicons-welcome-learn-more', 9, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],
         'questionnaire' => ['שאלוני מחקר', 'שאלון מחקר', 'dashicons-clipboard', 10, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields']],
+        'student-work' => ['עבודות סטודנטים', 'עבודת סטודנט', 'dashicons-welcome-write-blog', 11, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields']],
+        'student-job' => ['משרות לסטודנטים', 'משרת סטודנט', 'dashicons-businessman', 12, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],
     ];
 
     foreach ($cpts as $slug => $details) {
@@ -80,7 +82,7 @@ function iprf_register_post_types() {
  */
 function iprf_move_excerpt_after_title($post_type, $post) {
     // Define post types where we want to move the excerpt
-    $target_post_types = ['research-paper', 'questionnaire', 'event', 'meeting', 'training'];
+    $target_post_types = ['research-paper', 'questionnaire', 'event', 'meeting', 'training', 'student-work', 'student-job'];
 
     if (!in_array($post_type, $target_post_types)) {
         return;
@@ -151,7 +153,7 @@ function iprf_show_excerpt_column_content($column, $post_id) {
 }
 
 // Apply columns and content hooks to specific post types
-$excerpt_post_types = ['research-paper', 'questionnaire', 'event', 'meeting', 'training'];
+$excerpt_post_types = ['research-paper', 'questionnaire', 'event', 'meeting', 'training', 'student-work', 'student-job'];
 foreach ($excerpt_post_types as $pt) {
     add_filter("manage_{$pt}_posts_columns", 'iprf_add_excerpt_column');
     add_action("manage_{$pt}_posts_custom_column", 'iprf_show_excerpt_column_content', 10, 2);
@@ -196,7 +198,7 @@ function iprf_show_thumbnail_column_content($column, $post_id) {
 }
 
 // Hook for columns - only for types that support thumbnails
-$thumbnail_post_types = ['research-paper', 'questionnaire', 'event', 'training'];
+$thumbnail_post_types = ['research-paper', 'questionnaire', 'event', 'training', 'student-work', 'student-job'];
 foreach ($thumbnail_post_types as $pt) {
     add_filter("manage_{$pt}_posts_columns", 'iprf_add_thumbnail_column');
     add_action("manage_{$pt}_posts_custom_column", 'iprf_show_thumbnail_column_content', 10, 2);
@@ -207,7 +209,7 @@ foreach ($thumbnail_post_types as $pt) {
  */
 function iprf_admin_enqueue_scripts($hook) {
     global $post_type;
-    $thumbnail_post_types = ['research-paper', 'questionnaire', 'event', 'training'];
+    $thumbnail_post_types = ['research-paper', 'questionnaire', 'event', 'training', 'student-work', 'student-job'];
 
     if ('edit.php' === $hook && in_array($post_type, $thumbnail_post_types)) {
         wp_enqueue_media();

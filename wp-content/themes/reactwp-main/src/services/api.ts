@@ -7,6 +7,8 @@ import {
   MOCK_SETTINGS,
   MOCK_TEMPLATES,
   MOCK_TRAININGS,
+  MOCK_STUDENT_PAPERS,
+  MOCK_STUDENT_JOBS,
   object,
 } from "../mockData";
 import {
@@ -20,6 +22,8 @@ import {
   Questionnaire,
   Researcher,
   Training,
+  StudentPaper,
+  StudentJob,
 } from "../types";
 import { useCallback } from "react";
 
@@ -470,6 +474,56 @@ export const useAPI = () => {
     [post],
   );
 
+  const fetchStudentPapers = useCallback(
+    async (page = 1, limit = 10): Promise<PaginatedResponse<StudentPaper>> => {
+      try {
+        return await post("fetchStudentPapers", {
+          page: `${page}`,
+          limit: `${limit}`,
+        });
+      } catch (error) {
+        console.warn(
+          "Failed to fetch student papers from server, falling back to mock.",
+          error,
+        );
+        if (import.meta.env.DEV || isStorybook) {
+          await delay(500);
+          const start = (page - 1) * limit;
+          const end = start + limit;
+          const data = MOCK_STUDENT_PAPERS.slice(start, end);
+          return { data, total: MOCK_STUDENT_PAPERS.length };
+        }
+        throw error;
+      }
+    },
+    [post],
+  );
+
+  const fetchStudentJobs = useCallback(
+    async (page = 1, limit = 10): Promise<PaginatedResponse<StudentJob>> => {
+      try {
+        return await post("fetchStudentJobs", {
+          page: `${page}`,
+          limit: `${limit}`,
+        });
+      } catch (error) {
+        console.warn(
+          "Failed to fetch student jobs from server, falling back to mock.",
+          error,
+        );
+        if (import.meta.env.DEV || isStorybook) {
+          await delay(500);
+          const start = (page - 1) * limit;
+          const end = start + limit;
+          const data = MOCK_STUDENT_JOBS.slice(start, end);
+          return { data, total: MOCK_STUDENT_JOBS.length };
+        }
+        throw error;
+      }
+    },
+    [post],
+  );
+
   return {
     post,
     submitJoinForm,
@@ -488,5 +542,7 @@ export const useAPI = () => {
     fetchTrainings,
     sendContactMessage,
     fetchQuestionnairesByAuthor,
+    fetchStudentPapers,
+    fetchStudentJobs,
   };
 };

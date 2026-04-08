@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAPI } from "../services/api";
 import { useState, useMemo } from "react";
-import { PaginatedResponse, Article } from "../types";
+import { PaginatedResponse, Article, StudentPaper, StudentJob } from "../types";
 
 export const useSettings = () => {
   const { fetchSettings } = useAPI();
@@ -146,5 +146,23 @@ export const useQuestionnairesByAuthor = (authorId: string) => {
     queryKey: ["questionnaires", authorId],
     queryFn: () => fetchQuestionnairesByAuthor(authorId),
     enabled: !!authorId,
+  });
+};
+
+export const useStudentPapers = (page: number, limit: number) => {
+  const { fetchStudentPapers } = useAPI();
+  return useQuery<PaginatedResponse<StudentPaper>>({
+    queryKey: ["student-papers", page, limit],
+    queryFn: () => fetchStudentPapers(page, limit),
+    placeholderData: keepPreviousData,
+  });
+};
+
+export const useStudentJobs = (page: number, limit: number) => {
+  const { fetchStudentJobs } = useAPI();
+  return useQuery<PaginatedResponse<StudentJob>>({
+    queryKey: ["student-jobs", page, limit],
+    queryFn: () => fetchStudentJobs(page, limit),
+    placeholderData: keepPreviousData,
   });
 };
