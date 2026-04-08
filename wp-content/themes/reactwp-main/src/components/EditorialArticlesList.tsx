@@ -39,10 +39,7 @@ export const EditorialArticlesList: React.FC = () => {
           {currentEditorialArticles.map((article) => (
             <EditorialCard
               key={article.id}
-              article={{
-                ...article,
-                authorName: "מערכת הפורום",
-              }}
+              article={article}
               showImage={false}
             />
           ))}

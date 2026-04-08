@@ -340,14 +340,21 @@ function iprf_fetch_articles()
     while ($query->have_posts()) {
         $query->the_post();
         $is_editorial = get_post_type() === 'post';
+        
+        // Get actual display name from the post author
+        $author_id = get_the_author_meta('ID');
+        $author_name = get_the_author_meta('display_name', $author_id);
+        if (empty($author_name)) {
+            $author_name = get_the_author();
+        }
 
         $articles[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
             'excerpt' => has_excerpt() ? get_the_excerpt() : '',
             'content' => apply_filters('the_content', get_the_content()),
-            'authorId' => (string)get_the_author_meta('ID'),
-            'authorName' => get_the_author(),
+            'authorId' => (string)$author_id,
+            'authorName' => $author_name,
             'date' => get_the_date('d/m/Y'),
             'isEditorial' => $is_editorial,
             'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
@@ -417,13 +424,20 @@ function iprf_fetch_articles_paged()
         $query->the_post();
         $is_editorial = get_post_type() === 'post';
 
+        // Get actual display name from the post author
+        $author_id = get_the_author_meta('ID');
+        $author_name = get_the_author_meta('display_name', $author_id);
+        if (empty($author_name)) {
+            $author_name = get_the_author();
+        }
+
         $articles[] = [
             'id' => (string)get_the_ID(),
             'title' => get_the_title(),
             'excerpt' => has_excerpt() ? get_the_excerpt() : '',
             'content' => apply_filters('the_content', get_the_content()),
-            'authorId' => (string)get_the_author_meta('ID'),
-            'authorName' => get_the_author(),
+            'authorId' => (string)$author_id,
+            'authorName' => $author_name,
             'date' => get_the_date('d/m/Y'),
             'isEditorial' => $is_editorial,
             'tags' => wp_list_pluck(get_the_tags(), 'name') ?: [],
