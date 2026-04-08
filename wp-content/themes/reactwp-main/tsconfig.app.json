@@ -16,6 +16,7 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
@@ -25,5 +26,9 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "**/*.stories.tsx",
+    "**/*.test.tsx"
   ]
 }

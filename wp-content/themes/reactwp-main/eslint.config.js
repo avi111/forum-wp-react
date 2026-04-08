@@ -19,5 +19,13 @@ export default [
     },
   },
   { ignores: ["dist/*"] },
-  ...storybook.configs["flat/recommended"]
+  ...storybook.configs["flat/recommended"],
+  {
+    files: ["**/*.test.{js,jsx,ts,tsx}"],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
+    },
+  }
 ];
