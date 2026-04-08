@@ -1,5 +1,7 @@
 <?php
 
+use MailPoet\API\API;
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }
@@ -157,7 +159,7 @@ function iprf_get_post_attachments($post_id)
             $name = basename($url);
             // Decode URL to handle Hebrew filenames correctly in display
             $name = urldecode($name);
-            
+
             $type = pathinfo($url, PATHINFO_EXTENSION);
             $size = '';
 
@@ -340,7 +342,7 @@ function iprf_fetch_articles()
     while ($query->have_posts()) {
         $query->the_post();
         $is_editorial = get_post_type() === 'post';
-        
+
         // Get actual display name from the post author
         $author_id = get_the_author_meta('ID');
         $author_name = get_the_author_meta('display_name', $author_id);
@@ -787,9 +789,9 @@ function iprf_subscribe_newsletter()
     }
 
     // Check if MailPoet is active
-    if (class_exists(\MailPoet\API\API::class)) {
+    if (class_exists(API::class)) {
         try {
-            $mailpoet_api = \MailPoet\API\API::MP('v1');
+            $mailpoet_api = API::MP('v1');
 
             // Get the default list (usually ID 1, or find by name)
             // You can also create a specific list for this form
@@ -798,7 +800,7 @@ function iprf_subscribe_newsletter()
             // Check if subscriber exists
             try {
                 $subscriber = $mailpoet_api->getSubscriber($email);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $subscriber = false;
             }
 
@@ -816,7 +818,7 @@ function iprf_subscribe_newsletter()
 
             iprf_send_response(['message' => 'נרשמת בהצלחה לניוזלטר!']);
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log error for admin
             error_log('MailPoet Error: ' . $e->getMessage());
             wp_send_json_error(['message' => 'אירעה שגיאה בהרשמה. אנא נסה שנית מאוחר יותר.']);
@@ -868,7 +870,7 @@ function create_user_from_data($data)
     update_user_meta($user_id, 'wpcf-institution', $data['institution']);
     update_user_meta($user_id, 'wpcf-faculty', $data['faculty']);
     update_user_meta($user_id, 'wpcf-specialization', $data['mainSpecialization']);
-    
+
     // Assuming subSpecializations is an array
     if (isset($data['subSpecializations']) && is_array($data['subSpecializations'])) {
         foreach ($data['subSpecializations'] as $sub_spec) {
@@ -889,7 +891,7 @@ function create_user_from_data($data)
             }
         }
     }
-    
+
     // Handle direct URLs if provided (e.g. from Google Sheets sync)
     if (isset($data['verificationDocUrl']) && !empty($data['verificationDocUrl'])) {
         $uploaded_files['verificationDoc'] = $data['verificationDocUrl'];
@@ -922,7 +924,7 @@ function create_user_from_data($data)
     }
 
     wp_mail($admin_email, $subject, $message);
-    
+
     return $user_id;
 }
 
@@ -1102,7 +1104,7 @@ function iprf_process_user_verification()
 {
     $user_id = isset($_POST['user_id']) ? intval($_POST['user_id']) : 0;
     $answer = isset($_POST['answer']) ? sanitize_text_field($_POST['answer']) : '';
-    
+
     $user = get_user_by('id', $user_id);
 
     // Basic styling
@@ -1181,7 +1183,7 @@ function iprf_cleanup_unverified_subscribers()
                 require_once(ABSPATH . 'wp-admin/includes/user.php');
             }
             wp_delete_user($user->ID);
-            
+
             $deleted_count++;
         }
     }

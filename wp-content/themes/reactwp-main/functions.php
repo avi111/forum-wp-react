@@ -13,6 +13,7 @@ use Google\Service\Sheets;
 // Include API endpoints and Toolset setup
 require_once get_template_directory() . '/inc/api-endpoints.php';
 require_once get_template_directory() . '/inc/toolset-setup.php';
+require_once get_template_directory() . '/inc/student-paper-meta-boxes.php';
 
 function my_theme_enqueue_scripts()
 {
@@ -21,49 +22,54 @@ function my_theme_enqueue_scripts()
 
 add_action('wp_enqueue_scripts', 'my_theme_enqueue_scripts');
 
-function filter_custom_post_type_by_author( $query ) {
+function filter_custom_post_type_by_author($query)
+{
   // בדוק אם אנחנו ב-Admin Area, במסך עריכה של CPT, ושהמשתמש הוא Contributor
-  if ( is_admin() && $query->is_main_query() && ( 'research-paper' == $query->get('post_type') ) && current_user_can('contributor') ) {
+  if (is_admin() && $query->is_main_query() && ('research-paper' == $query->get('post_type')) && current_user_can('contributor')) {
     // הגדר את השאילתה להציג רק פוסטים של המשתמש הנוכחי
-    $query->set( 'author', get_current_user_id() );
+    $query->set('author', get_current_user_id());
   }
 }
+
 // חבר את הפונקציה ל-hook של pre_get_posts
-add_action( 'pre_get_posts', 'filter_custom_post_type_by_author' );
+add_action('pre_get_posts', 'filter_custom_post_type_by_author');
 
 // Enqueue styles for the Block Editor (Gutenberg)
-function my_theme_enqueue_editor_scripts() {
-    // Load Tailwind CSS from CDN for the editor
-    wp_enqueue_script(
-        'tailwindcss-cdn',
-        'https://cdn.tailwindcss.com',
-        [],
-        '3.4.1',
-        false
-    );
+function my_theme_enqueue_editor_scripts()
+{
+  // Load Tailwind CSS from CDN for the editor
+  wp_enqueue_script(
+    'tailwindcss-cdn',
+    'https://cdn.tailwindcss.com',
+    [],
+    '3.4.1',
+    false
+  );
 }
+
 add_action('enqueue_block_editor_assets', 'my_theme_enqueue_editor_scripts');
 
 // Register Custom Blocks
 add_action('init', 'iprf_register_blocks');
-function iprf_register_blocks() {
-    register_block_type( get_template_directory() . '/blocks/home-feature' );
-    register_block_type( get_template_directory() . '/blocks/features-container' );
-    register_block_type( get_template_directory() . '/blocks/core-pillar-item' );
-    register_block_type( get_template_directory() . '/blocks/core-pillars' );
-    register_block_type( get_template_directory() . '/blocks/header-section' );
-    register_block_type( get_template_directory() . '/blocks/main-content-container' );
-    register_block_type( get_template_directory() . '/blocks/chip' );
-    register_block_type( get_template_directory() . '/blocks/section-subtitle' );
-    register_block_type( get_template_directory() . '/blocks/content-paragraph' );
-    register_block_type( get_template_directory() . '/blocks/decorative-box' );
-    register_block_type( get_template_directory() . '/blocks/grid-container' );
+function iprf_register_blocks()
+{
+  register_block_type(get_template_directory() . '/blocks/home-feature');
+  register_block_type(get_template_directory() . '/blocks/features-container');
+  register_block_type(get_template_directory() . '/blocks/core-pillar-item');
+  register_block_type(get_template_directory() . '/blocks/core-pillars');
+  register_block_type(get_template_directory() . '/blocks/header-section');
+  register_block_type(get_template_directory() . '/blocks/main-content-container');
+  register_block_type(get_template_directory() . '/blocks/chip');
+  register_block_type(get_template_directory() . '/blocks/section-subtitle');
+  register_block_type(get_template_directory() . '/blocks/content-paragraph');
+  register_block_type(get_template_directory() . '/blocks/decorative-box');
+  register_block_type(get_template_directory() . '/blocks/grid-container');
 
-    // New Hero Blocks
-    register_block_type( get_template_directory() . '/blocks/hero-container' );
-    register_block_type( get_template_directory() . '/blocks/hero-subtitle' );
-    register_block_type( get_template_directory() . '/blocks/styled-heading' );
-    register_block_type( get_template_directory() . '/blocks/hero-badge' );
+  // New Hero Blocks
+  register_block_type(get_template_directory() . '/blocks/hero-container');
+  register_block_type(get_template_directory() . '/blocks/hero-subtitle');
+  register_block_type(get_template_directory() . '/blocks/styled-heading');
+  register_block_type(get_template_directory() . '/blocks/hero-badge');
 }
 
 function get_data_map()
@@ -129,22 +135,26 @@ function enq_react()
 }
 
 // Add 'Research Papers' column to Users table
-function iprf_add_research_papers_column( $columns ) {
-    $columns['research_papers'] = 'מאמרי מחקר';
-    return $columns;
+function iprf_add_research_papers_column($columns)
+{
+  $columns['research_papers'] = 'מאמרי מחקר';
+  return $columns;
 }
-add_filter( 'manage_users_columns', 'iprf_add_research_papers_column' );
 
-function iprf_show_research_papers_column_content( $value, $column_name, $user_id ) {
-    if ( 'research_papers' == $column_name ) {
-        $count = count_user_posts( $user_id, 'research-paper' );
-        return $count;
-    }
-    return $value;
+add_filter('manage_users_columns', 'iprf_add_research_papers_column');
+
+function iprf_show_research_papers_column_content($value, $column_name, $user_id)
+{
+  if ('research_papers' == $column_name) {
+    $count = count_user_posts($user_id, 'research-paper');
+    return $count;
+  }
+  return $value;
 }
-add_action( 'manage_users_custom_column', 'iprf_show_research_papers_column_content', 10, 3 );
 
-add_action('wp_enqueue_scripts', function() {
+add_action('manage_users_custom_column', 'iprf_show_research_papers_column_content', 10, 3);
+
+add_action('wp_enqueue_scripts', function () {
 
   // קבלת נתיב התיקייה של ערכת הנושא
   $theme_uri = get_stylesheet_directory_uri();
@@ -168,23 +178,24 @@ add_action('wp_enqueue_scripts', function() {
 
 }, 20);
 
-remove_action( 'login_init', 'send_frame_options_header', 10 );
-remove_action( 'admin_init', 'send_frame_options_header', 10 );
+remove_action('login_init', 'send_frame_options_header', 10);
+remove_action('admin_init', 'send_frame_options_header', 10);
 
 // הוספת Header שמאפשר הצגה (בדפדפנים מודרניים משתמשים ב-CSP)
-add_action( 'send_headers', function() {
+add_action('send_headers', function () {
   header_remove('X-Frame-Options');
 
   header("Content-Security-Policy: frame-ancestors 'self' https://psyforum.co.il");
-}, 10 );
+}, 10);
 
 define('ZEROBOUNCE_API_KEY', '77acd04b7abb4d66929b669635ebdd5d');
-define('ZERUH','2dbb19d80ce73fd5bf443736f81e93527860c0e8c3c97c3c0abc50fb570a4f11');
+define('ZERUH', '2dbb19d80ce73fd5bf443736f81e93527860c0e8c3c97c3c0abc50fb570a4f11');
 define('ADMIN_EMAIL', 'psyresforum@gmail.com');
 define('SECRET', '23uhg26g4#4fqfqw44h');
 
 add_filter('cred_form_validate', 'validate_user_with_ai', 10, 2);
-function validate_user_with_ai($error_fields, $form_data) {
+function validate_user_with_ai($error_fields, $form_data)
+{
 
   echo '<pre>';
   print_r($_POST);
@@ -192,14 +203,13 @@ function validate_user_with_ai($error_fields, $form_data) {
   die();
   $field_id = 6287; // ה-ID של הטופס שלך
   if ($form_data['id'] == $field_id) {
-    if($_POST['pot']!=="") {
+    if ($_POST['pot'] !== "") {
       $error_fields['pot'] = 'מלכודת.';
     }
 
-    if(!$_POST['אישור']) {
+    if (!$_POST['אישור']) {
       $error_fields['אישור'] = 'זהו שדה חובה.';
     }
-
 
 
     $email_to_validate = $_POST['user_email'];
