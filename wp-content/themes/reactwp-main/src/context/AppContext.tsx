@@ -1,19 +1,21 @@
 import React, {
   createContext,
-  useContext,
-  useState,
   ReactNode,
-  useEffect,
   useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 import { QueryObserverResult, useQueryClient } from "@tanstack/react-query";
 import {
-  useSettings,
-  useResearchers,
   useArticles,
   useMeetings,
-  useTrainings,
   useNews,
+  useResearchers,
+  useSettings,
+  useStudentJobs,
+  useStudentPapers,
+  useTrainings,
 } from "../hooks/useAppQueries";
 import {
   AppSettings,
@@ -21,12 +23,14 @@ import {
   CalendarEvent,
   Meeting,
   NewsItem,
-  Researcher,
-  Training,
-  UserStatus,
   OnJoin,
   PaginatedResponse,
+  Researcher,
   SiteOptions,
+  StudentJob,
+  StudentPaper,
+  Training,
+  UserStatus,
 } from "../types";
 import { Brain } from "lucide-react";
 import { initStrings } from "../services/stringService";
@@ -69,6 +73,8 @@ interface AppContextType {
   settings: AppSettings;
   researchers: Researcher[];
   articles: Article[];
+  studentPapers: StudentPaper[]; // Add studentPapers
+  studentJobs: StudentJob[]; // Add studentJobs
   // Tags cloud data
   tagsData: { tag: string; count: number }[] | null;
   isTagsLoading: boolean;
@@ -85,6 +91,8 @@ interface AppContextType {
   simulateAdminApproval: () => void;
   getResearchersFromServer: Fetcher<Researcher[]>;
   getArticlesFromServer: Fetcher<Article[]>;
+  getStudentPapersFromServer: Fetcher<PaginatedResponse<StudentPaper>>; // Add fetcher for student papers
+  getStudentJobsFromServer: Fetcher<PaginatedResponse<StudentJob>>; // Add fetcher for student jobs
   getEventsFromServer: EventsFetcher;
   getMeetingsFromServer: Fetcher<Meeting[]>;
   getTrainingsFromServer: Fetcher<Training[]>;
@@ -127,6 +135,17 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const { data: meetings = [], refetch: refetchMeetings } = useMeetings();
   const { data: trainings = [], refetch: refetchTrainings } = useTrainings();
   const { data: newsItems = [], refetch: refetchNews } = useNews();
+
+  // Fetch student papers and jobs
+  const { data: studentPapersData, refetch: refetchStudentPapers } =
+    useStudentPapers(1, 999); // Fetch all for now, pagination can be added later
+  const studentPapers = studentPapersData?.data || [];
+
+  const { data: studentJobsData, refetch: refetchStudentJobs } = useStudentJobs(
+    1,
+    999,
+  ); // Fetch all for now, pagination can be added later
+  const studentJobs = studentJobsData?.data || [];
 
   const [currentUser, setCurrentUser] = useState<Researcher | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
@@ -180,6 +199,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     [refetchTrainings],
   );
   const getNewsFromServer = useCallback(() => refetchNews(), [refetchNews]);
+
+  // Add fetchers for student papers and jobs
+  const getStudentPapersFromServer = useCallback(
+    () => refetchStudentPapers(),
+    [refetchStudentPapers],
+  );
+  const getStudentJobsFromServer = useCallback(
+    () => refetchStudentJobs(),
+    [refetchStudentJobs],
+  );
 
   const getEventsFromServer: EventsFetcher = useCallback(
     (page, limit, timeFilter) => {
@@ -272,6 +301,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     settings,
     researchers,
     articles,
+    studentPapers, // Add to context value
+    studentJobs, // Add to context value
     tagsData,
     isTagsLoading,
     getTagsFromServer,
@@ -287,6 +318,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
     simulateAdminApproval,
     getResearchersFromServer,
     getArticlesFromServer,
+    getStudentPapersFromServer, // Add to context value
+    getStudentJobsFromServer, // Add to context value
     getEventsFromServer,
     getMeetingsFromServer,
     getTrainingsFromServer,

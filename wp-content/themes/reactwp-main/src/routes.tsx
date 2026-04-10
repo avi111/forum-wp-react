@@ -19,6 +19,8 @@ import { NewsPage } from "./pages/NewsPage";
 import { Bylaws } from "./pages/Bylaws";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { StudentsArea } from "./pages/StudentsArea";
+import { StudentPaperPage } from "./pages/StudentPaperPage"; // Import new page
+import { StudentJobPage } from "./pages/StudentJobPage"; // Import new page
 
 export const routeConfig = [
   {
@@ -100,6 +102,14 @@ export const routeConfig = [
   {
     path: "/students",
     element: <StudentsArea />,
+  },
+  {
+    path: "/student-papers/:id", // New route for student papers
+    element: <StudentPaperPage />,
+  },
+  {
+    path: "/student-jobs/:id", // New route for student jobs
+    element: <StudentJobPage />,
   },
   {
     path: "*",

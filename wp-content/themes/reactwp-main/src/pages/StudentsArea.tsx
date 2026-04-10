@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useStudentJobs, useStudentPapers } from "../hooks/useAppQueries";
 import {
+  ArrowRight,
   Briefcase,
-  Download,
   ExternalLink,
   FileText,
   Loader2,
 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader";
+import { Link } from "react-router-dom"; // Import Link
 
 export const StudentsArea: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"papers" | "jobs">("papers");
@@ -60,11 +61,12 @@ export const StudentsArea: React.FC = () => {
             ) : papersQuery.data?.data && papersQuery.data.data.length > 0 ? (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {papersQuery.data.data.map((paper) => (
-                  <div
+                  <Link
+                    to={`/student-papers/${paper.id}`} // Link to student paper detail page
                     key={paper.id}
-                    className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border border-slate-100 flex flex-col"
+                    className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border border-slate-100 flex flex-col group"
                   >
-                    <h3 className="text-xl font-bold text-slate-800 mb-2">
+                    <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">
                       {paper.title}
                     </h3>
                     <div className="text-sm text-slate-500 mb-4 flex flex-col gap-1">
@@ -95,18 +97,11 @@ export const StudentsArea: React.FC = () => {
                         dangerouslySetInnerHTML={{ __html: paper.excerpt }}
                       />
                     )}
-                    {paper.pdfUrl && (
-                      <a
-                        href={paper.pdfUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-auto inline-flex items-center text-indigo-600 font-medium hover:text-indigo-700"
-                      >
-                        <Download className="w-4 h-4 ml-2" />
-                        הורדת העבודה (PDF)
-                      </a>
-                    )}
-                  </div>
+                    <div className="mt-auto inline-flex items-center text-indigo-600 font-medium group-hover:text-indigo-700 transition-colors">
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                      קרא עוד
+                    </div>
+                  </Link>
                 ))}
               </div>
             ) : (
@@ -130,37 +125,46 @@ export const StudentsArea: React.FC = () => {
                     key={job.id}
                     className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border border-slate-100 flex flex-col"
                   >
-                    <h3 className="text-xl font-bold text-slate-800 mb-2">
-                      {job.title}
-                    </h3>
-                    <div className="text-sm text-slate-500 mb-4 flex flex-col gap-1">
-                      {job.companyName && (
-                        <span>
-                          <strong>מוסד/חברה:</strong> {job.companyName}
-                        </span>
-                      )}
-                      {job.jobType && (
-                        <span>
-                          <strong>סוג משרה:</strong> {job.jobType}
-                        </span>
-                      )}
-                      {job.location && (
-                        <span>
-                          <strong>מיקום:</strong> {job.location}
-                        </span>
-                      )}
-                    </div>
-                    <div
-                      className="text-slate-600 mb-6 flex-grow line-clamp-4"
-                      dangerouslySetInnerHTML={{ __html: job.content }}
-                    />
+                    <Link
+                      to={`/student-jobs/${job.id}`} // Link to student job detail page
+                      className="flex flex-col flex-grow group"
+                    >
+                      <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">
+                        {job.title}
+                      </h3>
+                      <div className="text-sm text-slate-500 mb-4 flex flex-col gap-1">
+                        {job.companyName && (
+                          <span>
+                            <strong>מוסד/חברה:</strong> {job.companyName}
+                          </span>
+                        )}
+                        {job.jobType && (
+                          <span>
+                            <strong>סוג משרה:</strong> {job.jobType}
+                          </span>
+                        )}
+                        {job.location && (
+                          <span>
+                            <strong>מיקום:</strong> {job.location}
+                          </span>
+                        )}
+                      </div>
+                      <div
+                        className="text-slate-600 mb-6 flex-grow line-clamp-4"
+                        dangerouslySetInnerHTML={{ __html: job.content }}
+                      />
+                      <div className="mt-auto inline-flex items-center text-indigo-600 font-medium group-hover:text-indigo-700 transition-colors">
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                        קרא עוד
+                      </div>
+                    </Link>
 
                     {job.applyLink && (
                       <a
                         href={job.applyLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="mt-auto w-full inline-flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                        className="mt-4 w-full inline-flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                       >
                         הגש מועמדות
                         <ExternalLink className="w-4 h-4 mr-2" />
