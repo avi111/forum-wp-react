@@ -6,6 +6,7 @@ import { ToastProvider } from "./context/ToastContext";
 import { Toast } from "./components/Toast";
 import "./index.css";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
+import { ResearchToolsPage } from "./pages/ResearchToolsPage"; // Import the new page
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
               />
             ))}
             <Route path="/questionnaire/:id" element={<QuestionnairePage />} />
+            <Route path="/research-tools" element={<ResearchToolsPage />} /> {/* Add the new route */}
           </Route>
         </Routes>
       </AppProvider>

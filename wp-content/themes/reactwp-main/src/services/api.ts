@@ -9,6 +9,7 @@ import {
   MOCK_TRAININGS,
   MOCK_STUDENT_PAPERS,
   MOCK_STUDENT_JOBS,
+  MOCK_QUESTIONNAIRES, // Import mock questionnaires
   object,
 } from "../mockData";
 import {
@@ -466,13 +467,29 @@ export const useAPI = () => {
         );
         if (import.meta.env.DEV || isStorybook) {
           await delay(SIMULATED_DELAY_MS);
-          return [];
+          return MOCK_QUESTIONNAIRES.filter(q => q.authorId === authorId); // Filter mock data by authorId
         }
         throw error;
       }
     },
     [post],
   );
+
+  const fetchAllQuestionnaires = useCallback(async (): Promise<Questionnaire[]> => {
+    try {
+      return await post("fetchAllQuestionnaires");
+    } catch (error) {
+      console.warn(
+        "Failed to fetch all questionnaires from server, falling back to mock.",
+        error,
+      );
+      if (import.meta.env.DEV || isStorybook) {
+        await delay(SIMULATED_DELAY_MS);
+        return [...MOCK_QUESTIONNAIRES];
+      }
+      throw error;
+    }
+  }, [post]);
 
   const fetchStudentPapers = useCallback(
     async (page = 1, limit = 10): Promise<PaginatedResponse<StudentPaper>> => {
@@ -542,6 +559,7 @@ export const useAPI = () => {
     fetchTrainings,
     sendContactMessage,
     fetchQuestionnairesByAuthor,
+    fetchAllQuestionnaires, // Add the new function here
     fetchStudentPapers,
     fetchStudentJobs,
   };

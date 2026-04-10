@@ -133,6 +133,7 @@ export interface Questionnaire {
   date: string;
   content: string;
   imageUrl?: string;
+  authorId?: string; // Added authorId to Questionnaire
 }
 
 export interface PaginatedResponse<T> {
@@ -174,6 +175,7 @@ export enum PageView {
   LOGIN = "LOGIN",
   MEETINGS = "MEETINGS",
   STUDENTS = "STUDENTS",
+  RESEARCH_TOOLS = "RESEARCH_TOOLS", // Added new PageView
 }
 
 export interface NavItem {

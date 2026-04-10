@@ -919,6 +919,37 @@ export const MOCK_QUESTIONNAIRES: Questionnaire[] = [
     `,
     imageUrl:
       "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800",
+    authorId: "res1", // Assign an author ID
+  },
+  {
+    id: "q2",
+    title: "שאלון הערכה עצמית של רווחה נפשית",
+    excerpt:
+      "שאלון זה נועד להעריך את רמת הרווחה הנפשית של המשתתפים לפני ואחרי התערבות טיפולית.",
+    date: "15/02/2024",
+    content: `
+      <h2>הסבר על השאלון</h2>
+      <p>אנא מלא/י את השאלון בכנות. המידע ישמש למטרות מחקר בלבד וישמר בסודיות מוחלטת.</p>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc_example2/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    `,
+    imageUrl:
+      "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?auto=format&fit=crop&q=80&w=800",
+    authorId: "res2", // Assign an author ID
+  },
+  {
+    id: "q3",
+    title: "שאלון חווית שינוי תודעה",
+    excerpt:
+      "שאלון מפורט הבוחן היבטים שונים של חווית שינוי תודעה בעקבות שימוש בחומרים פסיכדליים.",
+    date: "20/03/2024",
+    content: `
+      <h2>הסבר על השאלון</h2>
+      <p>שאלון זה נועד לאסוף מידע איכותני וכמותי על חוויות שינוי תודעה. השתתפותך חשובה לנו.</p>
+      <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfg_example3/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+    `,
+    imageUrl:
+      "https://images.unsplash.com/photo-1582213782179-e0d2913f911c?auto=format&fit=crop&q=80&w=800",
+    authorId: "res1", // Assign an author ID
   },
 ];
 
@@ -930,6 +961,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "אירועים", view: PageView.EVENTS },
   { label: "מפגשים", view: PageView.MEETINGS },
   { label: "איזור סטודנטים", view: PageView.STUDENTS },
+  { label: "כלי מחקר", view: PageView.RESEARCH_TOOLS }, // Add new navigation item
   { label: "צור קשר", view: PageView.CONTACT },
 ];
 
@@ -1083,7 +1115,7 @@ export const MOCK_TEMPLATES: Record<string, string> = {
     <div class="relative bg-slate-900 text-white overflow-hidden min-h-[500px] flex items-center">
       <div class="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop&q=80&w=1920&auto=format&fit=crop"
           alt="Abstract Background"
           class="w-full h-full object-cover opacity-20"
         />

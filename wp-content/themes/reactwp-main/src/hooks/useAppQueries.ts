@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAPI } from "../services/api";
 import { useState, useMemo } from "react";
-import { PaginatedResponse, Article, StudentPaper, StudentJob } from "../types";
+import { PaginatedResponse, Article, StudentPaper, StudentJob, Questionnaire } from "../types";
 
 export const useSettings = () => {
   const { fetchSettings } = useAPI();
@@ -142,10 +142,19 @@ export const useTrainings = () => {
 export const useQuestionnairesByAuthor = (authorId: string) => {
   const { fetchQuestionnairesByAuthor } = useAPI();
 
-  return useQuery({
+  return useQuery<Questionnaire[]>({
     queryKey: ["questionnaires", authorId],
     queryFn: () => fetchQuestionnairesByAuthor(authorId),
     enabled: !!authorId,
+  });
+};
+
+export const useAllQuestionnaires = () => {
+  const { fetchAllQuestionnaires } = useAPI();
+
+  return useQuery<Questionnaire[]>({
+    queryKey: ["allQuestionnaires"],
+    queryFn: fetchAllQuestionnaires,
   });
 };
 
