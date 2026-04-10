@@ -1349,3 +1349,70 @@ function iprf_fetch_student_jobs()
         'total' => (int)$query->found_posts,
     ]);
 }
+
+/**
+ * 20. Fetch Single Student Paper
+ */
+add_action('wp_ajax_fetchSingleStudentPaper', 'iprf_fetch_single_student_paper');
+add_action('wp_ajax_nopriv_fetchSingleStudentPaper', 'iprf_fetch_single_student_paper');
+
+function iprf_fetch_single_student_paper()
+{
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+    if (!$id) {
+        wp_send_json_error(['message' => 'Missing post ID']);
+    }
+
+    $post = get_post($id);
+
+    if (!$post || $post->post_type !== 'student-paper' || $post->post_status !== 'publish') {
+        wp_send_json_error(['message' => 'Student paper not found or not published']);
+    }
+
+    $paper_data = [
+        'id' => (string)$post->ID,
+        'title' => $post->post_title,
+        'content' => apply_filters('the_content', $post->post_content),
+        'studentName' => iprf_get_field($post->ID, 'student-name'),
+        'institution' => iprf_get_field($post->ID, 'institution'),
+        'degree' => iprf_get_field($post->ID, 'degree'),
+        'year' => iprf_get_field($post->ID, 'year'),
+        'pdfUrl' => iprf_get_field($post->ID, 'pdf', true),
+    ];
+
+    iprf_send_response($paper_data);
+}
+
+/**
+ * 21. Fetch Single Student Job
+ */
+add_action('wp_ajax_fetchSingleStudentJob', 'iprf_fetch_single_student_job');
+add_action('wp_ajax_nopriv_fetchSingleStudentJob', 'iprf_fetch_single_student_job');
+
+function iprf_fetch_single_student_job()
+{
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+    if (!$id) {
+        wp_send_json_error(['message' => 'Missing post ID']);
+    }
+
+    $post = get_post($id);
+
+    if (!$post || $post->post_type !== 'student-job' || $post->post_status !== 'publish') {
+        wp_send_json_error(['message' => 'Student job not found or not published']);
+    }
+
+    $job_data = [
+        'id' => (string)$post->ID,
+        'title' => $post->post_title,
+        'content' => apply_filters('the_content', $post->post_content),
+        'companyName' => iprf_get_field($post->ID, 'company-name'),
+        'jobType' => iprf_get_field($post->ID, 'job-type'),
+        'location' => iprf_get_field($post->ID, 'location'),
+        'applyLink' => iprf_get_field($post->ID, 'apply-link'),
+    ];
+
+    iprf_send_response($job_data);
+}
