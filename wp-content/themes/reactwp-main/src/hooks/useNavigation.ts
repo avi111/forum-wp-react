@@ -30,6 +30,8 @@ export const useNavigation = () => {
           return site.site_url + "/wp-admin/";
         case PageView.STUDENTS:
           return "/students";
+        case PageView.RESEARCH_TOOLS: // Add the new case for RESEARCH_TOOLS
+          return "/research-tools";
         default:
           return "/";
       }

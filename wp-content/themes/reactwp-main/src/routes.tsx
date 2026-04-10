@@ -19,8 +19,9 @@ import { NewsPage } from "./pages/NewsPage";
 import { Bylaws } from "./pages/Bylaws";
 import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { StudentsArea } from "./pages/StudentsArea";
-import { StudentPaperPage } from "./pages/StudentPaperPage"; // Import new page
-import { StudentJobPage } from "./pages/StudentJobPage"; // Import new page
+import { StudentPaperPage } from "./pages/StudentPaperPage";
+import { StudentJobPage } from "./pages/StudentJobPage";
+import { ResearchToolsPage } from "./pages/ResearchToolsPage"; // Import the new page
 
 export const routeConfig = [
   {
@@ -104,12 +105,16 @@ export const routeConfig = [
     element: <StudentsArea />,
   },
   {
-    path: "/student-papers/:id", // New route for student papers
+    path: "/student-papers/:id",
     element: <StudentPaperPage />,
   },
   {
-    path: "/student-jobs/:id", // New route for student jobs
+    path: "/student-jobs/:id",
     element: <StudentJobPage />,
+  },
+  {
+    path: "/research-tools", // New route for Research Tools
+    element: <ResearchToolsPage />,
   },
   {
     path: "*",
