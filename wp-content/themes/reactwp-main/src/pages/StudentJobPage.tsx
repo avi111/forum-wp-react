@@ -38,7 +38,7 @@ export const StudentJobPage: React.FC = () => {
           יתכן שהקישור שגוי או שההצעה הוסרה.
         </p>
         <button
-          onClick={() => navigate("/students-area")} // Adjust path as needed
+          onClick={() => navigate("/students")} // Corrected path
           className="text-teal-600 font-bold hover:underline flex items-center"
         >
           <ArrowRight className="w-4 h-4 ml-1" />
@@ -104,7 +104,7 @@ export const StudentJobPage: React.FC = () => {
           {/* Footer */}
           <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
             <button
-              onClick={() => navigate("/students-area")} // Adjust path as needed
+              onClick={() => navigate("/students")} // Corrected path
               className="text-teal-600 font-bold hover:text-teal-700 transition-colors"
             >
               חזרה לאזור הסטודנטים
