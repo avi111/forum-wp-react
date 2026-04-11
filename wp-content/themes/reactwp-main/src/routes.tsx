@@ -17,7 +17,6 @@ import { TagPage } from "./pages/TagPage";
 import { EventPage } from "./pages/EventPage";
 import { NewsPage } from "./pages/NewsPage";
 import { Bylaws } from "./pages/Bylaws";
-import { QuestionnairePage } from "./pages/QuestionnairePage";
 import { StudentsArea } from "./pages/StudentsArea";
 import { StudentPaperPage } from "./pages/StudentPaperPage";
 import { StudentJobPage } from "./pages/StudentJobPage";
@@ -98,10 +97,6 @@ export const routeConfig = [
   {
     path: "/dashboard",
     element: <ProtectedDashboard />,
-  },
-  {
-    path: "/questionnaire/:id",
-    element: <QuestionnairePage />,
   },
   {
     path: "/students",
