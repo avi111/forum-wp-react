@@ -34,6 +34,10 @@ export const ResearchArticlesList: React.FC = () => {
         <div className="flex items-center justify-center py-16">
           <Loader2 className="w-8 h-8 text-teal-500 animate-spin" />
         </div>
+      ) : currentResearcherArticles.length === 0 ? (
+        <div className="text-center py-16 text-slate-600">
+          {t("no_research_articles_found")}
+        </div>
       ) : (
         <div className="grid md:grid-cols-3 gap-8">
           {currentResearcherArticles.map((article) => (
@@ -42,11 +46,13 @@ export const ResearchArticlesList: React.FC = () => {
         </div>
       )}
 
-      <PaginationControls
-        currentPage={researcherPage}
-        totalPages={totalResearcherPages}
-        onPageChange={handleResearcherPageChange}
-      />
+      {currentResearcherArticles.length > 0 && (
+        <PaginationControls
+          currentPage={researcherPage}
+          totalPages={totalResearcherPages}
+          onPageChange={handleResearcherPageChange}
+        />
+      )}
     </div>
   );
 };

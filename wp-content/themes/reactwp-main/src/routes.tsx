@@ -11,7 +11,7 @@ import { PastEvents } from "./pages/PastEvents";
 import { Contact } from "./pages/Contact";
 import { About } from "./pages/About";
 import { ResearcherProfile } from "./pages/ResearcherProfile";
-import { ProtectedDashboard } = from "./pages/ProtectedDashboard";
+import { ProtectedDashboard } from "./pages/ProtectedDashboard";
 import { PageNotFound } from "./pages/PageNotFound";
 import { TagPage } from "./pages/TagPage";
 import { EventPage } from "./pages/EventPage";
