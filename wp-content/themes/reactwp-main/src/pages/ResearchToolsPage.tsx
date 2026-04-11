@@ -124,8 +124,9 @@ export const ResearchToolsPage: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {mockImagingMethods.map((method) => (
-              <div
+              <Link
                 key={method.id}
+                to={`/imaging-method/${method.id}`}
                 className="block bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:border-indigo-200 hover:shadow-md transition-all"
               >
                 {method.imageUrl && (
@@ -141,7 +142,7 @@ export const ResearchToolsPage: React.FC = () => {
                 <p className="text-sm text-slate-600 line-clamp-3">
                   {method.excerpt}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -156,8 +157,9 @@ export const ResearchToolsPage: React.FC = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {mockRecruitmentTools.map((tool) => (
-              <div
+              <Link
                 key={tool.id}
+                to={`/recruitment-item/${tool.id}`}
                 className="block bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:border-blue-200 hover:shadow-md transition-all flex items-start"
               >
                 <div className="shrink-0 mt-1 ml-4">{tool.icon}</div>
@@ -169,7 +171,7 @@ export const ResearchToolsPage: React.FC = () => {
                     {tool.excerpt}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
