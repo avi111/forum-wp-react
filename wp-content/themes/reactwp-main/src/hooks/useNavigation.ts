@@ -32,6 +32,8 @@ export const useNavigation = () => {
           return "/students";
         case PageView.RESEARCH_TOOLS: // Add the new case for RESEARCH_TOOLS
           return "/research-tools";
+        case PageView.EDITORIAL_ARTICLES:
+          return "/editorial";
         default:
           return "/";
       }

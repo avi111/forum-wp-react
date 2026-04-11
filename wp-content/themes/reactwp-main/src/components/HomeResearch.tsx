@@ -25,7 +25,7 @@ export const HomeResearch: React.FC<HomeResearchProps> = ({
           <h3 className="font-bold text-xl text-slate-900">מחקרים חדשים</h3>
         </div>
         <button
-          onClick={() => navigate("/researchers")}
+          onClick={() => navigate("/articles")}
           className="text-xs font-bold text-teal-600 hover:underline"
         >
           לאינדקס המלא

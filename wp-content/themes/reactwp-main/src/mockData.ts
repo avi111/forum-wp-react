@@ -72,9 +72,10 @@ export const MOCK_SETTINGS: AppSettings = {
 
     // Article List
     articlelist_page_title: "מאמרים ופרסומים",
-    articlelist_editorial_section_title: "מערכת הפורום",
-    articlelist_researcher_section_title: "ממחקרים חדשים בקהילה",
+    articlelist_editorial_section_title: "מאמרי דעה ותכנים של מערכת הפורום", // Updated string
+    articlelist_researcher_section_title: "מחקרים מדעיים של חברי הקהילה", // Updated string
     articlelist_read_more: "קרא עוד",
+    editorial_page_title: "מגזין הפורום",
   },
   institutions: [
     "מכון וייצמן למדע",
@@ -608,7 +609,7 @@ export const MOCK_TRAININGS: Training[] = [
     
     נלמד כיצד מולקולות אלו משפיעות על רצפטורים שונים במוח (ובעיקר 5-HT2A), כיצד הן משנות את הקישוריות המוחית (על פי ממצאי fMRI עדכניים), ומהם הסיכונים הפיזיולוגיים הכרוכים בשימוש בהן.
     
-    דגש מיוחד יינתן לנושא של אינטראקציות בין-תרופתיות (Drug-Drug Interactions) - נושא קריטי עבור מטפלים העובדים עם מטופלים הנוטלים תרופות פסיכיאטריות קבועות (SSRI/SNRI).`,
+    דגש מיוחד יינתן לנושא של אינטראקציות בין-תרופתיות (Drug-Drug Interactions) - נושא קריטי עבור מטפלים העוברים עם מטופלים הנוטלים תרופות פסיכיאטריות קבועות (SSRI/SNRI).`,
     date: "זמין לצפייה בכל עת",
     location: "Online (Zoom / VOD)",
     price: "1,200 ₪",
@@ -1053,6 +1054,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "דף הבית", view: PageView.HOME },
   { label: "אינדקס חוקרים", view: PageView.RESEARCHERS },
   { label: "מאמרים", view: PageView.ARTICLES },
+  { label: "מגזין הפורום", view: PageView.EDITORIAL_ARTICLES },
   { label: "הכשרות", view: PageView.TRAINING },
   { label: "אירועים", view: PageView.EVENTS },
   { label: "מפגשים", view: PageView.MEETINGS },

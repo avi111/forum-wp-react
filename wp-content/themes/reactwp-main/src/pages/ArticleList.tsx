@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import { t } from "../services/stringService";
 import { TagCloud } from "../components/TagCloud";
-import { EditorialArticlesList } from "../components/EditorialArticlesList";
 import { ResearchArticlesList } from "../components/ResearchArticlesList";
 
 export const ArticleList: React.FC = () => {
@@ -42,9 +41,6 @@ export const ArticleList: React.FC = () => {
 
       {/* Researcher Articles Section */}
       <ResearchArticlesList />
-
-      {/* Editorial / Featured Section */}
-      <EditorialArticlesList />
     </div>
   );
 };

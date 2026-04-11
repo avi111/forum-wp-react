@@ -24,6 +24,7 @@ import { ResearchToolsPage } from "./pages/ResearchToolsPage"; // Import the new
 import { ResearchQuestionnairePage } from "./pages/ResearchQuestionnairePage"; // New import
 import { ImagingMethodPage } from "./pages/ImagingMethodPage"; // New import
 import { RecruitmentItemPage } from "./pages/RecruitmentItemPage"; // New import
+import { EditorialPage } from "./pages/EditorialPage"; // Import EditorialPage
 
 export const routeConfig = [
   {
@@ -53,6 +54,10 @@ export const routeConfig = [
   {
     path: "/articles",
     element: <ArticleList />,
+  },
+  {
+    path: "/editorial",
+    element: <EditorialPage />,
   },
   {
     path: "/article/:id",
