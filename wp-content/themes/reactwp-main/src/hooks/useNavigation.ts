@@ -12,8 +12,10 @@ export const useNavigation = () => {
           return "/";
         case PageView.RESEARCHERS:
           return "/researchers";
-        case PageView.ARTICLES:
-          return "/articles";
+        case PageView.RESEARCH_ARTICLES: // Updated from SCIENTIFIC_ARTICLES
+          return "/research-articles";
+        case PageView.EDITORIAL_ARTICLES:
+          return "/editorial-articles";
         case PageView.TRAINING:
           return "/training";
         case PageView.EVENTS:
@@ -30,10 +32,8 @@ export const useNavigation = () => {
           return site.site_url + "/wp-admin/";
         case PageView.STUDENTS:
           return "/students";
-        case PageView.RESEARCH_TOOLS: // Add the new case for RESEARCH_TOOLS
+        case PageView.RESEARCH_TOOLS:
           return "/research-tools";
-        case PageView.EDITORIAL_ARTICLES:
-          return "/editorial";
         default:
           return "/";
       }

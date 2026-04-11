@@ -25,7 +25,7 @@ export const HomeEditorial: React.FC<HomeEditorialProps> = ({
           <h3 className="font-bold text-xl text-slate-900">מגזין הפורום</h3>
         </div>
         <button
-          onClick={() => navigate("/articles")}
+          onClick={() => navigate("/editorial-articles")}
           className="text-xs font-bold text-indigo-600 hover:underline"
         >
           לכל המאמרים

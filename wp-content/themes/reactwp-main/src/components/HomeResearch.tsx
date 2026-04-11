@@ -22,10 +22,10 @@ export const HomeResearch: React.FC<HomeResearchProps> = ({
           <span className="p-2 bg-teal-50 rounded-lg">
             <FlaskConical className="w-5 h-5 text-teal-600" />
           </span>
-          <h3 className="font-bold text-xl text-slate-900">מחקרים חדשים</h3>
+          <h3 className="font-bold text-xl text-slate-900">מחקרים מדעיים</h3>
         </div>
         <button
-          onClick={() => navigate("/articles")}
+          onClick={() => navigate("/research-articles")}
           className="text-xs font-bold text-teal-600 hover:underline"
         >
           לאינדקס המלא

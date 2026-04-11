@@ -297,7 +297,7 @@ export const MOCK_NEWS: NewsItem[] = [
     date: "05/05/2025",
     link: "#",
     content:
-      "מחקר פורץ דרך של צוות חוקרים ממכון ויצמן והמרכז הרפואי שיבא, המדגים מנגנון נוירופלסטי חדש המופעל על ידי DMT, פורסם בכתב העת היוקרתי Nature Medicine.",
+      "מחקר פורץ דרך של צוות חוקרים ממכון ויצמן והמרכז הרפואי שיבא, המדגים מנגנון נוירופלסטי חד המופעל על ידי DMT, פורסם בכתב העת היוקרתי Nature Medicine.",
   },
 ];
 
@@ -476,10 +476,10 @@ export const MOCK_EVENTS: CalendarEvent[] = [
     location: "אוניברסיטת תל אביב",
     type: "הרצאה",
     imageUrl:
-      "https://images.unsplash.com/photo-1544928147-79a2dbc1f389?auto=format&fit=crop&q=80&w=1200",
+      "https://images.unsplash.com/photo-154492814779a2dbc1f389?auto=format&fit=crop&q=80&w=1200",
     description: "הרצאה מרתקת על מודל ה-REBUS והמוח האנטרופי.",
     fullContent:
-      "<p>פרופ' קרהארט-האריס הציג את מחקרי ה-fMRI האחרונים שלו ואת התיאוריה המאחדת שלו לגבי פעולה פסיכדלית.</p>",
+      "<p>פרופ' קרהארט-האריס הציג את מחקרי ה-fMRI האחרונים שלו ואת התיאוריה המאוחדת שלו לגבי פעולה פסיכדלית.</p>",
     startTime: "19:00",
     endTime: "21:00",
     speakers: ["פרופ' רובין קרהארט-האריס"],
@@ -708,7 +708,7 @@ export const INITIAL_ARTICLES: Article[] = [
       "כיצד משתנה הקישוריות המוחית בזמן אמת? סקירה של טכנולוגיות fMRI מתקדמות.",
     content: `אחת השאלות המרתקות ביותר במדעי המוח כיום היא: מה קורה במוח האנושי תחת השפעת פסיכדליים קלאסיים כמו LSD? מחקרים חדשים המשתמשים בטכנולוגיית fMRI (דימות תהודה מגנטית תפקודי) שופכים אור על המנגנונים העצביים העומדים בבסיס החוויה הפסיכדלית ושינוי התודעה.
 
-הממצא העקבי ביותר במחקרים אלו הוא הפחתה משמעותית בפעילות של "רשת ברירת המחדל" (Default Mode Network - DMN). רשת זו פעילה כשאנחנו חולמים בהקיץ, חושבים על עצמנו, על העבר או על העתיד. פעילות יתר ב-DMN מקושרת לעיתים קרובות למצבים של דיכאון, חרדה ודפוסי חשיבה רומינטיביים (חזרתיים). החלשות הקשרים בתוך רשת זו תחת השפעת LSD מתואמת עם הדיווח הסובייקטיבי של "התמוססות האגו" (Ego Dissolution) – תחושת אחדות עם הסביבה והתפוגגות הגבולות בין העצמי לאחר.
+הממצא העקבי ביותר בממחקרים אלו הוא הפחתה משמעותית בפעילות של "רשת ברירת המחדל" (Default Mode Network - DMN). רשת זו פעילה כשאנחנו חולמים בהקיץ, חושבים על עצמנו, על העבר או על העתיד. פעילות יתר ב-DMN מקושרת לעיתים קרובות למצבים של דיכאון, חרדה ודפוסי חשיבה רומינטיביים (חזרתיים). החלשות הקשרים בתוך רשת זו תחת השפעת LSD מתואמת עם הדיווח הסובייקטיבי של "התמוססות האגו" (Ego Dissolution) – תחושת אחדות עם הסביבה והתפוגגות הגבולות בין העצמי לאחר.
 
 במקביל להחלשות ה-DMN, אנו רואים עליה דרמטית ב"קישוריות התפקודית הגלובלית" (Global Functional Connectivity). אזורים במוח שבדרך כלל אינם מתקשרים זה עם זה ישירות, מתחילים "לדבר". כך למשל, הקורטקס הראייתי עשוי לתקשר ישירות עם אזורים האחראיים על עיבוד רגשי או שמיעתי, מה שעשוי להסביר תופעות כמו סינסתזיה (עירוב חושי).
 
@@ -753,7 +753,7 @@ export const INITIAL_ARTICLES: Article[] = [
       "תוצאות ראשוניות ממחקר שנערך באוניברסיטת חיפה בקרב סטודנטים לאמנות.",
     content: `תופעת ה"מיקרו-דוזינג" (Microdosing) – נטילת מינונים מזעריים של חומרים פסיכדליים (כעשירית מהמנה הפעילה) באופן קבוע – צברה פופולריות רבה בשנים האחרונות, במיוחד בקרב אנשי הייטק ויוצרים. המשתמשים מדווחים על שיפור במצב הרוח, בריכוז וביצירתיות, ללא עיוותי תפיסה המפריעים לתפקוד היומיומי. אולם, עד כה, הספרות המדעית בנושא הייתה דלה והסתמכה בעיקר על סקרים ושאלונים בדיעבד.
 
-במחקר חדש שנערך באוניברסיטת חיפה, ניסינו לבחון את הטענות הללו בתנאי מעבדה מבוקרים כפולי-סמיות (Double-blind placebo-controlled). המשתתפים במחקר, סטודנטים מתחומי האמנות והעיצוב, עברו סדרה של מבחנים קוגניטיביים סטנדרטיים להערכת יצירתיות, כגון "מבחן השימושים האלטרנטיביים" (Bricolage / Alternative Uses Task).
+במחקר חדש שנערך באוניברסיטת חיפה, ניסינו לבחון את הטענות הללו בתנאי מעבדה מבוקרים כפולי-סמיות (Double-blind placebo-controlled). המשתתפים בממחקר, סטודנטים מתחומי האמנות והעיצוב, עברו סדרה של מבחנים קוגניטיביים סטנדרטיים להערכת יצירתיות, כגון "מבחן השימושים האלטרנטיביים" (Bricolage / Alternative Uses Task).
 
 הממצאים הראשוניים מצביעים על תמונה מורכבת. בעוד שלא נמצא שיפור מובהק ב"חשיבה מתכנסת" (Convergent Thinking - היכולת למצוא את הפתרון ה"נכון" היחיד לבעיה), נצפה שיפור משמעותי במדדים של "חשיבה מסתעפת" (Divergent Thinking) – היכולת לייצר מגוון רחב של רעיונות ופתרונות מקוריים לאותה בעיה.
 
@@ -916,7 +916,7 @@ export const MOCK_QUESTIONNAIRES: Questionnaire[] = [
     date: "01/01/2024",
     content: `
       <h2>הסבר על המחקר</h2>
-      <p>אנו מזמינים אותך להשתתף במחקר הבוחן עמדות ותפיסות בנוגע לטיפול פסיכדלי. השאלון אנונימי לחלוטין ונועד לצרכי מחקר בלבד.</p>
+      <p>אנו מזמינים אותך להשתתף בממחקר הבוחן עמדות ותפיסות בנוגע לטיפול פסיכדלי. השאלון אנונימי לחלוטין ונועד לצרכי מחקר בלבד.</p>
       <p>השאלון מיועד לבגירים מעל גיל 18.</p>
       <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfD_example/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
     `,
@@ -1053,7 +1053,7 @@ export const MOCK_RECRUITMENT_TOOLS: RecruitmentTool[] = [
 export const NAV_ITEMS: NavItem[] = [
   { label: "דף הבית", view: PageView.HOME },
   { label: "אינדקס חוקרים", view: PageView.RESEARCHERS },
-  { label: "מאמרים", view: PageView.ARTICLES },
+  { label: "מאמרים מדעיים", view: PageView.RESEARCH_ARTICLES }, // Updated to RESEARCH_ARTICLES
   { label: "מגזין הפורום", view: PageView.EDITORIAL_ARTICLES },
   { label: "הכשרות", view: PageView.TRAINING },
   { label: "אירועים", view: PageView.EVENTS },
@@ -1139,12 +1139,18 @@ export const MOCK_TEMPLATES: Record<string, string> = {
     </div>
     <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSerMUNZSv6aJ9L_c6PIY0WN8T_GQAxW3-3IubSvjLhuohbITQ/viewform?embedded=true&hl=iw" width="100%" height="3861" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
   `,
-  contact: `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdIw-P4hbbZ0oaWNl2BVEvBk_IUcI_TPG4HfK18BacEWRKtEg/viewform?embedded=true&hl=iw" width="100%" height="850" frameborder="0" marginheight="0" marginwidth="0">בטעינה…</iframe>`,
+  contact: `<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdIw-P4hbbZ0oaWNl2BVEvBk_IUcI_TPG4HfK18BacKWRKtEg/viewform?embedded=true&hl=iw" width="100%" height="850" frameborder="0" marginheight="0" marginwidth="0">בטעינה…</iframe>`,
   about: `
     <!-- Header Section -->
     <div class="bg-slate-900 text-white relative py-20 overflow-hidden">
-      <div class="absolute inset-0 bg-pattern opacity-10"></div>
-      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900/90 to-teal-900/40"></div>
+      <div class="absolute inset-0">
+        <img
+          src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop&q=80&w=1920&auto=format&fit=crop"
+          alt="Abstract Background"
+          class="w-full h-full object-cover opacity-20"
+        />
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900/90 to-teal-900/40"></div>
+      </div>
       <div class="max-w-4xl mx-auto px-4 relative z-10 text-center">
         <h1 class="text-4xl md:text-5xl font-bold font-heebo mb-6">אודות הפורום הישראלי למחקר פסיכדלי</h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">קהילה מדעית המוקדשת לקידום הידע, המחקר והטיפול בתחום הפסיכדלי בישראל, תוך שמירה על סטנדרטים אקדמיים ואתיים מחמירים.</p>
@@ -1174,10 +1180,34 @@ export const MOCK_TEMPLATES: Record<string, string> = {
       <section>
         <h2 class="text-3xl font-bold text-slate-900 text-center mb-12">עמודי התווך של הפעילות</h2>
         <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow"><div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M15.09 16.05a1 1 0 0 1-1.42 1.42l-2.12-2.12a1 1 0 0 1 0-1.42l2.12-2.12a1 1 0 0 1 1.42 1.42L14 14.05l1.09 1Z"></path><path d="M12 2a7.5 7.5 0 0 0-5.13 12.87l-2.12 2.13a1 1 0 0 0 0 1.42l2.12 2.12a1 1 0 0 0 1.42 0l2.12-2.12A7.5 7.5 0 1 0 12 2Z"></path><path d="M12 2v5"></path></svg></div><h3 class="text-xl font-bold text-slate-900 mb-3">מחקר וחדשנות</h3><p class="text-slate-600 text-sm">עידוד מחקרים קליניים ופרה-קליניים, שיתוף פעולה בין מוסדות אקדמיים, וגיוס מענקי מחקר לחוקרים צעירים.</p></div>
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow"><div class="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center text-teal-600 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div><h3 class="text-xl font-bold text-slate-900 mb-3">חינוך והכשרה</h3><p class="text-slate-600 text-sm">בניית תוכניות הכשרה למטפלים, ארגון כנסים אקדמיים, והנגשת ידע מדעי עדכני לקהל הרחב בשפה העברית.</p></div>
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow"><div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h3 class="text-xl font-bold text-slate-900 mb-3">קהילה ורישות</h3><p class="text-slate-600 text-sm">יצירת פלטפורמה למפגש, דיון והחלפת רעיונות בין אנשי מקצוע מתחומים שונים: פסיכיאטריה, פסיכולוגיה, מדעי המוח ועוד.</p></div>
-          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow"><div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center text-amber-600 mb-4"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg></div><h3 class="text-xl font-bold text-slate-900 mb-3">אתיקה ורגולציה</h3><p class="text-slate-600 text-sm">קידום שיח אתי סביב השימוש בחומרים משני תודעה וסיוע בגיבוש מדיניות ציבורית אחראית מול הרשויות.</p></div>
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 hover:shadow-xl transition-shadow group">
+            <div class="w-16 h-16 bg-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-teal-600"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-3 text-slate-900">מחקר וחדשנות</h3>
+            <p class="text-slate-600 leading-relaxed">עידוד מחקרים קליניים ופרה-קליניים, שיתוף פעולה בין מוסדות אקדמיים, וגיוס מענקי מחקר לחוקרים צעירים.</p>
+          </div>
+          <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-shadow group">
+            <div class="w-16 h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-600"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-3 text-slate-900">חינוך והכשרה</h3>
+            <p class="text-slate-600 leading-relaxed">בניית תוכניות הכשרה למטפלים, ארגון כנסים אקדמיים, והנגשת ידע מדעי עדכני לקהל הרחב בשפה העברית.</p>
+          </div>
+          <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-shadow group">
+            <div class="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-600"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-3 text-slate-900">קהילה ורישות</h3>
+            <p class="text-slate-600 leading-relaxed">יצירת פלטפורמה למפגש, דיון והחלפת רעיונות בין אנשי מקצוע מתחומים שונים: פסיכיאטריה, פסיכולוגיה, מדעי המוח ועוד.</p>
+          </div>
+          <div class="p-8 rounded-2xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-shadow group">
+            <div class="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-amber-600"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-3 text-slate-900">אתיקה ורגולציה</h3>
+            <p class="text-slate-600 leading-relaxed">קידום שיח אתי סביב השימוש בחומרים משני תודעה וסיוע בגיבוש מדיניות ציבורית אחראית מול הרשויות.</p>
+          </div>
         </div>
       </section>
     </div>

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import { t } from "../services/stringService";
 import { TagCloud } from "../components/TagCloud";
-import { ResearchArticlesList } from "../components/ResearchArticlesList";
 
 export const ArticleList: React.FC = () => {
   const { tagsData, isTagsLoading, getTagsFromServer } = useApp();
@@ -38,9 +37,6 @@ export const ArticleList: React.FC = () => {
         </div>
       )}
       <TagCloud tagsData={tagsData || []} />
-
-      {/* Researcher Articles Section */}
-      <ResearchArticlesList />
     </div>
   );
 };

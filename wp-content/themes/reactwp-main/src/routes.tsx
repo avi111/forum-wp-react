@@ -11,7 +11,7 @@ import { PastEvents } from "./pages/PastEvents";
 import { Contact } from "./pages/Contact";
 import { About } from "./pages/About";
 import { ResearcherProfile } from "./pages/ResearcherProfile";
-import { ProtectedDashboard } from "./pages/ProtectedDashboard";
+import { ProtectedDashboard } = from "./pages/ProtectedDashboard";
 import { PageNotFound } from "./pages/PageNotFound";
 import { TagPage } from "./pages/TagPage";
 import { EventPage } from "./pages/EventPage";
@@ -20,11 +20,12 @@ import { Bylaws } from "./pages/Bylaws";
 import { StudentsArea } from "./pages/StudentsArea";
 import { StudentPaperPage } from "./pages/StudentPaperPage";
 import { StudentJobPage } from "./pages/StudentJobPage";
-import { ResearchToolsPage } from "./pages/ResearchToolsPage"; // Import the new page
-import { ResearchQuestionnairePage } from "./pages/ResearchQuestionnairePage"; // New import
-import { ImagingMethodPage } from "./pages/ImagingMethodPage"; // New import
-import { RecruitmentItemPage } from "./pages/RecruitmentItemPage"; // New import
-import { EditorialPage } from "./pages/EditorialPage"; // Import EditorialPage
+import { ResearchToolsPage } from "./pages/ResearchToolsPage";
+import { ResearchQuestionnairePage } from "./pages/ResearchQuestionnairePage";
+import { ImagingMethodPage } from "./pages/ImagingMethodPage";
+import { RecruitmentItemPage } from "./pages/RecruitmentItemPage";
+import { EditorialPage } from "./pages/EditorialPage";
+import { ResearchArticlesPage } from "./pages/ResearchArticlesPage"; // Import ResearchArticlesPage
 
 export const routeConfig = [
   {
@@ -52,11 +53,15 @@ export const routeConfig = [
     element: <ResearcherProfile />,
   },
   {
-    path: "/articles",
+    path: "/articles", // General articles list, if still needed
     element: <ArticleList />,
   },
   {
-    path: "/editorial",
+    path: "/research-articles", // New path for research articles
+    element: <ResearchArticlesPage />,
+  },
+  {
+    path: "/editorial-articles", // New path for editorial articles
     element: <EditorialPage />,
   },
   {
@@ -116,7 +121,7 @@ export const routeConfig = [
     element: <StudentJobPage />,
   },
   {
-    path: "/research-tools", // New route for Research Tools
+    path: "/research-tools",
     element: <ResearchToolsPage />,
   },
   {

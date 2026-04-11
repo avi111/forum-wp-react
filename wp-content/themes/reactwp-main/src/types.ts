@@ -97,10 +97,10 @@ export interface CalendarEvent {
 
 export interface Meeting {
   id: string;
+  title: string;
   date: string;
   day: string;
   month: string;
-  title: string;
   description: string;
   buttonText: string;
 }
@@ -183,8 +183,8 @@ export enum PageView {
   RESEARCHERS = "RESEARCHERS",
   TRAINING = "TRAINING",
   EVENTS = "EVENTS",
-  ARTICLES = "ARTICLES",
-  EDITORIAL_ARTICLES = "EDITORIAL_ARTICLES", // New PageView
+  RESEARCH_ARTICLES = "RESEARCH_ARTICLES", // Renamed from SCIENTIFIC_ARTICLES
+  EDITORIAL_ARTICLES = "EDITORIAL_ARTICLES", // New entry
   CONTACT = "CONTACT",
   JOIN = "JOIN",
   DASHBOARD = "DASHBOARD",
