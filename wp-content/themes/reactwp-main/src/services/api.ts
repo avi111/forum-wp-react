@@ -10,6 +10,8 @@ import {
   MOCK_STUDENT_PAPERS,
   MOCK_STUDENT_JOBS,
   MOCK_QUESTIONNAIRES, // Import mock questionnaires
+  MOCK_IMAGING_METHODS, // Import mock imaging methods
+  MOCK_RECRUITMENT_TOOLS, // Import mock recruitment tools
   object,
 } from "../mockData";
 import {
@@ -25,6 +27,8 @@ import {
   Training,
   StudentPaper,
   StudentJob,
+  ImagingMethod, // Import ImagingMethod type
+  RecruitmentTool, // Import RecruitmentTool type
 } from "../types";
 import { useCallback } from "react";
 
@@ -491,6 +495,66 @@ export const useAPI = () => {
     }
   }, [post]);
 
+  const fetchQuestionnaireById = useCallback(async (id: string): Promise<Questionnaire> => {
+    try {
+      return await post("fetchQuestionnaireById", { id });
+    } catch (error) {
+      console.warn(
+        `Failed to fetch questionnaire with ID ${id} from server, falling back to mock.`,
+        error,
+      );
+      if (import.meta.env.DEV || isStorybook) {
+        await delay(SIMULATED_DELAY_MS);
+        const questionnaire = MOCK_QUESTIONNAIRES.find(q => q.id === id);
+        if (!questionnaire) {
+          throw new Error(`Mock questionnaire with ID ${id} not found.`);
+        }
+        return questionnaire;
+      }
+      throw error;
+    }
+  }, [post]);
+
+  const fetchImagingMethodById = useCallback(async (id: string): Promise<ImagingMethod> => {
+    try {
+      return await post("fetchImagingMethodById", { id });
+    } catch (error) {
+      console.warn(
+        `Failed to fetch imaging method with ID ${id} from server, falling back to mock.`,
+        error,
+      );
+      if (import.meta.env.DEV || isStorybook) {
+        await delay(SIMULATED_DELAY_MS);
+        const imagingMethod = MOCK_IMAGING_METHODS.find(im => im.id === id);
+        if (!imagingMethod) {
+          throw new Error(`Mock imaging method with ID ${id} not found.`);
+        }
+        return imagingMethod;
+      }
+      throw error;
+    }
+  }, [post]);
+
+  const fetchRecruitmentItemById = useCallback(async (id: string): Promise<RecruitmentTool> => {
+    try {
+      return await post("fetchRecruitmentItemById", { id });
+    } catch (error) {
+      console.warn(
+        `Failed to fetch recruitment item with ID ${id} from server, falling back to mock.`,
+        error,
+      );
+      if (import.meta.env.DEV || isStorybook) {
+        await delay(SIMULATED_DELAY_MS);
+        const recruitmentItem = MOCK_RECRUITMENT_TOOLS.find(rt => rt.id === id);
+        if (!recruitmentItem) {
+          throw new Error(`Mock recruitment item with ID ${id} not found.`);
+        }
+        return recruitmentItem;
+      }
+      throw error;
+    }
+  }, [post]);
+
   const fetchStudentPapers = useCallback(
     async (page = 1, limit = 10): Promise<PaginatedResponse<StudentPaper>> => {
       try {
@@ -559,7 +623,10 @@ export const useAPI = () => {
     fetchTrainings,
     sendContactMessage,
     fetchQuestionnairesByAuthor,
-    fetchAllQuestionnaires, // Add the new function here
+    fetchAllQuestionnaires,
+    fetchQuestionnaireById, // Add the new function here
+    fetchImagingMethodById, // Add the new function here
+    fetchRecruitmentItemById, // Add the new function here
     fetchStudentPapers,
     fetchStudentJobs,
   };

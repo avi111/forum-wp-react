@@ -119,7 +119,6 @@ export const routeConfig = [
     path: "/research-tools", // New route for Research Tools
     element: <ResearchToolsPage />,
   },
-  // New routes for the requested pages
   {
     path: "/research-questionnaire/:id",
     element: <ResearchQuestionnairePage />,

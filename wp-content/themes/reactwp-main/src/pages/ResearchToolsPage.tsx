@@ -81,7 +81,7 @@ export const ResearchToolsPage: React.FC = () => {
               {questionnaires.map((questionnaire) => (
                 <Link
                   key={questionnaire.id}
-                  to={`/questionnaire/${questionnaire.id}`}
+                  to={`/research-questionnaire/${questionnaire.id}`}
                   className="block bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:border-purple-200 hover:shadow-md transition-all"
                 >
                   {questionnaire.imageUrl && (

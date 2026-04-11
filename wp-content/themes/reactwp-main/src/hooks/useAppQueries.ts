@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAPI } from "../services/api";
 import { useState, useMemo } from "react";
-import { PaginatedResponse, Article, StudentPaper, StudentJob, Questionnaire } from "../types";
+import { PaginatedResponse, Article, StudentPaper, StudentJob, Questionnaire, ImagingMethod, RecruitmentTool } from "../types";
 
 export const useSettings = () => {
   const { fetchSettings } = useAPI();
@@ -155,6 +155,33 @@ export const useAllQuestionnaires = () => {
   return useQuery<Questionnaire[]>({
     queryKey: ["allQuestionnaires"],
     queryFn: fetchAllQuestionnaires,
+  });
+};
+
+export const useQuestionnaire = (id: string) => {
+  const { fetchQuestionnaireById } = useAPI();
+  return useQuery<Questionnaire>({
+    queryKey: ["questionnaire", id],
+    queryFn: () => fetchQuestionnaireById(id),
+    enabled: !!id,
+  });
+};
+
+export const useImagingMethod = (id: string) => {
+  const { fetchImagingMethodById } = useAPI();
+  return useQuery<ImagingMethod>({
+    queryKey: ["imagingMethod", id],
+    queryFn: () => fetchImagingMethodById(id),
+    enabled: !!id,
+  });
+};
+
+export const useRecruitmentItem = (id: string) => {
+  const { fetchRecruitmentItemById } = useAPI();
+  return useQuery<RecruitmentTool>({
+    queryKey: ["recruitmentItem", id],
+    queryFn: () => fetchRecruitmentItemById(id),
+    enabled: !!id,
   });
 };
 
