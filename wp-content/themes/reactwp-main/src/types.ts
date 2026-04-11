@@ -131,9 +131,24 @@ export interface Questionnaire {
   title: string;
   excerpt: string;
   date: string;
-  content: string;
+  content: string; // This will be the fullContent for questionnaires
   imageUrl?: string;
-  authorId?: string; // Added authorId to Questionnaire
+  authorId?: string;
+}
+
+export interface ImagingMethod {
+  id: string;
+  title: string;
+  excerpt: string;
+  fullContent: string;
+  imageUrl?: string;
+}
+
+export interface RecruitmentTool {
+  id: string;
+  title: string;
+  excerpt: string;
+  fullContent: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -175,7 +190,7 @@ export enum PageView {
   LOGIN = "LOGIN",
   MEETINGS = "MEETINGS",
   STUDENTS = "STUDENTS",
-  RESEARCH_TOOLS = "RESEARCH_TOOLS", // Added new PageView
+  RESEARCH_TOOLS = "RESEARCH_TOOLS",
 }
 
 export interface NavItem {

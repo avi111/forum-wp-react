@@ -22,6 +22,9 @@ import { StudentsArea } from "./pages/StudentsArea";
 import { StudentPaperPage } from "./pages/StudentPaperPage";
 import { StudentJobPage } from "./pages/StudentJobPage";
 import { ResearchToolsPage } from "./pages/ResearchToolsPage"; // Import the new page
+import { ResearchQuestionnairePage } from "./pages/ResearchQuestionnairePage"; // New import
+import { ImagingMethodPage } from "./pages/ImagingMethodPage"; // New import
+import { RecruitmentItemPage } from "./pages/RecruitmentItemPage"; // New import
 
 export const routeConfig = [
   {
@@ -115,6 +118,19 @@ export const routeConfig = [
   {
     path: "/research-tools", // New route for Research Tools
     element: <ResearchToolsPage />,
+  },
+  // New routes for the requested pages
+  {
+    path: "/research-questionnaire/:id",
+    element: <ResearchQuestionnairePage />,
+  },
+  {
+    path: "/imaging-method/:id",
+    element: <ImagingMethodPage />,
+  },
+  {
+    path: "/recruitment-item/:id",
+    element: <RecruitmentItemPage />,
   },
   {
     path: "*",
