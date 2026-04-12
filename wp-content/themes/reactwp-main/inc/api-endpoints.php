@@ -453,6 +453,9 @@ function iprf_fetch_articles_paged()
     iprf_send_response([
         'data' => $articles,
         'total' => $total,
+        // Add debugging info
+        'debug_query_args' => $args,
+        'debug_post_types_filtered' => $post_types,
     ]);
 }
 
