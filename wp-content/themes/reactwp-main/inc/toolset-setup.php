@@ -354,3 +354,28 @@ function iprf_admin_styles()
 }
 
 add_action('admin_head', 'iprf_admin_styles');
+
+/**
+ * Add persistent notice for PDF uploads above the editor.
+ */
+function iprf_pdf_upload_editor_notice($post)
+{
+  // Define the post types where the notice should appear.
+  $target_post_types = ['post', 'research-paper'];
+
+  if (in_array($post->post_type, $target_post_types)) {
+    ?>
+    <div class="notice notice-warning"
+         style="margin-top: 20px; margin-bottom: 20px; padding: 15px; border-left: 4px solid #ffb900; background-color: #fff; box-shadow: 0 1px 1px rgba(0,0,0,.04);">
+      <p>
+        <strong>
+          <?php _e('אם אתם רוצים להעלות קבצי pdf, השתמשו בשדה בתחתית העמוד הזה, שנקרא pdf. אל תעלו את הקובץ מתיבת התוכן', 'iprf-textdomain'); ?>
+        </strong>
+      </p>
+    </div>
+    <?php
+  }
+}
+
+// Add the new hook for placement above the editor
+add_action('edit_form_after_title', 'iprf_pdf_upload_editor_notice');
