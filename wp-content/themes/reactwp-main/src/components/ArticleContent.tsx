@@ -24,7 +24,7 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
           className="prose prose-slate prose-lg max-w-none text-slate-800 leading-loose"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
-        s{/* Attachments Section */}
+        {/* Attachments Section */}
         {article.attachments && article.attachments.length > 0 && (
           <div className="mt-12 pt-8 border-t border-slate-100">
             <h3 className="text-lg font-bold text-slate-900 mb-6 flex items-center">
