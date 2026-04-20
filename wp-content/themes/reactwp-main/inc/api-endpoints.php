@@ -107,7 +107,6 @@ function iprf_convert_list_to_tailwind_steps($html)
     $dom = new DOMDocument();
     // Suppress warnings for invalid HTML structure (common with partial HTML)
     libxml_use_internal_errors(true);
-    // Load HTML with UTF-8 encoding hack
     $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
     libxml_clear_errors();
 
@@ -1091,6 +1090,7 @@ function iprf_check_user_verification()
     echo '<input type="text" name="answer" placeholder="הכנס את השם הפרטי" required>';
     echo '<br>';
     echo '<button type="submit">שלח</button>';
+    echo '<p class="error-message"></p>'; // Placeholder for error messages
     echo '</form>';
 
     echo '</div></body></html>';
@@ -1418,4 +1418,71 @@ function iprf_fetch_single_student_job()
     ];
 
     iprf_send_response($job_data);
+}
+
+/**
+ * 22. Fetch All Questionnaires
+ */
+add_action('wp_ajax_fetchAllQuestionnaires', 'iprf_fetch_all_questionnaires');
+add_action('wp_ajax_nopriv_fetchAllQuestionnaires', 'iprf_fetch_all_questionnaires');
+
+function iprf_fetch_all_questionnaires()
+{
+    $args = [
+        'post_type' => 'questionnaire',
+        'posts_per_page' => -1, // Fetch all posts
+        'post_status' => 'publish',
+        'orderby' => 'title',
+        'order' => 'ASC',
+    ];
+
+    $query = new WP_Query($args);
+    $questionnaires = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+        $questionnaires[] = [
+            'id' => (string)get_the_ID(),
+            'title' => get_the_title(),
+            'excerpt' => get_the_excerpt(),
+            'date' => get_the_date('d/m/Y'),
+            'content' => apply_filters('the_content', get_the_content()),
+            'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
+        ];
+    }
+    wp_reset_postdata();
+
+    iprf_send_response($questionnaires);
+}
+
+/**
+ * 23. Fetch Questionnaire by ID
+ */
+add_action('wp_ajax_fetchQuestionnaireById', 'iprf_fetch_questionnaire_by_id');
+add_action('wp_ajax_nopriv_fetchQuestionnaireById', 'iprf_fetch_questionnaire_by_id');
+
+function iprf_fetch_questionnaire_by_id()
+{
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+
+    if (!$id) {
+        wp_send_json_error(['message' => 'Missing ID']);
+    }
+
+    $post = get_post($id);
+
+    if (!$post || $post->post_type !== 'questionnaire' || $post->post_status !== 'publish') {
+        wp_send_json_error(['message' => 'Questionnaire not found or not published']);
+    }
+
+    $questionnaire = [
+        'id' => (string)$post->ID,
+        'title' => $post->post_title,
+        'excerpt' => has_excerpt($post) ? $post->post_excerpt : '',
+        'date' => get_the_date('d/m/Y', $post),
+        'content' => apply_filters('the_content', $post->post_content),
+        'imageUrl' => get_the_post_thumbnail_url($post->ID, 'large'),
+    ];
+
+    iprf_send_response($questionnaire);
 }
