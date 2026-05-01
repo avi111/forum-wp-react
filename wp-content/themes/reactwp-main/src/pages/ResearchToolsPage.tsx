@@ -6,7 +6,7 @@ import {
   useAllQuestionnaires,
   useAllRecruitmentTools,
 } from "../hooks/useAppQueries";
-import { useApp } from "../context/AppContext";
+import { t } from "../services/stringService";
 
 export const ResearchToolsPage: React.FC = () => {
   const {
@@ -27,10 +27,6 @@ export const ResearchToolsPage: React.FC = () => {
     isError: isErrorRecruitment,
   } = useAllRecruitmentTools();
 
-  const {
-    settings: { strings },
-  } = useApp();
-
   const getRecruitmentIcon = (index: number) => {
     return index % 2 === 0 ? (
       <Users className="w-6 h-6 text-blue-600" />
@@ -45,10 +41,10 @@ export const ResearchToolsPage: React.FC = () => {
       <div className="relative bg-gradient-to-r from-purple-600 to-indigo-800 py-16 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl font-extrabold leading-tight mb-3 font-heebo">
-            {strings.researchtools_page_title}
+            {t("researchtools_page_title")}
           </h1>
           <p className="text-purple-100 text-lg">
-            {strings.researchtools_page_description}
+            {t("researchtools_page_description")}
           </p>
         </div>
       </div>
@@ -58,7 +54,7 @@ export const ResearchToolsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 font-heebo flex items-center">
             <ClipboardList className="w-7 h-7 ml-3 text-purple-600" />
-            {strings.researchtools_questionnaires_section_title}
+            {t("researchtools_questionnaires_section_title")}
           </h2>
           {isLoadingQuestionnaires ? (
             <div className="flex justify-center py-8">
@@ -66,7 +62,7 @@ export const ResearchToolsPage: React.FC = () => {
             </div>
           ) : isErrorQuestionnaires ? (
             <div className="text-center py-8 text-red-600">
-              {strings.researchtools_questionnaires_loading_error}
+              {t("researchtools_questionnaires_loading_error")}
             </div>
           ) : questionnaires && questionnaires.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -100,7 +96,7 @@ export const ResearchToolsPage: React.FC = () => {
             <div className="text-center py-8 border border-dashed border-slate-200 rounded-lg bg-slate-50">
               <ClipboardList className="w-12 h-12 mx-auto text-slate-300 mb-4" />
               <p className="text-slate-500 text-lg">
-                {strings.researchtools_questionnaires_no_available}
+                {t("researchtools_questionnaires_no_available")}
               </p>
             </div>
           )}
@@ -112,7 +108,7 @@ export const ResearchToolsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 font-heebo flex items-center">
             <Brain className="w-7 h-7 ml-3 text-indigo-600" />
-            {strings.researchtools_imaging_methods_section_title}
+            {t("researchtools_imaging_methods_section_title")}
           </h2>
           {isLoadingImaging ? (
             <div className="flex justify-center py-8">
@@ -159,7 +155,7 @@ export const ResearchToolsPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-slate-900 mb-8 font-heebo flex items-center">
             <Users className="w-7 h-7 ml-3 text-blue-600" />
-            {strings.researchtools_recruitment_section_title}
+            {t("researchtools_recruitment_section_title")}
           </h2>
           {isLoadingRecruitment ? (
             <div className="flex justify-center py-8">

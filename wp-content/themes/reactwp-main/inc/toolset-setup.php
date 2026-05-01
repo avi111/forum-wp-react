@@ -40,7 +40,7 @@ function iprf_register_post_types()
     'student-paper' => ['עבודות סטודנטים', 'עבודת סטודנט', 'dashicons-welcome-write-blog', 11, true, ['title', 'editor', 'excerpt', 'thumbnail', 'author', 'custom-fields']],
     'student-job' => ['משרות לסטודנטים', 'משרת סטודנט', 'dashicons-businessman', 12, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],
     'imaging-method' => ['שיטות דימות', 'שיטת דימות', 'dashicons-brain', 13, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],
-    'recruitment-tool' => ['גיוס נחקרים', 'כלי גיוס', 'dashicons-groups', 14, true, ['title', 'editor', 'excerpt', 'thumbnail', 'custom-fields']],
+    'recruitment-tool' => ['גיוס נחקרים', 'כלי גיוס', 'dashicons-groups', 14, true, ['title', 'editor', 'excerpt', 'custom-fields']],
   ];
 
   foreach ($cpts as $slug => $details) {
