@@ -77,6 +77,29 @@ export const MOCK_SETTINGS: AppSettings = {
     articlelist_read_more: "קרא עוד",
     editorial_page_title: "מגזין הפורום",
     no_research_articles_found: "לא נמצאו מאמרים מדעיים.", // New string
+
+    // Research Tools
+    researchtools_page_title: "כלי מחקר",
+    researchtools_page_description: "מאגר כלים ומשאבים לחוקרים בתחום הפסיכדלי",
+    researchtools_questionnaires_section_title: "שאלוני מחקר",
+    researchtools_questionnaires_loading_error: "שגיאה בטעינת שאלוני המחקר.",
+    researchtools_questionnaires_no_available: "אין שאלוני מחקר זמינים כרגע.",
+    researchtools_imaging_methods_section_title: "שיטות דימות",
+    researchtools_recruitment_section_title: "גיוס נחקרים",
+    researchtools_fmri_title: "fMRI - דימות תהודה מגנטית תפקודי",
+    researchtools_fmri_excerpt: "הבנת פעילות מוחית בזמן אמת באמצעות זרימת דם.",
+    researchtools_eeg_title: "EEG - אלקטרואנצפלוגרפיה",
+    researchtools_eeg_excerpt: "רישום פעילות חשמלית מוחית דרך הקרקפת.",
+    researchtools_pet_title: "PET - טומוגרפיית פליטת פוזיטרונים",
+    researchtools_pet_excerpt:
+      "הדמיית תהליכים מטבוליים במוח באמצעות חומרים רדיואקטיביים.",
+    researchtools_recruitment_platform_title: "פלטפורמת גיוס מתנדבים למחקר",
+    researchtools_recruitment_platform_excerpt:
+      "מערכת לניהול וגיוס נחקרים פוטנציאליים למחקרים קליניים.",
+    researchtools_ethical_guidelines_title:
+      "הנחיות אתיות לגיוס אוכלוסיות פגיעות",
+    researchtools_ethical_guidelines_excerpt:
+      "מסמך מקיף המפרט את הכללים וההנחיות לגיוס אתי של נחקרים.",
   },
   institutions: [
     "מכון וייצמן למדע",

@@ -149,6 +149,7 @@ export interface RecruitmentTool {
   title: string;
   excerpt: string;
   fullContent: string;
+  imageUrl?: string;
 }
 
 export interface PaginatedResponse<T> {

@@ -30,7 +30,7 @@ const navItems = [
   { label: "חוקרים", view: PageView.RESEARCHERS },
   { label: "הכשרות", view: PageView.TRAINING },
   { label: "אירועים", view: PageView.EVENTS },
-  { label: "מאמרים", view: PageView.ARTICLES },
+  { label: "מאמרים", view: PageView.RESEARCH_ARTICLES },
   { label: "צור קשר", view: PageView.CONTACT },
 ];
 

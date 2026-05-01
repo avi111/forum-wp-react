@@ -1486,3 +1486,125 @@ function iprf_fetch_questionnaire_by_id()
 
     iprf_send_response($questionnaire);
 }
+
+/**
+ * 24. Fetch All Imaging Methods
+ */
+add_action('wp_ajax_fetchAllImagingMethods', 'iprf_fetch_all_imaging_methods');
+add_action('wp_ajax_nopriv_fetchAllImagingMethods', 'iprf_fetch_all_imaging_methods');
+
+function iprf_fetch_all_imaging_methods()
+{
+    $args = [
+        'post_type' => 'imaging-method',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'orderby' => 'title',
+        'order' => 'ASC',
+    ];
+
+    $query = new WP_Query($args);
+    $items = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+        $items[] = [
+            'id' => (string)get_the_ID(),
+            'title' => get_the_title(),
+            'excerpt' => get_the_excerpt(),
+            'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
+            'fullContent' => apply_filters('the_content', get_the_content()),
+        ];
+    }
+    wp_reset_postdata();
+
+    iprf_send_response($items);
+}
+
+/**
+ * 25. Fetch Imaging Method by ID
+ */
+add_action('wp_ajax_fetchImagingMethodById', 'iprf_fetch_imaging_method_by_id');
+add_action('wp_ajax_nopriv_fetchImagingMethodById', 'iprf_fetch_imaging_method_by_id');
+
+function iprf_fetch_imaging_method_by_id()
+{
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+    if (!$id) wp_send_json_error(['message' => 'Missing ID']);
+
+    $post = get_post($id);
+    if (!$post || $post->post_type !== 'imaging-method' || $post->post_status !== 'publish') {
+        wp_send_json_error(['message' => 'Imaging method not found']);
+    }
+
+    $data = [
+        'id' => (string)$post->ID,
+        'title' => $post->post_title,
+        'excerpt' => get_the_excerpt($post),
+        'imageUrl' => get_the_post_thumbnail_url($post->ID, 'large'),
+        'fullContent' => apply_filters('the_content', $post->post_content),
+    ];
+
+    iprf_send_response($data);
+}
+
+/**
+ * 26. Fetch All Recruitment Tools
+ */
+add_action('wp_ajax_fetchAllRecruitmentTools', 'iprf_fetch_all_recruitment_tools');
+add_action('wp_ajax_nopriv_fetchAllRecruitmentTools', 'iprf_fetch_all_recruitment_tools');
+
+function iprf_fetch_all_recruitment_tools()
+{
+    $args = [
+        'post_type' => 'recruitment-tool',
+        'posts_per_page' => -1,
+        'post_status' => 'publish',
+        'orderby' => 'title',
+        'order' => 'ASC',
+    ];
+
+    $query = new WP_Query($args);
+    $items = [];
+
+    while ($query->have_posts()) {
+        $query->the_post();
+        $items[] = [
+            'id' => (string)get_the_ID(),
+            'title' => get_the_title(),
+            'excerpt' => get_the_excerpt(),
+            'imageUrl' => get_the_post_thumbnail_url(get_the_ID(), 'large'),
+            'fullContent' => apply_filters('the_content', get_the_content()),
+        ];
+    }
+    wp_reset_postdata();
+
+    iprf_send_response($items);
+}
+
+/**
+ * 27. Fetch Recruitment Item by ID
+ */
+add_action('wp_ajax_fetchRecruitmentItemById', 'iprf_fetch_recruitment_item_by_id');
+add_action('wp_ajax_nopriv_fetchRecruitmentItemById', 'iprf_fetch_recruitment_item_by_id');
+
+function iprf_fetch_recruitment_item_by_id()
+{
+    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+    if (!$id) wp_send_json_error(['message' => 'Missing ID']);
+
+    $post = get_post($id);
+    if (!$post || $post->post_type !== 'recruitment-tool' || $post->post_status !== 'publish') {
+        wp_send_json_error(['message' => 'Recruitment item not found']);
+    }
+
+    $data = [
+        'id' => (string)$post->ID,
+        'title' => $post->post_title,
+        'excerpt' => get_the_excerpt($post),
+        'imageUrl' => get_the_post_thumbnail_url($post->ID, 'large'),
+        'fullContent' => apply_filters('the_content', $post->post_content),
+    ];
+
+    iprf_send_response($data);
+}
