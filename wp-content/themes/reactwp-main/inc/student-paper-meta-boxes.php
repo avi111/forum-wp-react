@@ -25,6 +25,19 @@ function iprf_add_student_paper_meta_boxes()
 add_action('add_meta_boxes', 'iprf_add_student_paper_meta_boxes');
 
 /**
+ * Enqueue media scripts for the meta box.
+ */
+function iprf_student_paper_admin_scripts($hook)
+{
+  global $post_type;
+  if (('post.php' == $hook || 'post-new.php' == $hook) && 'student-paper' == $post_type) {
+    wp_enqueue_media();
+  }
+}
+
+add_action('admin_enqueue_scripts', 'iprf_student_paper_admin_scripts');
+
+/**
  * Render the meta box content.
  *
  * @param WP_Post $post The post object.
@@ -77,11 +90,38 @@ function iprf_render_student_paper_meta_box_callback($post)
       <td>
         <input type="url" id="iprf_pdf_url" name="iprf_pdf_url" value="<?php echo esc_url($pdf_url); ?>"
                class="regular-text" />
-        <p class="description"><?php _e('הכנס קישור ישיר לקובץ ה-PDF של העבודה.', 'reactwp-main'); ?></p>
+        <button type="button" class="button"
+                id="iprf_upload_pdf_button"><?php _e('העלאת קובץ PDF', 'reactwp-main'); ?></button>
+        <p
+          class="description"><?php _e('הכנס קישור ישיר או השתמש בכפתור ההעלאה כדי לבחור קובץ מספריית המדיה.', 'reactwp-main'); ?></p>
       </td>
     </tr>
     </tbody>
   </table>
+  <script>
+    jQuery(document).ready(function($) {
+      var mediaUploader;
+      $("#iprf_upload_pdf_button").click(function(e) {
+        e.preventDefault();
+        if (mediaUploader) {
+          mediaUploader.open();
+          return;
+        }
+        mediaUploader = wp.media.frames.file_frame = wp.media({
+          title: '<?php _e('בחר קובץ PDF', 'reactwp-main'); ?>',
+          button: {
+            text: '<?php _e('השתמש בקובץ זה', 'reactwp-main'); ?>'
+          },
+          multiple: false
+        });
+        mediaUploader.on("select", function() {
+          var attachment = mediaUploader.state().get("selection").first().toJSON();
+          $("#iprf_pdf_url").val(attachment.url);
+        });
+        mediaUploader.open();
+      });
+    });
+  </script>
   <?php
 }
 
