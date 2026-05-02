@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Article } from "../types";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface EditorialCardProps {
   article: Article;
@@ -30,18 +31,18 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
         {shouldShowImage && (
           <img
             src={article.imageUrl}
-            alt={article.title}
+            alt={decodeHtml(article.title)}
             className="w-20 h-20 rounded-lg object-cover shrink-0"
           />
         )}
         <div className="flex-1 min-w-0">
           {article.tags.length > 0 && (
             <span className="text-xs text-indigo-500 font-bold mb-1 block truncate">
-              {article.tags[0]}
+              {decodeHtml(article.tags[0])}
             </span>
           )}
           <h4 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-indigo-600 transition-colors line-clamp-2">
-            {article.title}
+            {decodeHtml(article.title)}
           </h4>
           <span className="text-xs text-slate-400 mt-2 block">
             {article.date}
@@ -63,7 +64,7 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
       {shouldShowImage && (
         <img
           src={article.imageUrl}
-          alt={article.title}
+          alt={decodeHtml(article.title)}
           className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500"
         />
       )}
@@ -76,18 +77,20 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
               onClick={(e) => e.stopPropagation()}
               className="text-xs font-bold text-teal-300 bg-teal-900/50 px-2 py-1 rounded backdrop-blur-md hover:bg-teal-800 transition-colors"
             >
-              {tag}
+              {decodeHtml(tag)}
             </Link>
           ))}
         </div>
         <h3 className="text-2xl font-bold text-white mb-2 leading-tight group-hover:text-teal-400 transition-colors">
-          {article.title}
+          {decodeHtml(article.title)}
         </h3>
-        <p className="text-slate-300 line-clamp-2">{article.excerpt}</p>
+        <p className="text-slate-300 line-clamp-2">
+          {decodeHtml(article.excerpt)}
+        </p>
         <div className="mt-4 flex items-center text-slate-400 text-sm">
           <span>{article.date}</span>
           <span className="mx-2">•</span>
-          <span>{article.authorName}</span>
+          <span>{decodeHtml(article.authorName)}</span>
         </div>
       </div>
     </div>
