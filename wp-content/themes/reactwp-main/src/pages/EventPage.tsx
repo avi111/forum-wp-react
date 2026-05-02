@@ -1,17 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEvents } from "../hooks/useAppQueries";
-import {
-  ArrowRight,
-  Calendar,
-  Clock,
-  Loader2,
-  MapPin,
-  Share2,
-  Ticket,
-  Users,
-} from "lucide-react";
+import { ArrowRight, Calendar, Clock, Loader2, MapPin, Share2, Ticket, Users } from "lucide-react";
 import { CalendarEvent } from "../types.ts";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const EventPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -63,7 +55,7 @@ export const EventPage: React.FC = () => {
       <div className="relative h-[400px] w-full overflow-hidden">
         <img
           src={bgImage}
-          alt={event!.title}
+          alt={decodeHtml(event!.title)}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/70 to-transparent"></div>
@@ -80,7 +72,7 @@ export const EventPage: React.FC = () => {
             {event!.type}
           </div>
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight font-heebo drop-shadow-lg">
-            {event!.title}
+            {decodeHtml(event!.title)}
           </h1>
           <div className="flex flex-wrap items-center gap-6 text-slate-200 text-sm md:text-base">
             <div className="flex items-center">
@@ -92,7 +84,7 @@ export const EventPage: React.FC = () => {
             {event!.location && (
               <div className="flex items-center">
                 <MapPin className="w-5 h-5 ml-2 text-teal-400" />
-                <span>{event!.location}</span>
+                <span>{decodeHtml(event!.location)}</span>
               </div>
             )}
           </div>
@@ -132,7 +124,7 @@ export const EventPage: React.FC = () => {
                         {speaker.charAt(0)}
                       </div>
                       <span className="text-sm font-medium text-slate-700">
-                        {speaker}
+                        {decodeHtml(speaker)}
                       </span>
                     </div>
                   ))}
@@ -177,7 +169,7 @@ export const EventPage: React.FC = () => {
                 <div>
                   <div className="text-xs text-slate-500">מיקום</div>
                   <div className="font-medium text-slate-800">
-                    {event!.location}
+                    {decodeHtml(event!.location || "")}
                   </div>
                 </div>
               </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowRight, Eye, FileDown, Loader2 } from "lucide-react";
 import { useApp } from "../context/AppContext"; // Assuming useApp will provide student papers
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const StudentPaperPage: React.FC = () => {
   const { studentPapers, getStudentPapersFromServer } = useApp(); // Assuming these exist or will be added
@@ -52,7 +53,7 @@ export const StudentPaperPage: React.FC = () => {
       <div className="relative bg-gradient-to-r from-teal-600 to-teal-800 py-16 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl font-extrabold leading-tight mb-3">
-            {paper.title}
+            {decodeHtml(paper.title)}
           </h1>
           {paper.studentName && (
             <p className="text-teal-100 text-lg">מאת: {paper.studentName}</p>
@@ -71,7 +72,7 @@ export const StudentPaperPage: React.FC = () => {
         <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-8 md:p-12">
           {paper.excerpt && (
             <div className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium">
-              {paper.excerpt}
+              {decodeHtml(paper.excerpt)}
             </div>
           )}
           <article
@@ -88,12 +89,12 @@ export const StudentPaperPage: React.FC = () => {
               </h4>
               <div className="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden">
                 <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 text-xs font-bold text-slate-500">
-                  {paper.title}
+                  {decodeHtml(paper.title)}
                 </div>
                 <iframe
                   src={`${paper.pdfUrl}#toolbar=0`}
                   className="w-full h-[600px]"
-                  title={paper.title}
+                  title={decodeHtml(paper.title)}
                 />
               </div>
               <a

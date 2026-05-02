@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { Article } from "../types";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface ArticleHeaderProps {
   article: Article;
@@ -20,7 +21,7 @@ export const ArticleHeader: React.FC<ArticleHeaderProps> = ({
       {shouldShowImage && (
         <img
           src={article.imageUrl}
-          alt={article.title}
+          alt={decodeHtml(article.title)}
           className="absolute inset-0 w-full h-full object-cover"
         />
       )}
@@ -45,7 +46,7 @@ export const ArticleHeader: React.FC<ArticleHeaderProps> = ({
           ))}
         </div>
         <h1 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight font-heebo drop-shadow-lg">
-          {article.title}
+          {decodeHtml(article.title)}
         </h1>
         <div className="flex items-center text-slate-300 text-sm gap-6">
           <div className="flex items-center bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">

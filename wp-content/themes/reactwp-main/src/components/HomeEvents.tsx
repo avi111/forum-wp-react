@@ -2,6 +2,7 @@ import React from "react";
 import { CalendarEvent } from "../types";
 import { Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface HomeEventsProps {
   events: CalendarEvent[];
@@ -54,9 +55,11 @@ export const HomeEvents: React.FC<HomeEventsProps> = ({ events }) => {
                   {event.type}
                 </span>
                 <h4 className="font-bold text-slate-900 text-sm leading-tight mb-1 group-hover:text-purple-700 transition-colors">
-                  {event.title}
+                  {decodeHtml(event.title)}
                 </h4>
-                <p className="text-xs text-slate-500">{event.location}</p>
+                <p className="text-xs text-slate-500">
+                  {decodeHtml(event.location)}
+                </p>
               </div>
             </div>
           ))

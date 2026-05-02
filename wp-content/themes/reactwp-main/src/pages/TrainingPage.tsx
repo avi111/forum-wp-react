@@ -10,6 +10,7 @@ import {
   Users,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const TrainingPage: React.FC = () => {
   const { trainings, getTrainingsFromServer } = useApp();
@@ -98,7 +99,7 @@ export const TrainingPage: React.FC = () => {
               {training.category}
             </span>
             <h1 className="text-3xl md:text-5xl font-bold font-heebo mb-6 leading-tight">
-              {training.title}
+              {decodeHtml(training.title)}
             </h1>
             <div className="flex flex-wrap gap-6 text-slate-300 text-sm md:text-base">
               <div className="flex items-center">
@@ -108,7 +109,7 @@ export const TrainingPage: React.FC = () => {
               {training.location && (
                 <div className="flex items-center">
                   <MapPin className="w-5 h-5 ml-2 text-teal-400" />
-                  {training.location}
+                  {decodeHtml(training.location)}
                 </div>
               )}
             </div>
@@ -126,7 +127,7 @@ export const TrainingPage: React.FC = () => {
               אודות ההכשרה
             </h2>
             <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed whitespace-pre-line">
-              {training.fullDescription || training.description}
+              {decodeHtml(training.fullDescription || training.description)}
             </div>
           </div>
 
@@ -143,7 +144,7 @@ export const TrainingPage: React.FC = () => {
                     className="border border-slate-200 rounded-lg overflow-hidden"
                   >
                     <div className="bg-slate-50 px-5 py-3 border-b border-slate-200 font-bold text-slate-800 flex justify-between items-center">
-                      <span>{module.title}</span>
+                      <span>{decodeHtml(module.title)}</span>
                       <span className="text-xs bg-white border border-slate-200 px-2 py-1 rounded text-slate-500">
                         יחידה {idx + 1}
                       </span>
@@ -156,7 +157,7 @@ export const TrainingPage: React.FC = () => {
                             className="flex items-start text-sm text-slate-600"
                           >
                             <CheckCircle className="w-4 h-4 ml-2 text-teal-500 mt-0.5 shrink-0" />
-                            {topic}
+                            {decodeHtml(topic)}
                           </li>
                         ))}
                       </ul>
@@ -204,7 +205,7 @@ export const TrainingPage: React.FC = () => {
                       {instructor.charAt(0)}
                     </div>
                     <span className="text-sm font-medium text-slate-700">
-                      {instructor}
+                      {decodeHtml(instructor)}
                     </span>
                   </li>
                 ))}

@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getResearcherName, UserStatus } from "../types";
+import { decodeHtml } from "../utils/decodeHtml";
 import {
   ArrowRight,
   Building2,
   Calendar,
   FileText,
+  Globe,
   GraduationCap,
   Loader2,
   Mail,
   MapPin,
   Phone,
   User,
-  Globe,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
@@ -108,14 +109,14 @@ export const ResearcherProfile: React.FC = () => {
 
             <div className="text-center md:text-right flex-1">
               <h1 className="text-3xl md:text-4xl font-bold font-heebo mb-2">
-                {fullName}
+                {decodeHtml(fullName)}
               </h1>
               <div
                 className="flex items-center justify-center md:justify-start text-slate-300 text-sm cursor-pointer hover:text-white hover:underline transition-all"
                 onClick={handleInstitutionClick}
               >
                 <Building2 className="w-4 h-4 ml-1.5" />
-                {researcher.institution}
+                {decodeHtml(researcher.institution)}
               </div>
             </div>
           </div>
@@ -154,7 +155,7 @@ export const ResearcherProfile: React.FC = () => {
                   onClick={handleInstitutionClick}
                 >
                   <MapPin className="w-4 h-4 ml-3 text-teal-500 shrink-0" />
-                  <span>{researcher.institution}</span>
+                  <span>{decodeHtml(researcher.institution)}</span>
                 </div>
 
                 {researcher.websites && researcher.websites.length > 0 && (
@@ -191,7 +192,7 @@ export const ResearcherProfile: React.FC = () => {
                       פקולטה / חוג
                     </span>
                     <span className="text-slate-800 font-medium">
-                      {researcher.faculty}
+                      {decodeHtml(researcher.faculty)}
                     </span>
                   </div>
                 )}
@@ -263,11 +264,14 @@ export const ResearcherProfile: React.FC = () => {
                       <div className="flex flex-col sm:flex-row gap-4">
                         <div className="flex-1">
                           <h4 className="font-bold text-lg text-slate-800 mb-2 hover:text-teal-600 transition-colors">
-                            {article.title}
+                            {decodeHtml(article.title)}
                           </h4>
-                          <p className="text-sm text-slate-600 line-clamp-2 mb-3">
-                            {article.excerpt}
-                          </p>
+                          <p
+                            className="text-sm text-slate-600 line-clamp-2 mb-3"
+                            dangerouslySetInnerHTML={{
+                              __html: article.excerpt,
+                            }}
+                          />
                           <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
                             <div className="flex gap-2">
                               {article.tags.map((tag) => (

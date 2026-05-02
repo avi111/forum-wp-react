@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ArrowRight, Briefcase, Link, Loader2, MapPin } from "lucide-react";
 import { useApp } from "../context/AppContext"; // Assuming useApp will provide student jobs
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const StudentJobPage: React.FC = () => {
   const { studentJobs, getStudentJobsFromServer } = useApp(); // Assuming these exist or will be added
@@ -54,20 +55,22 @@ export const StudentJobPage: React.FC = () => {
       <div className="relative bg-gradient-to-r from-indigo-600 to-indigo-800 py-16 text-white">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-4xl font-extrabold leading-tight mb-3">
-            {job.title}
+            {decodeHtml(job.title)}
           </h1>
           {job.companyName && (
-            <p className="text-indigo-100 text-lg">חברה: {job.companyName}</p>
+            <p className="text-indigo-100 text-lg">
+              חברה: {decodeHtml(job.companyName)}
+            </p>
           )}
           <div className="flex justify-center items-center gap-4 mt-2 text-indigo-100 text-md">
             {job.jobType && (
               <span className="flex items-center">
-                <Briefcase className="w-4 h-4 ml-1" /> {job.jobType}
+                <Briefcase className="w-4 h-4 ml-1" /> {decodeHtml(job.jobType)}
               </span>
             )}
             {job.location && (
               <span className="flex items-center">
-                <MapPin className="w-4 h-4 ml-1" /> {job.location}
+                <MapPin className="w-4 h-4 ml-1" /> {decodeHtml(job.location)}
               </span>
             )}
           </div>

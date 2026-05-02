@@ -2,6 +2,7 @@ import React from "react";
 import { CalendarEvent } from "../types";
 import { Calendar, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface EventsListProps {
   events: CalendarEvent[];
@@ -70,13 +71,16 @@ export const EventsList: React.FC<EventsListProps> = ({
                 {event.type}
               </span>
               <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-indigo-600 transition-colors">
-                {event.title}
+                {decodeHtml(event.title)}
               </h3>
-              <p className="text-slate-600 text-sm">{event.location}</p>
+              <p className="text-slate-600 text-sm">
+                {decodeHtml(event.location)}
+              </p>
               {event.description && (
-                <p className="text-slate-500 text-xs mt-2 line-clamp-2">
-                  {event.description}
-                </p>
+                <p
+                  className="text-slate-500 text-xs mt-2 line-clamp-2"
+                  dangerouslySetInnerHTML={{ __html: event.description }}
+                />
               )}
             </div>
             <button

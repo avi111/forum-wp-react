@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserCircle } from "lucide-react";
 import { Article } from "../types";
 import { t } from "../services/stringService";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface ArticleCardProps {
   article: Article;
@@ -30,11 +31,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         className="block hover:bg-slate-50 p-3 rounded-lg -mx-2 transition-colors border-b border-slate-50 last:border-0 cursor-pointer group"
       >
         <h4 className="font-bold text-slate-800 text-sm mb-1 line-clamp-1 group-hover:text-teal-600 transition-colors">
-          {article.title}
+          {decodeHtml(article.title)}
         </h4>
-        <p className="text-xs text-slate-500 mb-2 line-clamp-2">
-          {article.excerpt}
-        </p>
+        <p
+          className="text-xs text-slate-500 mb-2 line-clamp-2"
+          dangerouslySetInnerHTML={{ __html: article.excerpt }}
+        />
         <div className="flex justify-between items-center text-xs">
           <span className="text-teal-600 font-medium">
             {article.authorName}
@@ -54,7 +56,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         <div className="h-48 overflow-hidden relative">
           <img
             src={article.imageUrl}
-            alt={article.title}
+            alt={decodeHtml(article.title)}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           />
           <div className="absolute top-4 right-4 flex flex-col gap-1 items-end">
@@ -77,11 +79,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           <span>{article.authorName}</span>
         </div>
         <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
-          {article.title}
+          {decodeHtml(article.title)}
         </h3>
-        <p className="text-slate-600 text-sm line-clamp-3 mb-4 flex-1">
-          {article.excerpt}
-        </p>
+        <p
+          className="text-slate-600 text-sm line-clamp-3 mb-4 flex-1"
+          dangerouslySetInnerHTML={{ __html: article.excerpt }}
+        />
         <div className="pt-4 border-t border-slate-100 flex justify-between items-center text-xs text-slate-400">
           <span>{article.date}</span>
           <button

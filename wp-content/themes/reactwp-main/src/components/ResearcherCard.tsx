@@ -1,6 +1,7 @@
 import React from "react";
-import { Researcher, getResearcherName } from "../types";
+import { getResearcherName, Researcher } from "../types";
 import { ArrowRight, MapPin } from "lucide-react";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface ResearcherCardProps {
   researcher: Researcher;
@@ -32,7 +33,7 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
         <div className="h-48 overflow-hidden relative">
           <img
             src={researcher.imageUrl}
-            alt={getResearcherName(researcher)}
+            alt={decodeHtml(getResearcherName(researcher))}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
             draggable={false}
           />
@@ -40,7 +41,7 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
         </div>
         <div className="p-4 text-center">
           <h3 className="font-bold text-slate-900 truncate">
-            {getResearcherName(researcher)}
+            {decodeHtml(getResearcherName(researcher))}
           </h3>
           <button className="text-sm text-indigo-600 hover:text-indigo-800 font-medium inline-flex items-center">
             צפה בפרופיל <ArrowRight className="w-3 h-3 mr-1" />
@@ -59,7 +60,7 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
         <div className="relative -top-12 mb-[-30px]">
           <img
             src={researcher.imageUrl}
-            alt={getResearcherName(researcher)}
+            alt={decodeHtml(getResearcherName(researcher))}
             className="w-24 h-24 rounded-2xl border-4 border-white shadow-md object-cover bg-white"
           />
         </div>
@@ -69,7 +70,7 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
             className="text-xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors cursor-pointer"
             onClick={() => onClick(researcher.id)}
           >
-            {getResearcherName(researcher)}
+            {decodeHtml(getResearcherName(researcher))}
           </h3>
 
           <div
@@ -78,13 +79,14 @@ export const ResearcherCard: React.FC<ResearcherCardProps> = ({
           >
             <MapPin className="w-4 h-4 ml-1" />
             <span className={onInstitutionClick ? "hover:underline" : ""}>
-              {researcher.institution}
+              {decodeHtml(researcher.institution)}
             </span>
           </div>
 
-          <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
-            {researcher.bio}
-          </p>
+          <p
+            className="text-slate-600 text-sm line-clamp-3 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: researcher.bio || "" }}
+          />
         </div>
         <div className="mt-6 pt-4 border-t border-slate-100 flex justify-between items-center">
           <span className="text-xs font-semibold text-indigo-900 bg-indigo-50 px-2 py-1 rounded">

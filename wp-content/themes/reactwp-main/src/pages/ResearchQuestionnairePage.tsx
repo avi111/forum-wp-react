@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom"; // Import Link
 import { useQuestionnaire } from "../hooks/useAppQueries"; // Import the new hook
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const ResearchQuestionnairePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -50,7 +51,9 @@ export const ResearchQuestionnairePage: React.FC = () => {
       <main>
         <div className="container mx-auto p-4">
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold">{questionnaire.title}</h1>
+            <h1 className="text-3xl font-bold">
+              {decodeHtml(questionnaire.title)}
+            </h1>
             <Link
               to="/research-tools"
               className="text-indigo-600 hover:underline flex items-center"
@@ -72,7 +75,10 @@ export const ResearchQuestionnairePage: React.FC = () => {
               חזרה לכלי מחקר
             </Link>
           </div>
-          <p className="text-gray-600 mb-4">{questionnaire.excerpt}</p>
+          <p
+            className="text-gray-600 mb-4"
+            dangerouslySetInnerHTML={{ __html: questionnaire.excerpt }}
+          />
           <div
             className="prose lg:prose-lg max-w-none"
             dangerouslySetInnerHTML={{ __html: questionnaire.content }}

@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, FileDown, Paperclip } from "lucide-react";
 import { Article } from "../types";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export interface ArticleContentProps {
   article: Article;
@@ -16,9 +17,10 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
     <div className="max-w-4xl mx-auto px-4 -mt-8 relative z-20">
       <div className="bg-white rounded-xl shadow-lg border border-slate-100 p-8 md:p-12">
         {article.excerpt && (
-          <div className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium">
-            {article.excerpt}
-          </div>
+          <div
+            className="text-xl text-slate-600 leading-relaxed font-serif mb-8 border-b border-slate-100 pb-8 font-medium"
+            dangerouslySetInnerHTML={{ __html: article.excerpt }}
+          />
         )}
         <article
           className="prose prose-slate prose-lg max-w-none text-slate-800 leading-loose"
@@ -45,9 +47,9 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
                   <div className="flex-1 min-w-0">
                     <h4
                       className="font-bold text-slate-800 text-sm truncate"
-                      title={file.name}
+                      title={decodeHtml(file.name)}
                     >
-                      {file.name}
+                      {decodeHtml(file.name)}
                     </h4>
                     {file.size && (
                       <span className="text-xs text-slate-500">
@@ -82,12 +84,12 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
                   className="bg-slate-50 border border-slate-200 rounded-xl overflow-hidden"
                 >
                   <div className="bg-slate-100 px-4 py-2 border-b border-slate-200 text-xs font-bold text-slate-500">
-                    {pdf.name}
+                    {decodeHtml(pdf.name)}
                   </div>
                   <iframe
                     src={`${pdf.url}#toolbar=0`}
                     className="w-full h-[600px]"
-                    title={pdf.name}
+                    title={decodeHtml(pdf.name)}
                   />
                 </div>
               ))}

@@ -1,12 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Brain, Calendar, ClipboardList, Loader2, Users } from "lucide-react";
-import {
-  useAllImagingMethods,
-  useAllQuestionnaires,
-  useAllRecruitmentTools,
-} from "../hooks/useAppQueries";
+import { useAllImagingMethods, useAllQuestionnaires, useAllRecruitmentTools } from "../hooks/useAppQueries";
 import { t } from "../services/stringService";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const ResearchToolsPage: React.FC = () => {
   const {
@@ -75,16 +72,17 @@ export const ResearchToolsPage: React.FC = () => {
                   {questionnaire.imageUrl && (
                     <img
                       src={questionnaire.imageUrl}
-                      alt={questionnaire.title}
+                      alt={decodeHtml(questionnaire.title)}
                       className="w-full h-40 object-cover rounded-lg mb-4"
                     />
                   )}
                   <h3 className="font-bold text-xl text-slate-800 mb-2 hover:text-purple-600 transition-colors">
-                    {questionnaire.title}
+                    {decodeHtml(questionnaire.title)}
                   </h3>
-                  <p className="text-sm text-slate-600 line-clamp-3 mb-4">
-                    {questionnaire.excerpt}
-                  </p>
+                  <p
+                    className="text-sm text-slate-600 line-clamp-3 mb-4"
+                    dangerouslySetInnerHTML={{ __html: questionnaire.excerpt }}
+                  />
                   <div className="flex items-center text-xs text-slate-400">
                     <Calendar className="w-3 h-3 ml-1" />
                     {questionnaire.date}
@@ -129,16 +127,17 @@ export const ResearchToolsPage: React.FC = () => {
                   {method.imageUrl && (
                     <img
                       src={method.imageUrl}
-                      alt={method.title}
+                      alt={decodeHtml(method.title)}
                       className="w-full h-40 object-cover rounded-lg mb-4"
                     />
                   )}
                   <h3 className="font-bold text-xl text-slate-800 mb-2 hover:text-indigo-600 transition-colors">
-                    {method.title}
+                    {decodeHtml(method.title)}
                   </h3>
-                  <p className="text-sm text-slate-600 line-clamp-3">
-                    {method.excerpt}
-                  </p>
+                  <p
+                    className="text-sm text-slate-600 line-clamp-3"
+                    dangerouslySetInnerHTML={{ __html: method.excerpt }}
+                  />
                 </Link>
               ))}
             </div>
@@ -176,7 +175,7 @@ export const ResearchToolsPage: React.FC = () => {
                   {tool.imageUrl ? (
                     <img
                       src={tool.imageUrl}
-                      alt={tool.title}
+                      alt={decodeHtml(tool.title)}
                       className="w-full md:w-32 h-32 object-cover rounded-lg mb-4 md:mb-0 md:ml-4 shrink-0"
                     />
                   ) : (
@@ -186,11 +185,12 @@ export const ResearchToolsPage: React.FC = () => {
                   )}
                   <div>
                     <h3 className="font-bold text-xl text-slate-800 mb-2 hover:text-blue-600 transition-colors">
-                      {tool.title}
+                      {decodeHtml(tool.title)}
                     </h3>
-                    <p className="text-sm text-slate-600 line-clamp-3">
-                      {tool.excerpt}
-                    </p>
+                    <p
+                      className="text-sm text-slate-600 line-clamp-3"
+                      dangerouslySetInnerHTML={{ __html: tool.excerpt }}
+                    />
                   </div>
                 </Link>
               ))}

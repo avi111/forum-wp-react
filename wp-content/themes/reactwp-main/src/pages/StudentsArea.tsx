@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { useStudentJobs, useStudentPapers } from "../hooks/useAppQueries";
-import {
-  ArrowRight,
-  Briefcase,
-  ExternalLink,
-  FileText,
-  Loader2,
-} from "lucide-react";
+import { ArrowRight, Briefcase, ExternalLink, FileText, Loader2 } from "lucide-react";
 import { PageHeader } from "../components/PageHeader";
 import { Link } from "react-router-dom"; // Import Link
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const StudentsArea: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"papers" | "jobs">("papers");
@@ -67,7 +62,7 @@ export const StudentsArea: React.FC = () => {
                     className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6 border border-slate-100 flex flex-col group"
                   >
                     <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">
-                      {paper.title}
+                      {decodeHtml(paper.title)}
                     </h3>
                     <div className="text-sm text-slate-500 mb-4 flex flex-col gap-1">
                       {paper.studentName && (
@@ -130,7 +125,7 @@ export const StudentsArea: React.FC = () => {
                       className="flex flex-col flex-grow group"
                     >
                       <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-indigo-600 transition-colors">
-                        {job.title}
+                        {decodeHtml(job.title)}
                       </h3>
                       <div className="text-sm text-slate-500 mb-4 flex flex-col gap-1">
                         {job.companyName && (
