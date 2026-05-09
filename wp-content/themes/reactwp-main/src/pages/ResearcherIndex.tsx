@@ -4,8 +4,10 @@ import { ResearchersFilter } from "../components/ResearchersFilter.tsx";
 import { ResearcherIndex as Index } from "../components/ResearcherIndex.tsx";
 import { useResearchersFilter } from "../hooks/useResearchersFilter.ts";
 import { ResearchersFilterProvider } from "../context/ResearchersFilterContext.tsx";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const ResearcherIndexContent: React.FC = () => {
+  usePageTitle("אינדקס חוקרים");
   const { isLoading } = useResearchersFilter();
 
   if (isLoading) {

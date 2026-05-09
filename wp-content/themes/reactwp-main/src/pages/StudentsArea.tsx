@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import { useStudentJobs, useStudentPapers } from "../hooks/useAppQueries";
-import { ArrowRight, Briefcase, ExternalLink, FileText, Loader2 } from "lucide-react";
+import {
+  ArrowRight,
+  Briefcase,
+  ExternalLink,
+  FileText,
+  Loader2,
+} from "lucide-react";
 import { PageHeader } from "../components/PageHeader";
 import { Link } from "react-router-dom"; // Import Link
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const StudentsArea: React.FC = () => {
+  usePageTitle("איזור סטודנטים");
   const [activeTab, setActiveTab] = useState<"papers" | "jobs">("papers");
   const [papersPage] = useState(1);
   const [jobsPage] = useState(1);

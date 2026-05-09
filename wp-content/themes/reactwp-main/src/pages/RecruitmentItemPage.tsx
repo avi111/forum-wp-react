@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom"; // Import Link
 import { useRecruitmentItem } from "../hooks/useAppQueries"; // Import the new hook
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const RecruitmentItemPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,10 @@ export const RecruitmentItemPage: React.FC = () => {
     isError,
     error,
   } = useRecruitmentItem(id || "");
+
+  usePageTitle(
+    recruitmentItem ? decodeHtml(recruitmentItem.title) : "גיוס נחקרים",
+  );
 
   if (isLoading) {
     return (

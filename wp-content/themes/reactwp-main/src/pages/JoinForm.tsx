@@ -5,6 +5,7 @@ import { useApp } from "../context/AppContext";
 import { t } from "../services/stringService";
 import { useTemplate } from "../hooks/useAppQueries";
 import { ContentNotFound } from "../components/ContentNotFound";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 const BylawsModal: FC<{
   onClose: () => void;
@@ -48,6 +49,7 @@ const BylawsModal: FC<{
 };
 
 export const JoinForm: FC = () => {
+  usePageTitle("הצטרפות כחוקר");
   const { currentUser } = useApp();
   const [showBylaws, setShowBylaws] = useState(false);
   const navigate = useNavigate();

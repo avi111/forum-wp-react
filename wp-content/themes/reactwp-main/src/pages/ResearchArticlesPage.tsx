@@ -1,8 +1,10 @@
 import React from "react";
 import { ResearchArticlesList } from "../components/ResearchArticlesList";
 import { t } from "../services/stringService";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ResearchArticlesPage: React.FC = () => {
+  usePageTitle("מאמרים מחקריים");
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">
       <div className="text-center mb-16">

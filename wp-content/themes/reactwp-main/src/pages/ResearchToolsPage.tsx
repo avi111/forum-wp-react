@@ -1,11 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Brain, Calendar, ClipboardList, Loader2, Users } from "lucide-react";
-import { useAllImagingMethods, useAllQuestionnaires, useAllRecruitmentTools } from "../hooks/useAppQueries";
+import {
+  useAllImagingMethods,
+  useAllQuestionnaires,
+  useAllRecruitmentTools,
+} from "../hooks/useAppQueries";
 import { t } from "../services/stringService";
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ResearchToolsPage: React.FC = () => {
+  usePageTitle(t("researchtools_page_title"));
   const {
     data: questionnaires,
     isLoading: isLoadingQuestionnaires,

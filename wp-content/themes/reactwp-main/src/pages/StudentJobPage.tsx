@@ -3,12 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowRight, Briefcase, Link, Loader2, MapPin } from "lucide-react";
 import { useApp } from "../context/AppContext"; // Assuming useApp will provide student jobs
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const StudentJobPage: React.FC = () => {
   const { studentJobs, getStudentJobsFromServer } = useApp(); // Assuming these exist or will be added
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  const job = studentJobs?.find((j) => j.id === id);
+
+  usePageTitle(job ? decodeHtml(job.title) : "הצעת עבודה");
 
   useEffect(() => {
     if (!studentJobs || studentJobs.length === 0) {
@@ -18,8 +23,6 @@ export const StudentJobPage: React.FC = () => {
       setIsLoading(false);
     }
   }, [getStudentJobsFromServer, studentJobs]);
-
-  const job = studentJobs?.find((j) => j.id === id);
 
   if (isLoading) {
     return (

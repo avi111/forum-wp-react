@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEvents } from "../hooks/useAppQueries";
-import { ArrowRight, Calendar, Clock, Loader2, MapPin, Share2, Ticket, Users } from "lucide-react";
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  Loader2,
+  MapPin,
+  Share2,
+  Ticket,
+  Users,
+} from "lucide-react";
 import { CalendarEvent } from "../types.ts";
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const EventPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { data, isLoading } = useEvents({ limit: 100, timeFilter: "all" });
   const [event, setEvent] = useState<CalendarEvent | null>(null);
+
+  usePageTitle(event ? decodeHtml(event.title) : "אירוע");
 
   useEffect(() => {
     if (data?.data) {

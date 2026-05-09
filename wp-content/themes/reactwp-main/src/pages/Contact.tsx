@@ -3,8 +3,10 @@ import { Loader2, Mail } from "lucide-react";
 import { useTemplate } from "../hooks/useAppQueries.ts";
 import { ContentNotFound } from "../components/ContentNotFound.tsx";
 import React from "react";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const Contact: React.FC = () => {
+  usePageTitle("צור קשר");
   const { data: content, isLoading, isError } = useTemplate("contact");
 
   if (isLoading) {

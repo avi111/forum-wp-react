@@ -1,7 +1,9 @@
 import React from "react";
 import { t } from "../services/stringService";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ArticleList: React.FC = () => {
+  usePageTitle("מאמרים");
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">
       <div className="text-center mb-16">
@@ -13,7 +15,8 @@ export const ArticleList: React.FC = () => {
       {/* ArticleList is now a general landing page for articles,
           the specific lists are in ResearchArticlesPage and EditorialPage */}
       <p className="text-center text-slate-600">
-        {t("articlelist_intro_text")} {/* You might want to add this string in WP */}
+        {t("articlelist_intro_text")}{" "}
+        {/* You might want to add this string in WP */}
       </p>
     </div>
   );

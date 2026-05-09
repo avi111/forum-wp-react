@@ -11,12 +11,17 @@ import {
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const TrainingPage: React.FC = () => {
   const { trainings, getTrainingsFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  const training = trainings.find((t) => t.id === id);
+
+  usePageTitle(training ? decodeHtml(training.title) : "הכשרה");
 
   useEffect(() => {
     if (trainings.length === 0) {
@@ -26,8 +31,6 @@ export const TrainingPage: React.FC = () => {
       setIsLoading(false);
     }
   }, [getTrainingsFromServer, trainings.length]);
-
-  const training = trainings.find((t) => t.id === id);
 
   if (isLoading) {
     return (

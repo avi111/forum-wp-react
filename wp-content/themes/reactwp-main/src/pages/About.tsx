@@ -3,13 +3,11 @@ import { ContentNotFound } from "../components/ContentNotFound";
 import { CTA } from "../components/CTA";
 import { useTemplate } from "../hooks/useAppQueries";
 import { Loader2 } from "lucide-react";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const About: React.FC = () => {
-  const {
-    data: content,
-    isLoading,
-    isError,
-  } = useTemplate("about");
+  usePageTitle("אודות");
+  const { data: content, isLoading, isError } = useTemplate("about");
 
   if (isLoading) {
     return (

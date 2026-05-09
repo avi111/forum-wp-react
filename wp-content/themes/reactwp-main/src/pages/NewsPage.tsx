@@ -4,8 +4,10 @@ import { useLocation } from "react-router-dom";
 import { Bell, Calendar, Link as LinkIcon, Share2 } from "lucide-react";
 import { InfoPage } from "../components/InfoPage";
 import { useToast } from "../context/ToastContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const NewsPage: React.FC = () => {
+  usePageTitle("חדשות ועדכונים");
   const { newsItems, getNewsFromServer } = useApp();
   const { hash } = useLocation();
   const { showToast } = useToast();

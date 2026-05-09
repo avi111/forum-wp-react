@@ -3,8 +3,10 @@ import { InfoPage } from "../components/InfoPage";
 import { BookOpen, Loader2 } from "lucide-react";
 import { TrainingList } from "../components/TrainingList";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const Training: React.FC = () => {
+  usePageTitle("הכשרות וקורסים");
   const { trainings, getTrainingsFromServer } = useApp();
   const [isLoading, setIsLoading] = useState(true);
 

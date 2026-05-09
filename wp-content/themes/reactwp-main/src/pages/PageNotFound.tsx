@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Frown } from "lucide-react";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const PageNotFound: React.FC = () => {
+  usePageTitle("404 - עמוד לא נמצא");
   return (
     <div className="flex items-center justify-center min-h-[60vh] bg-slate-50">
       <div className="text-center p-8">

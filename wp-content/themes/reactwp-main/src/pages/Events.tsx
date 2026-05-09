@@ -5,22 +5,18 @@ import { EventsList } from "../components/EventsList";
 import { useEvents } from "../hooks/useAppQueries";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const Events: React.FC = () => {
+  usePageTitle("אירועים וכנסים");
   const { settings } = useApp();
   const navigate = useNavigate();
 
-  const {
-    data,
-    isLoading,
-    page,
-    setPage,
-    totalPages,
-    setTimeFilter,
-  } = useEvents({
-    limit: settings.eventsItemsPerPage,
-    timeFilter: "future",
-  });
+  const { data, isLoading, page, setPage, totalPages, setTimeFilter } =
+    useEvents({
+      limit: settings.eventsItemsPerPage,
+      timeFilter: "future",
+    });
 
   // Ensure the filter is set to 'future' when the component mounts
   useEffect(() => {

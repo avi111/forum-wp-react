@@ -4,16 +4,18 @@ import { ResearcherCarousel } from "../components/ResearcherCarousel";
 import { HomeFeatures } from "../components/HomeFeatures";
 import { HomeLatestUpdates } from "../components/HomeLatestUpdates";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 import {
   useEditorialArticles,
-  useResearchArticles,
   useEvents,
+  useResearchArticles,
 } from "../hooks/useAppQueries";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 export const Home: React.FC = () => {
   const { researchers, settings, getResearchersFromServer } = useApp();
+  usePageTitle("דף הבית");
   const navigate = useNavigate();
 
   // Fetch events specifically for this component

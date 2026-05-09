@@ -2,8 +2,10 @@ import React from "react";
 import { InfoPage } from "../components/InfoPage";
 import { Scale } from "lucide-react";
 import { useTemplate } from "../hooks/useAppQueries";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const Bylaws: React.FC = () => {
+  usePageTitle("תקנון הפורום");
   const { data: templateContent, isLoading } = useTemplate("bylaws-modal");
 
   return (

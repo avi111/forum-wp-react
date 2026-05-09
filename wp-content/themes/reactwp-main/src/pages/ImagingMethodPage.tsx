@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom"; // Import Link
 import { useImagingMethod } from "../hooks/useAppQueries"; // Import the new hook
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ImagingMethodPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,8 @@ export const ImagingMethodPage: React.FC = () => {
     isError,
     error,
   } = useImagingMethod(id || "");
+
+  usePageTitle(imagingMethod ? decodeHtml(imagingMethod.title) : "שיטת דימות");
 
   if (isLoading) {
     return (

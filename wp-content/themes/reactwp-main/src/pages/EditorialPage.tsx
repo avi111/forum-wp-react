@@ -1,8 +1,10 @@
 import React from "react";
 import { EditorialArticlesList } from "../components/EditorialArticlesList";
 import { t } from "../services/stringService";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const EditorialPage: React.FC = () => {
+  usePageTitle(t("editorial_page_title"));
   return (
     <div className="max-w-7xl mx-auto py-16 px-4">
       <div className="text-center mb-16">

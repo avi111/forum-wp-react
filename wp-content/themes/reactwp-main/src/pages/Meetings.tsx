@@ -3,8 +3,10 @@ import { InfoPage } from "../components/InfoPage";
 import { Calendar, Loader2 } from "lucide-react";
 import { MeetingsList } from "../components/MeetingsList";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const Meetings: React.FC = () => {
+  usePageTitle("מפגשי הפורום");
   const { meetings, getMeetingsFromServer } = useApp();
   const [isLoading, setIsLoading] = useState(true);
 

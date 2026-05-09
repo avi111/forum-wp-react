@@ -16,12 +16,18 @@ import {
   User,
 } from "lucide-react";
 import { useApp } from "../context/AppContext";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ResearcherProfile: React.FC = () => {
   const { researchers, articles, getResearchersFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  const researcher = researchers.find((r) => r.id === id);
+  const fullName = researcher ? getResearcherName(researcher) : "";
+
+  usePageTitle(fullName ? decodeHtml(fullName) : "פרופיל חוקר");
 
   useEffect(() => {
     if (researchers.length === 0) {
@@ -31,8 +37,6 @@ export const ResearcherProfile: React.FC = () => {
       setIsLoading(false);
     }
   }, [getResearchersFromServer, researchers.length]);
-
-  const researcher = researchers.find((r) => r.id === id);
 
   if (isLoading) {
     return (
@@ -61,8 +65,6 @@ export const ResearcherProfile: React.FC = () => {
       </div>
     );
   }
-
-  const fullName = getResearcherName(researcher);
 
   // Filter articles belonging to this researcher
   const researcherArticles = articles.filter(

@@ -4,12 +4,17 @@ import { ArrowRight, Loader2 } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { ArticleHeader } from "../components/ArticleHeader";
 import { ArticleContent } from "../components/ArticleContent";
+import { usePageTitle } from "../hooks/usePageTitle";
+import { decodeHtml } from "../utils/decodeHtml";
 
 export const ArticlePage: React.FC = () => {
   const { articles, getArticlesFromServer } = useApp();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  const article = articles.find((a) => a.id === id);
+  usePageTitle(article ? decodeHtml(article.title) : "מאמר");
 
   useEffect(() => {
     if (articles.length === 0) {
@@ -19,8 +24,6 @@ export const ArticlePage: React.FC = () => {
       setIsLoading(false);
     }
   }, [getArticlesFromServer, articles.length]);
-
-  const article = articles.find((a) => a.id === id);
 
   if (isLoading) {
     return (

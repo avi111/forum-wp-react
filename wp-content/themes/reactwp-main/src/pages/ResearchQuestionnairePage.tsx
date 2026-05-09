@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom"; // Import Link
 import { useQuestionnaire } from "../hooks/useAppQueries"; // Import the new hook
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ResearchQuestionnairePage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,6 +12,8 @@ export const ResearchQuestionnairePage: React.FC = () => {
     isError,
     error,
   } = useQuestionnaire(id || "");
+
+  usePageTitle(questionnaire ? decodeHtml(questionnaire.title) : "שאלון מחקר");
 
   if (isLoading) {
     return (

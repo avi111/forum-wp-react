@@ -3,12 +3,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowRight, Eye, FileDown, Loader2 } from "lucide-react";
 import { useApp } from "../context/AppContext"; // Assuming useApp will provide student papers
 import { decodeHtml } from "../utils/decodeHtml";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const StudentPaperPage: React.FC = () => {
   const { studentPapers, getStudentPapersFromServer } = useApp(); // Assuming these exist or will be added
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
+
+  const paper = studentPapers?.find((p) => p.id === id);
+
+  usePageTitle(paper ? decodeHtml(paper.title) : "עבודת סטודנט");
 
   useEffect(() => {
     if (!studentPapers || studentPapers.length === 0) {
@@ -18,8 +23,6 @@ export const StudentPaperPage: React.FC = () => {
       setIsLoading(false);
     }
   }, [getStudentPapersFromServer, studentPapers]);
-
-  const paper = studentPapers?.find((p) => p.id === id);
 
   if (isLoading) {
     return (
