@@ -28,11 +28,19 @@ export const ArticleHeader: React.FC<ArticleHeaderProps> = ({
       <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
       <div className="absolute bottom-0 left-0 right-0 p-10 max-w-4xl mx-auto w-full z-10">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() =>
+            navigate(
+              article.isEditorial
+                ? "/editorial-articles"
+                : "/research-articles",
+            )
+          }
           className="mb-6 text-slate-300 hover:text-white flex items-center text-sm font-medium transition-colors w-fit bg-black/20 px-3 py-1 rounded-full backdrop-blur-sm"
         >
           <ArrowRight className="w-4 h-4 ml-2" />
-          חזרה
+          {article.isEditorial
+            ? "בחזרה למגזין הפורום"
+            : "בחזרה לרשימת המאמרים המדעיים"}
         </button>
         <div className="flex gap-2 mb-4">
           {article.tags.map((tag) => (

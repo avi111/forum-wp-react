@@ -102,10 +102,18 @@ export const ArticleContent: React.FC<ArticleContentProps> = ({ article }) => {
             פורסם בתאריך: {article.date}
           </div>
           <button
-            onClick={() => navigate("/articles")}
+            onClick={() =>
+              navigate(
+                article.isEditorial
+                  ? "/editorial-articles"
+                  : "/research-articles",
+              )
+            }
             className="text-teal-600 font-bold hover:text-teal-700 transition-colors"
           >
-            קרא מאמרים נוספים
+            {article.isEditorial
+              ? "קרא מאמרים נוספים במגזין הפורום"
+              : "קרא מאמרים מדעיים נוספים"}
           </button>
         </div>
       </div>

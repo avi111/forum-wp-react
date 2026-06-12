@@ -41,7 +41,7 @@ export const ArticlePage: React.FC = () => {
         </h2>
         <p className="text-slate-500 mb-6">יתכן שהקישור שגוי או שהמאמר הוסר.</p>
         <button
-          onClick={() => navigate("/articles")}
+          onClick={() => navigate("/research-articles")}
           className="text-teal-600 font-bold hover:underline flex items-center"
         >
           <ArrowRight className="w-4 h-4 ml-1" />

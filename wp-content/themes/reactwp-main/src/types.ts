@@ -11,6 +11,7 @@ export interface Researcher {
   bio: string;
   status: UserStatus;
   imageUrl?: string;
+  hasProfilePicture?: boolean;
   username?: string;
   firstName?: string;
   lastName?: string;

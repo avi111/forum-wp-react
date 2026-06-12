@@ -44,14 +44,6 @@ export const TagPage: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-slate-900 to-teal-900 opacity-90"></div>
 
         <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
-          <button
-            onClick={() => navigate("/articles")}
-            className="absolute top-0 right-4 md:right-0 text-slate-400 hover:text-white flex items-center text-sm font-medium transition-colors"
-          >
-            <ArrowRight className="w-4 h-4 ml-2" />
-            חזרה לכל המאמרים
-          </button>
-
           <div className="inline-flex items-center justify-center p-4 bg-white/10 rounded-full mb-6 backdrop-blur-sm">
             <Tag className="w-8 h-8 text-teal-400" />
           </div>
@@ -85,12 +77,6 @@ export const TagPage: React.FC = () => {
             <p className="text-slate-500 mt-2">
               לא קיימים מאמרים המקושרים לתגית &#34;{decodedTag}&#34; כרגע.
             </p>
-            <button
-              onClick={() => navigate("/articles")}
-              className="mt-6 text-teal-600 font-bold hover:underline"
-            >
-              חזרה לרשימת המאמרים
-            </button>
           </div>
         )}
 

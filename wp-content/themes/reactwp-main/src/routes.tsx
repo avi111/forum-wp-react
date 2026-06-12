@@ -1,6 +1,5 @@
 import { Home } from "./pages/Home";
 import { ResearcherIndex } from "./pages/ResearcherIndex";
-import { ArticleList } from "./pages/ArticleList";
 import { ArticlePage } from "./pages/ArticlePage";
 import { JoinForm } from "./pages/JoinForm";
 import { Training } from "./pages/Training";
@@ -52,10 +51,7 @@ export const routeConfig = [
     path: "/researchers/:id",
     element: <ResearcherProfile />,
   },
-  {
-    path: "/articles", // General articles list, if still needed
-    element: <ArticleList />,
-  },
+
   {
     path: "/research-articles", // New path for research articles
     element: <ResearchArticlesPage />,

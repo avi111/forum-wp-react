@@ -39,7 +39,9 @@ export const Footer: React.FC<FooterProps> = ({
       <div className="max-w-7xl mx-auto px-4">
         {/* Tag Cloud Section - Above the columns */}
         <div className="mb-12 pb-8 border-b border-slate-700">
-          <h4 className="text-white font-bold text-lg mb-4 text-center md:text-right">תגיות פופולריות</h4>
+          <h4 className="text-white font-bold text-lg mb-4 text-center md:text-right">
+            תגיות פופולריות
+          </h4>
           {isTagsLoading && (
             <div className="bg-slate-800 rounded-lg p-4">
               <div className="h-6 w-48 bg-slate-700 rounded mb-4 animate-pulse" />
@@ -59,10 +61,14 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-right">
           <div>
             <h4 className="text-white font-bold text-lg mb-4">{site_name}</h4>
-            <p className="text-sm leading-relaxed max-w-xs">{site_description}</p>
+            <p className="text-sm leading-relaxed max-w-xs">
+              {site_description}
+            </p>
           </div>
           <div>
-            <h4 className="text-white font-bold text-lg mb-4">קישורים מהירים</h4>
+            <h4 className="text-white font-bold text-lg mb-4">
+              קישורים מהירים
+            </h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <button
@@ -82,10 +88,18 @@ export const Footer: React.FC<FooterProps> = ({
               </li>
               <li>
                 <button
-                  onClick={() => handleLinkClick("/articles")}
+                  onClick={() => handleLinkClick("/research-articles")}
                   className="hover:text-teal-400"
                 >
-                  מאמרים
+                  מאמרים מדעיים
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleLinkClick("/editorial-articles")}
+                  className="hover:text-teal-400"
+                >
+                  מגזין הפורום
                 </button>
               </li>
             </ul>
