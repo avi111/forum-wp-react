@@ -7,6 +7,7 @@ require_once get_template_directory() . '/inc/api-endpoints.php';
 require_once get_template_directory() . '/inc/toolset-setup.php';
 require_once get_template_directory() . '/inc/student-paper-meta-boxes.php';
 require_once get_template_directory() . '/inc/student-job-meta-boxes.php';
+require_once get_template_directory() . '/inc/post-meta-boxes.php';
 
 function my_theme_enqueue_scripts()
 {
