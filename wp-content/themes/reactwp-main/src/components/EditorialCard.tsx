@@ -22,6 +22,11 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
 
   const shouldShowImage = showImage && article.imageUrl;
 
+  const displayAuthor =
+    article.isEditorial && article.postWriterName
+      ? article.postWriterName
+      : article.authorName;
+
   if (mode === "compact") {
     return (
       <div
@@ -90,7 +95,7 @@ export const EditorialCard: React.FC<EditorialCardProps> = ({
         <div className="mt-4 flex items-center text-slate-400 text-sm">
           <span>{article.date}</span>
           <span className="mx-2">•</span>
-          <span>{decodeHtml(article.authorName)}</span>
+          <span>{decodeHtml(displayAuthor)}</span>
         </div>
       </div>
     </div>

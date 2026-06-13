@@ -24,6 +24,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
 
   const shouldShowImage = showImage && article.imageUrl;
 
+  const displayAuthor =
+    article.isEditorial && article.postWriterName
+      ? article.postWriterName
+      : article.authorName;
+
   if (mode === "compact") {
     return (
       <div
@@ -38,9 +43,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
           dangerouslySetInnerHTML={{ __html: article.excerpt }}
         />
         <div className="flex justify-between items-center text-xs">
-          <span className="text-teal-600 font-medium">
-            {article.authorName}
-          </span>
+          <span className="text-teal-600 font-medium">{displayAuthor}</span>
           <span className="text-slate-400">{article.date}</span>
         </div>
       </div>
@@ -76,7 +79,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
       <div className="p-6 flex-1 flex flex-col">
         <div className="flex items-center gap-2 mb-3 text-sm text-slate-500">
           <UserCircle className="w-4 h-4" />
-          <span>{article.authorName}</span>
+          <span>{displayAuthor}</span>
         </div>
         <h3 className="text-lg font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
           {decodeHtml(article.title)}

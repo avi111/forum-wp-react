@@ -16,6 +16,11 @@ export const ArticleHeader: React.FC<ArticleHeaderProps> = ({
   const navigate = useNavigate();
   const shouldShowImage = showImage && article.imageUrl;
 
+  const displayAuthor =
+    article.isEditorial && article.postWriterName
+      ? article.postWriterName
+      : article.authorName;
+
   return (
     <div className="relative h-[400px] w-full overflow-hidden bg-slate-900">
       {shouldShowImage && (
@@ -59,7 +64,7 @@ export const ArticleHeader: React.FC<ArticleHeaderProps> = ({
         <div className="flex items-center text-slate-300 text-sm gap-6">
           <div className="flex items-center bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
             <User className="w-4 h-4 ml-2 text-teal-400" />
-            <span className="font-medium">{article.authorName}</span>
+            <span className="font-medium">{displayAuthor}</span>
           </div>
           <div className="flex items-center bg-black/30 px-3 py-1 rounded-full backdrop-blur-sm">
             <Calendar className="w-4 h-4 ml-2 text-teal-400" />

@@ -39,6 +39,7 @@ export interface Article {
   content: string;
   authorId: string;
   authorName: string;
+  postWriterName?: string;
   date: string;
   isEditorial: boolean; // True if it's a general site article (WP Post), False if researcher paper (Custom Post Type)
   tags: string[];
