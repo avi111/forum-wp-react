@@ -102,7 +102,7 @@ export const ResearchersFilterProvider: React.FC<{ children: ReactNode }> = ({
   const filteredResearchers = useMemo(() => {
     return researchers
       .filter((r) => {
-        return !!r.institution && r.hasProfilePicture;
+        return !!r.institution;
       })
       .filter((r) => {
         const term = searchTerm.trim().toLowerCase();

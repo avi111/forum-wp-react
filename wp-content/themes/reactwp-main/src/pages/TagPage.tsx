@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useApp } from "../context/AppContext";
-import { ArrowRight, FileText, Loader2, Tag } from "lucide-react";
+import { FileText, Loader2, Tag } from "lucide-react";
 import { PaginationControls } from "../components/PaginationControls";
 import { useArticlesByTag } from "../hooks/useAppQueries";
 import { ArticleCard } from "../components/ArticleCard";
@@ -10,7 +10,6 @@ import { usePageTitle } from "../hooks/usePageTitle";
 export const TagPage: React.FC = () => {
   const { tag } = useParams<{ tag: string }>();
   const { settings } = useApp();
-  const navigate = useNavigate();
 
   const decodedTag = useMemo(() => (tag ? decodeURIComponent(tag) : ""), [tag]);
   usePageTitle(decodedTag ? `נושא: ${decodedTag}` : "תגיות");

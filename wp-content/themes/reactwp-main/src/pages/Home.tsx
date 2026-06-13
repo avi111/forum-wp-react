@@ -61,9 +61,7 @@ export const Home: React.FC = () => {
 
       <HomeFeatures />
 
-      <ResearcherCarousel
-        researchers={researchers.filter((r) => r.hasProfilePicture)}
-      />
+      <ResearcherCarousel researchers={researchers} />
 
       <HomeLatestUpdates
         editorialArticles={editorialArticles}
