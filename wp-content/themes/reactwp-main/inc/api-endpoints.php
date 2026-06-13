@@ -193,6 +193,35 @@ function iprf_get_post_attachments($post_id)
 }
 
 /**
+ * Helper function to get post writer name
+ */
+function iprf_get_post_writer_name($post_id)
+{
+    if (get_post_type($post_id) !== 'post') {
+        return '';
+    }
+
+    $writer_val = get_post_meta($post_id, 'forum_post_writer', true);
+
+    if (empty($writer_val)) {
+        return '';
+    }
+
+    if ($writer_val === 'system') {
+        return 'מערכת הפורום';
+    }
+
+    if (is_numeric($writer_val)) {
+        $user = get_userdata($writer_val);
+        if ($user) {
+            return $user->display_name;
+        }
+    }
+
+    return '';
+}
+
+/**
  * 1. Fetch Settings
  */
 add_action("wp_ajax_fetchSettings", "iprf_fetch_settings");
@@ -395,6 +424,7 @@ function iprf_fetch_articles()
             "content" => apply_filters("the_content", get_the_content()),
             "authorId" => (string) $author_id,
             "authorName" => $author_name,
+            "postWriterName" => iprf_get_post_writer_name(get_the_ID()),
             "date" => get_the_date("d/m/Y"),
             "isEditorial" => $is_editorial,
             "tags" => wp_list_pluck(get_the_tags(), "name") ?: [],
@@ -478,6 +508,7 @@ function iprf_fetch_articles_paged()
             "content" => apply_filters("the_content", get_the_content()),
             "authorId" => (string) $author_id,
             "authorName" => $author_name,
+            "postWriterName" => iprf_get_post_writer_name(get_the_ID()),
             "date" => get_the_date("d/m/Y"),
             "isEditorial" => $is_editorial,
             "tags" => wp_list_pluck(get_the_tags(), "name") ?: [],
